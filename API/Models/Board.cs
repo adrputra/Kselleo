@@ -11,8 +11,8 @@ namespace API.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int CreatedBy { get; set; }
-        public virtual User User { get; set; }
+        public string CreatedBy { get; set; }
+        //public virtual User User { get; set; }
         public virtual ICollection<List> Lists { get; set; }
         public virtual ICollection<MemberBoard> MemberBoards { get; set; }
     }

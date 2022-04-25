@@ -10,8 +10,8 @@ namespace API.Repository
         where Entity : class
         where Context : MyContext
     {
-        private readonly MyContext myContext;
-        private readonly DbSet<Entity> entities;
+        private MyContext myContext;
+        private DbSet<Entity> entities;
 
         public GeneralRepository(MyContext myContext)
         {

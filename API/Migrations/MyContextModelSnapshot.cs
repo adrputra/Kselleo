@@ -21,8 +21,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Account", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
@@ -51,8 +51,8 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -61,9 +61,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy")
-                        .IsUnique();
 
                     b.ToTable("Boards");
                 });
@@ -78,8 +75,8 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Due")
                         .HasColumnType("datetime2");
@@ -94,9 +91,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy")
-                        .IsUnique();
 
                     b.HasIndex("ListId");
 
@@ -136,8 +130,8 @@ namespace API.Migrations
                     b.Property<int>("CheckListItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -164,8 +158,8 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -189,8 +183,8 @@ namespace API.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -201,9 +195,6 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
-
-                    b.HasIndex("CreatedBy")
-                        .IsUnique();
 
                     b.ToTable("Lists");
                 });
@@ -218,20 +209,17 @@ namespace API.Migrations
                     b.Property<int>("BoardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BoardId1")
-                        .HasColumnType("int");
-
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BoardId");
 
-                    b.HasIndex("BoardId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("MemberBoards");
                 });
@@ -246,8 +234,8 @@ namespace API.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -260,10 +248,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -293,25 +279,8 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("API.Models.Board", b =>
-                {
-                    b.HasOne("API.Models.User", "User")
-                        .WithOne("Board")
-                        .HasForeignKey("API.Models.Board", "CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("API.Models.Card", b =>
                 {
-                    b.HasOne("API.Models.User", "User")
-                        .WithOne("Card")
-                        .HasForeignKey("API.Models.Card", "CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("API.Models.List", "List")
                         .WithMany("Cards")
                         .HasForeignKey("ListId")
@@ -319,8 +288,6 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("List");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.CheckListItem", b =>
@@ -344,9 +311,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("CheckListItemAssigns")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CheckListItem");
 
@@ -363,9 +328,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Card");
 
@@ -380,30 +343,20 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.User", "User")
-                        .WithOne("List")
-                        .HasForeignKey("API.Models.List", "CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Board");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.MemberBoard", b =>
                 {
-                    b.HasOne("API.Models.User", "User")
+                    b.HasOne("API.Models.Board", "Board")
                         .WithMany("MemberBoards")
                         .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.Board", "Board")
+                    b.HasOne("API.Models.User", "User")
                         .WithMany("MemberBoards")
-                        .HasForeignKey("BoardId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Board");
 
@@ -420,9 +373,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("MemberCards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Card");
 
@@ -459,15 +410,9 @@ namespace API.Migrations
                 {
                     b.Navigation("Account");
 
-                    b.Navigation("Board");
-
-                    b.Navigation("Card");
-
                     b.Navigation("CheckListItemAssigns");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("List");
 
                     b.Navigation("MemberBoards");
 
