@@ -24,6 +24,15 @@ namespace Client.Controllers
       }
       public IActionResult Dashboard()
       {
+         ViewBag.isDashboard = true;
+         ViewBag.isUsers = false;
+         return View();
+      }
+
+      public IActionResult Users()
+      {
+         ViewBag.isDashboard = false;
+         ViewBag.isUsers = true;
          return View();
       }
    }
