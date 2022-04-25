@@ -1,0 +1,81 @@
+[only admin]
+
+Method: GET
+    Endpoint: /api/board
+    Header: 
+      - Content-Type: application/json
+      - Accept: application/json
+      - Bearer {token}
+    Body: 
+      {
+        
+      }
+    Response:
+      {
+        "code": "number",
+        "message": "string",
+        "data": {
+              "boards": [
+                  {
+                     "name": "string",
+                     "description": "string",
+                     "createdBy": {
+                        "fullName": "string",
+                        "email": "string",
+                        "gender": "string",
+                        "image": "string"
+                     },
+                     "createdAt": "string",
+                     "members": [
+                        {
+                           "fullName": "string",
+                           "email": "string",
+                           "gender": "string",
+                           "image": "string"
+                        }
+                     ],
+                     "lists": [
+                        {
+                           "name": "string",
+                           "createdAt: "string",
+                           "status": "To do || In Progress || In Review || Done",
+                           "createdBy": {
+                              "fullName": "string",
+                              "email": "string",
+                              "gender": "string",
+                              "image": "string"
+                           },
+                           cards: [
+                              {
+                                 "name": "string",
+                                 "description": "string",
+                                 "due": "string",
+                                 "createdAt": "string",
+                                 "createdBy": {
+                                    "fullName": "string",
+                                    "email": "string",
+                                    "gender": "string",
+                                    "image": "string"
+                                 },
+                                 "checklists": [
+                                    {
+                                       "name": "string",
+                                       "due": "string",
+                                       "assign": [
+                                          {
+                                             "fullName": "string",
+                                             "email": "string",
+                                             "gender": "string",
+                                             "image": "string"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+              ],
+            }
+      }

@@ -1,0 +1,18 @@
+Method: POST
+    Endpoint: /api/auth/login
+    Header: 
+      - Content-Type: application/json
+      - Accept: application/json
+    Body: 
+      {
+        "email": "string",
+        "password": "string",
+      }
+    Response:
+      {
+        "code": "number",
+        "message": "string",
+        "data": {
+              "token": "string",
+            }
+      }

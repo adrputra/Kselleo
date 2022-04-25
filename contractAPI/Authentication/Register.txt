@@ -1,0 +1,18 @@
+Method: POST
+   Endpoint: /api/auth/register
+   Header: 
+      - Content-Type: application/json
+      - Accept: application/json
+   Body: 
+      {
+         "fullName": "string",
+         "email": "string",
+         "password": "string",
+         "gender": enum,
+         "Image": "belum tau",
+      }
+   Response:
+      {
+         "code": "number",
+         "message": "string",
+      }
