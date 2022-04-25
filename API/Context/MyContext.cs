@@ -27,20 +27,25 @@ namespace API.Context
                 .WithOne(acc => acc.User)
                 .HasForeignKey<Account>(acc => acc.UserId);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.Board)
-            //    .WithOne(board => board.User)
-            //    .HasForeignKey<Board>(board => board.CreatedBy);
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Board)
+                .WithOne(board => board.User)
+                .HasForeignKey<Board>(board => board.CreatedBy);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.List)
-            //    .WithOne(list => list.User)
-            //    .HasForeignKey<List>(list => list.CreatedBy);
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.List)
+                .WithOne(list => list.User)
+                .HasForeignKey<List>(list => list.CreatedBy);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.Card)
-            //    .WithOne(card => card.User)
-            //    .HasForeignKey<Card>(card => card.CreatedBy);
+            modelBuilder.Entity<User>()
+                .HasOne(user => user.Card)
+                .WithOne(card => card.User)
+                .HasForeignKey<Card>(card => card.CreatedBy);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(comment => comment.User)
+                .WithMany(user => user.Comments)
+                .HasForeignKey(comment => comment.UserId);
 
             modelBuilder.Entity<MemberBoard>()
                 .HasOne(mb => mb.User)

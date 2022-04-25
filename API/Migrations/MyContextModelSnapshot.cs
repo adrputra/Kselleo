@@ -62,6 +62,9 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedBy")
+                        .IsUnique();
+
                     b.ToTable("Boards");
                 });
 
@@ -91,6 +94,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy")
+                        .IsUnique();
 
                     b.HasIndex("ListId");
 
@@ -196,6 +202,9 @@ namespace API.Migrations
 
                     b.HasIndex("BoardId");
 
+                    b.HasIndex("CreatedBy")
+                        .IsUnique();
+
                     b.ToTable("Lists");
                 });
 
@@ -284,8 +293,25 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Models.Board", b =>
+                {
+                    b.HasOne("API.Models.User", "User")
+                        .WithOne("Board")
+                        .HasForeignKey("API.Models.Board", "CreatedBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.Models.Card", b =>
                 {
+                    b.HasOne("API.Models.User", "User")
+                        .WithOne("Card")
+                        .HasForeignKey("API.Models.Card", "CreatedBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Models.List", "List")
                         .WithMany("Cards")
                         .HasForeignKey("ListId")
@@ -293,6 +319,8 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("List");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.CheckListItem", b =>
@@ -352,7 +380,15 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Models.User", "User")
+                        .WithOne("List")
+                        .HasForeignKey("API.Models.List", "CreatedBy")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Board");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.MemberBoard", b =>
@@ -423,9 +459,15 @@ namespace API.Migrations
                 {
                     b.Navigation("Account");
 
+                    b.Navigation("Board");
+
+                    b.Navigation("Card");
+
                     b.Navigation("CheckListItemAssigns");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("List");
 
                     b.Navigation("MemberBoards");
 

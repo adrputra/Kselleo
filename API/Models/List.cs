@@ -13,7 +13,7 @@ namespace API.Models
         public DateTime CreatedAt { get; set; }
         public int CreatedBy { get; set; }
         public string Status { get; set; }
-        //public virtual User User { get; set; }
+        public virtual User User { get; set; }
         public virtual Board Board { get; set; }
         public virtual ICollection<Card> Cards { get; set; }
     }
