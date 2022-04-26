@@ -1,0 +1,79 @@
+@using Client.ViewModels;
+
+@model RegisterVM;
+
+@{
+   Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Register</title>
+   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+      }
+   </style>
+</head>
+
+<body style="background-color: #FAF5E4; margin: 0; padding: 0; height: 90vh; width: 90vw;">
+   <div class="row" style="height: 90vh;">
+      <div class="col-md-6 d-flex align-items-center justify-content-center" style="margin-top: 55px;">
+         <img src="~/images/login-register.png" alt="image" height="600px">
+      </div>
+      <div class="col-md-6 d-flex align-items-center justify-content-center">
+         <div class="box shadow bg-white rounded " style="padding: 50px; width: 70%; margin-top: 45px;">
+            <img src="~/images/logo.png" alt="logo">
+            <p class="mt-3" style="font-size: 20px; width: 80%;">Kselleo helps teams move work
+               forward.</p>
+            <div style="background-color: #FAF5E4; width: max-content; margin:auto">
+               <p class="text-center px-4 py-2 " style="color: #083DF9;">Register to Kselleo</p>
+            </div>
+
+            <form asp-action="Login">
+               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               <div class="form-group">
+                  <label asp-for="FullName" class="control-label"></label>
+                  <input asp-for="FullName" class="form-control" placeholder="Enter full name">
+                  <span asp-validation-for="FullName" class="text-danger pt-1"></span>
+               </div>
+               <div class="form-group">
+                  <label asp-for="Email" class="control-label"></label>
+                  <input asp-for="Email" class="form-control" placeholder="Enter email">
+                  <span asp-validation-for="Email" class="text-danger pt-1"></span>
+               </div>
+               <div class="form-group">
+                  <label asp-for="Password" class="control-label"></label>
+                  <input asp-for="Password" class="form-control" placeholder="Enter password">
+                  <span asp-validation-for="Password" class="text-danger pt-1"></span>
+               </div>
+               <div class="form-group">
+                  <label asp-for="ConfirmPassword" class="control-label"></label>
+                  <input asp-for="ConfirmPassword" class="form-control" placeholder="Enter confirm password">
+                  <span asp-validation-for="ConfirmPassword" class="text-danger pt-1"></span>
+               </div>
+
+               <div class="d-flex justify-content-between" style="gap: 15px; margin-top: 50px;">
+                  <input type="submit" value="Register" class="btn text-white"
+                     style="background-color: #F8B401; width: 90%;" />
+                  <a class="btn btn-outline-secondary" asp-controller="Auth" asp-action="Register"
+                     style="width: 90%;">Back to Log In</a>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+
+   <script src="~/lib/jquery/dist/jquery.min.js"></script>
+   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
