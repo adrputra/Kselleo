@@ -11,7 +11,7 @@ namespace Client.ViewModels
       [Display(Name = "Email")]
       [Required(ErrorMessage = "Email is required")]
       public string Email { get; set; }
-      public string OTP { get; set; }
+      public int OTP { get; set; }
       public string NewPassword { get; set; }
       public string ConfirmPassword { get; set; }
 
