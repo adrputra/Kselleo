@@ -1,3 +1,4 @@
+using System;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -17,6 +18,21 @@ namespace Kselleo.Controllers
       public IActionResult Index()
       {
          return View(new NewBoard());
+      }
+
+      [HttpPost("/boards")]
+      public IActionResult Index(NewBoard newBoard)
+      {
+         if (!ModelState.IsValid) return View(newBoard);
+
+         return View(newBoard);
+      }
+
+      public IActionResult Detail(int id)
+      {
+         Console.WriteLine(id);
+
+         return View();
       }
    }
 }
