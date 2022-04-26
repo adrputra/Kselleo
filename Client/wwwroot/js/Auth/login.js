@@ -7,7 +7,7 @@
         email,
         password
     }
-
+    
     $.ajax({
         type: 'POST',
         url: 'https://localhost:44308/api/accounts/login',
@@ -17,19 +17,17 @@
         },
         data: JSON.stringify(request),
         dataType: 'json',
-        success: function (response, asd) {
-            Swal.fire({
-                icon: 'success',
-                title: 'SUCCESS',
-            })
+    }).done((response) => {
+        swal('Success!', 'Your account has been registered!', 'success')
+        setTimeout(() => {
             window.location.href = 'https://localhost:44346/Admin/Dashboard'
-        },
-        error: function (e, asd) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!',
-            })
-        },
+        }, 2000)
+    }).fail((e) => {
+        swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+        console.log('e', JSON.parse(e))
     })
+
+    $('#error-confirmPassword').html('')
+
+    console.log('Login')
 }

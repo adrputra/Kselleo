@@ -45,7 +45,14 @@ namespace Client.Controllers
       {
          return View(new RegisterVM());
       }
+        
+      [HttpPost]
+      public IActionResult Register(RegisterVM registerVM)
+      {
+         if (!ModelState.IsValid) return View(registerVM);
 
+         return View(registerVM);
+      }
       public IActionResult ForgotPassword()
       {
          return View(new ForgetPasswordVM());
@@ -56,12 +63,6 @@ namespace Client.Controllers
          return View(new ChangePasswordVM());
       }
 
-      [HttpPost]
-      public IActionResult Register(RegisterVM registerVM)
-      {
-         if (!ModelState.IsValid) return View(registerVM);
-
-         return View(registerVM);
-      }
+      
    }
 }
