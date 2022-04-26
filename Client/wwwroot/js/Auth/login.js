@@ -18,13 +18,12 @@
         data: JSON.stringify(request),
         dataType: 'json',
     }).done((response) => {
-        swal('Success!', 'Your account has been registered!', 'success')
+        Swal.fire('Success!', 'Your account has been registered!', 'success')
         setTimeout(() => {
             window.location.href = 'https://localhost:44346/Admin/Dashboard'
         }, 2000)
     }).fail((e) => {
-        swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
-        console.log('e', JSON.parse(e))
+        Swal.fire('Error!', `${JSON.parse(e.responseText).message}`, 'error')
     })
 
     $('#error-confirmPassword').html('')
