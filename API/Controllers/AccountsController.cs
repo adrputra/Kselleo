@@ -15,8 +15,6 @@ namespace API.Controllers
     public class AccountsController : BaseController<Account, AccountRepository, int>
     {
         public AccountRepository accountRepository;
-        private readonly MyContext myContext;
-
 
         public AccountsController(AccountRepository accountRepository, MyContext myContext) : base(accountRepository)
         {
