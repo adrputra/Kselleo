@@ -26,16 +26,31 @@ const register = () => {
          'Content-Type': 'application/json',
       },
       data: JSON.stringify(request),
-      dataType: 'dataType',
-      success: function (response, asd) {
-         swal('Success!', 'Your account has been registered!', 'success')
-
-      },
-      error: function (e, asd) {
-         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
-         console.log('e', JSON.parse(e.responseText))
-      },
+      dataType: 'json',
+      // success: function (response, asd) {
+      //    swal('Success!', 'Your account has been registered!', 'success')
+      //    console.log('SUCCESSSS')
+      //    // window.location.href = 'https://localhost:3000/auth/login'
+      // },
+      // error: function (e, asd) {
+      //    swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      //    console.log('e', JSON.parse(e.responseText))
+      // },
+      // }).done((response) => {
+      //    console.log('OKKKKKK')
+      //    swal('Success!', 'Your account has been registered!', 'success')
+      //    window.location.href = 'https://localhost:3000/auth/login'
    })
+      .done((response) => {
+         swal('Success!', 'Your account has been registered!', 'success')
+         setTimeout(() => {
+            window.location.href = 'https://localhost:3000/auth/login'
+         }, 2000)
+      })
+      .fail((e) => {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+         console.log('e', JSON.parse(e))
+      })
 
    $('#error-confirmPassword').html('')
 
