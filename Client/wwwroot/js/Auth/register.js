@@ -29,6 +29,7 @@ const register = () => {
       dataType: 'dataType',
       success: function (response, asd) {
          swal('Success!', 'Your account has been registered!', 'success')
+
       },
       error: function (e, asd) {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
