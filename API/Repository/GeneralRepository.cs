@@ -10,7 +10,7 @@ namespace API.Repository
         where Entity : class
         where Context : MyContext
     {
-        private MyContext myContext;
+        internal MyContext myContext;
         private DbSet<Entity> entities;
 
         public GeneralRepository(MyContext myContext)
