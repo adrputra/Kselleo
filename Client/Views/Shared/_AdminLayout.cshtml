@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Client</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/adminLayout.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar-->
+        <div class="border-end bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading bg-white px-3 py-5">
+                <img src="~/images/logo.png" alt="logo" width="150px">
+            </div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Users</a>
+            </div>
+        </div>
+        <!-- Page content wrapper-->
+        <div id="page-content-wrapper">
+            <!-- Top navigation-->
+            <nav class="navbar navbar-expand-lg navbar-white bg-white border-bottom">
+                <div class="container-fluid">
+                    @* <button class="btn btn-primary" id="sidebarToggle">Toggle Menu</button> *@
+                    <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fa fa-bars" aria-hidden="true"></i></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div class="d-lg-flex justify-content-between w-100 align-items-center">
+                            <div class="pt-3" style="line-height: 10px;">
+                                <p style="color: #595959; font-size: 20px;">Hi, Mario</p>
+                                <p style="font-weight: bold; font-size: 20px;">Welcome Back!</p>
+                            </div>
+
+                            <div>
+                                <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-warning" id="navbarDropdown" href="#"
+                                            role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">
+                                            <i class="fa fa-bell text-warning" aria-hidden="true"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#!">Action</a>
+                                            <a class="dropdown-item" href="#!">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#!">Something else here</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item ">
+                                        <img src="https://ui-avatars.com/api/?name=John+Doe" alt="avatar" width="40"
+                                            class="rounded-circle">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Page content-->
+            <div class="container-fluid p-5">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        /*!
+* Start Bootstrap - Simple Sidebar v6.0.5 (https://startbootstrap.com/template/simple-sidebar)
+* Copyright 2013-2022 Start Bootstrap
+* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
+*/
+        // 
+        // Scripts
+        // 
+
+        window.addEventListener('DOMContentLoaded', event => {
+
+            // Toggle the side navigation
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                // Uncomment Below to persist sidebar toggle between refreshes
+                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                //     document.body.classList.toggle('sb-sidenav-toggled');
+                // }
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+
+        });
+    </script>
+</body>
+
+</html>
