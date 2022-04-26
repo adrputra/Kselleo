@@ -1,7 +1,10 @@
+using API.Context;
+using API.Repository.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,6 +29,21 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddScoped<AccountRepository>();
+            services.AddScoped<BoardRepository>();
+            services.AddScoped<CardRepository>();
+            services.AddScoped<CheckListItemAssignRepository>();
+            services.AddScoped<CheckListItemRepository>();
+            services.AddScoped<CommentRepository>();
+            services.AddScoped<ListRepository>();
+            services.AddScoped<MemberBoardRepository>();
+            services.AddScoped<MemberCardRepository>();
+            services.AddScoped<UserRepository>();
+
+            services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("API")));
+
+            //services.AddDbContext<MyContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("API")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
