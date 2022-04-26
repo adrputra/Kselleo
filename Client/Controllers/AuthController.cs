@@ -30,17 +30,25 @@ namespace Client.Controllers
          return View(new LoginVM());
       }
 
-      public IActionResult Register()
-      {
-         return View(new RegisterVM());
-      }
-
         [HttpPost]
       public IActionResult Login(LoginVM loginVM)
       {
          if (!ModelState.IsValid) return View(loginVM);
 
          return View(loginVM);
+      }
+
+        public IActionResult Register()
+      {
+         return View(new RegisterVM());
+      }
+
+       [HttpPost]
+      public IActionResult Register(RegisterVM registerVM)
+      {
+         if (!ModelState.IsValid) return View(registerVM);
+
+         return View(registerVM);
       }
    }
 }
