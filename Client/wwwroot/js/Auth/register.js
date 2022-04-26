@@ -42,9 +42,7 @@ const register = () => {
       //    window.location.href = 'https://localhost:3000/auth/login'
    })
       .done((response) => {
-         console.log('OKKKKKK')
          swal('Success!', 'Your account has been registered!', 'success')
-
          setTimeout(() => {
             window.location.href = 'https://localhost:3000/auth/login'
          }, 2000)
