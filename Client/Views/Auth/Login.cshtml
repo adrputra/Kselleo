@@ -37,16 +37,16 @@
                <p class="text-center px-4 py-2 " style="color: #083DF9;">Log in to Kselleo</p>
             </div>
 
-            <form asp-action="Login">
+            <form method="post" onsubmit="Login()">
                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                <div class="form-group">
-                  <label asp-for="EmailAddress" class="control-label"></label>
-                  <input asp-for="EmailAddress" class="form-control" placeholder="enter a email ...">
+                  <label class="control-label">Email</label>
+                  <input id="email" type="email" class="form-control" placeholder="Enter email" required>
                   <span asp-validation-for="EmailAddress" class="text-danger pt-1"></span>
                </div>
                <div class="form-group">
-                  <label asp-for="Password" class="control-label"></label>
-                  <input asp-for="Password" class="form-control" placeholder="enter a password ...">
+                  <label class="control-label">Password</label>
+                  <input id="password" type="password" class="form-control" placeholder="Enter password" required>
                   <span asp-validation-for="Password" class="text-danger pt-1"></span>
                </div>
 
@@ -71,6 +71,7 @@
 
    <script src="~/lib/jquery/dist/jquery.min.js"></script>
    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="~/js/Auth/login.js"></script>
 </body>
 
 </html>

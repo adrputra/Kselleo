@@ -8,8 +8,8 @@ namespace Client.ViewModels
 {
    public class LoginVM
    {
-      [Display(Name = "Email address")]
-      [Required(ErrorMessage = "Email address is required")]
+      [Display(Name = "Email")]
+      [Required(ErrorMessage = "Email is required")]
       public string EmailAddress { get; set; }
 
       [Required]
