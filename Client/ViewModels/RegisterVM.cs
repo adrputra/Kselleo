@@ -16,6 +16,10 @@ namespace Client.ViewModels
       [Required(ErrorMessage = "Email is required")]
       public string Email { get; set; }
 
+      [Display(Name = "Gender")]
+      [Required(ErrorMessage = "Gender is required")]
+      public string Gender { get; set; }
+
       [Required]
       [DataType(DataType.Password)]
       [MinLength(5)]
