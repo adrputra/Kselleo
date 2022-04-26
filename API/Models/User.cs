@@ -6,7 +6,7 @@ namespace API.Models
     public class User
     {
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Gender { get; set; }
@@ -15,6 +15,9 @@ namespace API.Models
         //public virtual Board Board { get; set; }
         //public virtual List List { get; set; }
         //public virtual Card Card { get; set; }
+        public virtual ICollection<Board> Boards { get; set; }
+        public virtual ICollection<List> Lists { get; set; }
+        public virtual ICollection<Card> Cards { get; set; }
         public virtual ICollection<MemberBoard> MemberBoards{ get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<MemberCard> MemberCards { get; set; }

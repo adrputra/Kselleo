@@ -42,6 +42,21 @@ namespace API.Context
             //    .WithOne(card => card.User)
             //    .HasForeignKey<Card>(card => card.CreatedBy);
 
+            modelBuilder.Entity<Board>()
+                .HasOne(board => board.User)
+                .WithMany(user => user.Boards)
+                .HasForeignKey(board => board.CreatedBy);
+
+            modelBuilder.Entity<List>()
+                .HasOne(list => list.User)
+                .WithMany(user => user.Lists)
+                .HasForeignKey(list => list.CreatedBy);
+
+            modelBuilder.Entity<Card>()
+                .HasOne(card => card.User)
+                .WithMany(user => user.Cards)
+                .HasForeignKey(card => card.CreatedBy);
+
             modelBuilder.Entity<Comment>()
                 .HasOne(comment => comment.User)
                 .WithMany(user => user.Comments)
