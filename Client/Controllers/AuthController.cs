@@ -38,9 +38,19 @@ namespace Client.Controllers
          return View(loginVM);
       }
 
-        public IActionResult Register()
+      public IActionResult Register()
       {
          return View(new RegisterVM());
+      }
+
+      public IActionResult ForgotPassword()
+      {
+         return View(new ForgetPasswordVM());
+      }
+
+      public IActionResult ChangePassword()
+      {
+            return View(new ChangePasswordVM());
       }
 
        [HttpPost]
