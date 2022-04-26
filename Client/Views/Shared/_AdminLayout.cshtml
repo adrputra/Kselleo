@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        .isActive {
+            background-color: #FAF5E4;
+        }
+    </style>
 </head>
 
 <body>
@@ -22,8 +28,11 @@
                 <img src="~/images/logo.png" alt="logo" width="150px">
             </div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Users</a>
+                <a asp-controller="Admin" asp-action="Dashboard"
+                    class="list-group-item list-group-item-action list-group-item-light p-3 
+                    @(ViewContext.RouteData.Values["Action"].ToString() == "Dashboard" ? "isActive" : "")">Dashboard</a>
+                <a asp-controller="Admin" asp-action="Users" class="list-group-item list-group-item-action list-group-item-light p-3
+                    @(ViewContext.RouteData.Values["Action"].ToString() == "Users" ? "isActive" : "")">Users</a>
             </div>
         </div>
         <!-- Page content wrapper-->
@@ -46,10 +55,12 @@
                             <div>
                                 <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle text-warning" id="navbarDropdown" href="#"
-                                            role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
+                                        <a class="nav-link dropdown-toggle text-warning mr-3" id="navbarDropdown"
+                                            href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false" style="position: relative;">
                                             <i class="fa fa-bell text-warning" aria-hidden="true"></i>
+                                            <span class="badge badge-danger badge-counter"
+                                                style="position: absolute; top: 4; font-size: 8px; right: 9;">3+</span>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="#!">Action</a>
@@ -62,6 +73,7 @@
                                         <img src="https://ui-avatars.com/api/?name=John+Doe" alt="avatar" width="40"
                                             class="rounded-circle">
                                     </li>
+
                                 </ul>
                             </div>
                         </div>
