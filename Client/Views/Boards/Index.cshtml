@@ -1,0 +1,85 @@
+@using Client.ViewModels;
+@model NewBoard;
+
+@{
+   Layout = "_UserLayout";
+   ViewData["Title"] = "My Boards";
+}
+
+<div class="header p-5 bg-white w-100 d-flex justify-content-between align-items-center shadow rounded">
+   <h2>My Boards</h2>
+   <button class="btn text-white" style="background-color: #F8B401;" data-bs-toggle="modal"
+      data-bs-target="#createBoard">
+      Create Board
+   </button>
+</div>
+
+<div class="row mt-4">
+   <div class="col-4">
+      <a asp-controller="Boards" asp-action="Detail" style="text-decoration: none;">
+         <div class="box shadow rounded" style="padding: 25px;">
+            <h4 style="color: black;">Learning Management System</h4>
+            <p style="color: #646464;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate odio harum
+               maxime
+               dolorem repudiandae,
+               odit voluptas accusamus autem fugiat soluta, pariatur commodi deserunt inventore provident. Aperiam !</p>
+
+            <div class="d-flex align-items-center justify-content-between">
+               <div class="pm">
+                  <img src="https://ui-avatars.com/api/?name=John+Doe" alt="project-manager" width="40px"
+                     class="rounded-circle">
+                  <span class="pl-1" style="color: black;">John Doe</span>
+               </div>
+
+               <div class="members d-flex">
+                  <img src="https://ui-avatars.com/api/?name=Rama+Dhani&background=random" alt="project-manager"
+                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+                     title="Rama Dhani - BE" style="margin-right: -20px;">
+                  <img src="https://ui-avatars.com/api/?name=Neo+Adam&background=random" alt="project-manager"
+                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+                     title="Neo Adam - BE" style="margin-right: -20px;">
+                  <img src="https://ui-avatars.com/api/?name=Cristiano+Ronaldo&background=random" alt="project-manager"
+                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+                     title="Cristiano Ronaldo - BE" style="margin-right: -20px;">
+                  <img src="https://ui-avatars.com/api/?name=Messi&background=random" alt="project-manager" width="40px"
+                     class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Messi - FE">
+               </div>
+            </div>
+
+         </div>
+      </a>
+   </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="createBoard" tabindex="-1" role="dialog" aria-labelledby="createBoardLabel"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="createBoardLabel">Create Board</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form asp-action="Login">
+               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               <div class="form-group">
+                  <label asp-for="Name" class="control-label"></label>
+                  <input asp-for="Name" class="form-control" placeholder="enter a name of board ...">
+                  <span asp-validation-for="Name" class="text-danger pt-1"></span>
+               </div>
+               <div class="form-group">
+                  <label asp-for="Description" class="control-label"></label>
+                  <textarea asp-for="Description" class="form-control" placeholder="enter a description ..."></textarea>
+                  <span asp-validation-for="Description" class="text-danger pt-1"></span>
+               </div>
+               <input type="submit" value="Submit" class="btn text-white float-right"
+                  style="background-color: #F8B401; " />
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
