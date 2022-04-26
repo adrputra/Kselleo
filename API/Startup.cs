@@ -43,6 +43,7 @@ namespace API
             services.AddScoped<MemberBoardRepository>();
             services.AddScoped<MemberCardRepository>();
             services.AddScoped<UserRepository>();
+            services.AddScoped<VerifyInviteRepository>();
 
             services.AddDbContext<MyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("API")));
 
