@@ -29,7 +29,7 @@ namespace API.Repository.Data
                 FullName = registerVM.FullName,
                 Email = registerVM.Email,
                 Gender = registerVM.Gender,
-                Image = registerVM.Image
+                Image = "Ini Foto"
             };
 
             var cekEmail = myContext.Users.Any(e => e.Email == regUser.Email);
