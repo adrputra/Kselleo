@@ -35,6 +35,7 @@
          </tbody>
       </table>
    </div>*@
+
    <div class="main mt-5">
        <table class="table tableUser mt-3">
           <thead style="background-color: #F8B401;">
@@ -47,12 +48,9 @@
             </tr>
           </thead>
           <tbody id="table">
-
           </tbody>
         </table>
    </div>
-   
-
 </div>
 
 
@@ -60,16 +58,17 @@
 <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
    <div class="modal-dialog ">
       <div class="modal-content">
-         <div class="modal-header">
+         <div class="modal-header" style="background-color: #F8B401;">
+            <img src="~/images/logo.png" alt="logo" width="150px">
             <h5 class="modal-title" id="addUserLabel">Add User</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
          </div>
          <div class="modal-body">
             <form class="needs-validation">
                 <div class="form-row">
                     <div class="col-md-12 mb-3">
-                      <label for="firstName">Full Name</label>
-                      <input type="text" class="form-control" id="firstName" required>
+                      <label for="fullName"><i class="fa-solid fa-user"></i> Full Name</label>
+                      <input type="text" class="form-control" id="fullName" required>
                       <div class="valid-feedback">
                         Looks good!
                       </div>
@@ -77,14 +76,14 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-8 mb-3">
-                      <label for="firstName">Email</label>
-                      <input type="text" class="form-control" id="firstName" required>
+                      <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+                      <input type="text" class="form-control" id="email" required>
                       <div class="valid-feedback">
                         Looks good!
                       </div>
                     </div>
                     <div class="col-md-4 mb-3">
-                      <label for="gender">Gender</label>
+                      <label for="gender"><i class="fa-solid fa-mars-and-venus"></i> Gender</label>
                       <select class="custom-select" id="gender" required>
                         <option selected disabled value="">Gender</option>
                         <option value="Male">Male</option>
@@ -97,15 +96,15 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6 mb-3">
-                      <label for="firstName">Password</label>
-                      <input type="text" class="form-control" id="firstName" required>
+                      <label for="Password"><i class="fa-solid fa-lock"></i> Password</label>
+                      <input type="text" class="form-control" id="Password" required>
                       <div class="valid-feedback">
                         Looks good!
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
-                      <label for="firstName">Confirm Password</label>
-                      <input type="text" class="form-control" id="firstName" required>
+                      <label for="confirmPassword"><i class="fa-solid fa-lock"></i> Confirm Password</label>
+                      <input type="text" class="form-control" id="confirmPassword" required>
                       <div class="valid-feedback">
                         Looks good!
                       </div>
@@ -121,4 +120,51 @@
    </div>
 </div>
 
-
+<!-- Modal Update User-->
+<div class="modal fade" id="updateUser" tabindex="-1" aria-labelledby="updateUserLabel" aria-hidden="true">
+   <div class="modal-dialog ">
+      <div class="modal-content">
+         <div class="modal-header" style="background-color: #F8B401;">
+            <img src="~/images/logo.png" alt="logo" width="150px">
+            <h5 class="modal-title" id="addUserLabel">Update User</h5>
+            @*<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+         </div>
+         <div class="modal-body" onsubmit="update()">
+            <form class="needs-validation">
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="FullNameUpdate"><i class="fa-solid fa-user"></i> Full Name</label>
+                      <input type="text" class="form-control" id="FullNameUpdate" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-8 mb-3">
+                      <label for="EmailUpdate"><i class="fa-solid fa-envelope"></i> Email</label>
+                      <input type="text" class="form-control" id="EmailUpdate" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="GenderUpdate"><i class="fa-solid fa-mars-and-venus"></i> Gender</label>
+                      <select class="custom-select" id="GenderUpdate" required>
+                        <option selected disabled value="">Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please select a valid state.
+                      </div>
+                    </div>
+                </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button class="btn btn-primary" onclick="update()" type="submit">Save changes</button>
+         </div>
+      </div>
+   </div>
+</div>

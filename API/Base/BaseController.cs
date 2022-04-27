@@ -41,16 +41,16 @@ namespace API.Base
         [HttpGet("{key}")]
         public ActionResult<Entity> GetByID(Key key)
         {
-            //try
-            //{
-            //    var master = repository.Get(key);
-            //    return StatusCode(200, new { status = HttpStatusCode.OK, result = master, message = $"Get Master Data {key} Successfully!" });
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            //}
-            return Ok(repository.Get(key));
+            try
+            {
+                var master = repository.Get(key);
+                return StatusCode(200, new { status = HttpStatusCode.OK, result = master, message = $"Get Master Data {key} Successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+            //return Ok(repository.Get(key));
         }
 
         [HttpPost]
