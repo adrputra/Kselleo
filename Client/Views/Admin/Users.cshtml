@@ -12,23 +12,21 @@
       </button>
    </div>
 
-   <div class="main mt-5">
-
+   @*<div class="main mt-5">
       <table id="table_id" class="mt-3">
-         <thead>
+         <thead class="thead-dark">
             <tr>
-               <th>No</th>
-               <th>Image</th>
-               <th>Full Name</th>
-               <th>Email</th>
-               <th>Action</th>
+               <th class="text-center">No</th>
+               <th class="text-center">Image</th>
+               <th class="text-center">Full Name</th>
+               <th class="text-center">Email</th>
+               <th class="text-center">Action</th>
             </tr>
          </thead>
          <tbody>
             <tr>
                <td>1</td>
                <td>
-
                </td>
                <td>Row 1 Data 2</td>
                <td>Row 1 Data 2</td>
@@ -36,20 +34,84 @@
             </tr>
          </tbody>
       </table>
+   </div>*@
+   <div class="main mt-5">
+       <table class="table tableUser table-striped mt-3">
+          <thead class="thead-dark">
+            <tr>
+              <th class="text-center">No</th>
+              <th class="text-center">Image</th>
+              <th class="text-center">Full Name</th>
+              <th class="text-center">Email</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody id="table">
+
+          </tbody>
+        </table>
    </div>
+   
+
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Add User-->
 <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
-   <div class="modal-dialog">
+   <div class="modal-dialog ">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="addUserLabel">Modal title</h5>
+            <h5 class="modal-title" id="addUserLabel">Add User</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body">
-            ...
+            <form class="needs-validation">
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="firstName">Full Name</label>
+                      <input type="text" class="form-control" id="firstName" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-8 mb-3">
+                      <label for="firstName">Email</label>
+                      <input type="text" class="form-control" id="firstName" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="gender">Gender</label>
+                      <select class="custom-select" id="gender" required>
+                        <option selected disabled value="">Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                      </select>
+                      <div class="invalid-feedback">
+                        Please select a valid state.
+                      </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName">Password</label>
+                      <input type="text" class="form-control" id="firstName" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName">Confirm Password</label>
+                      <input type="text" class="form-control" id="firstName" required>
+                      <div class="valid-feedback">
+                        Looks good!
+                      </div>
+                    </div>
+                </div>
+            </form>
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
