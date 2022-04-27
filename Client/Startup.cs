@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,7 +38,6 @@ namespace Client
 
          services.AddScoped<AuthRepository>();
          services.AddScoped<Address>();
-
 
 
          services.AddAuthentication(auth =>
@@ -90,6 +90,28 @@ namespace Client
             }
             await next();
          });
+
+         // app.UseStatusCodePages(async context =>
+         //       {
+         //          var request = context.HttpContext.Request;
+         //          var response = context.HttpContext.Response;
+
+         //          // Console.WriteLine("STATUS CODE {0}", response.StatusCode);
+
+         //          if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
+         //          {
+         //             response.Redirect("/forbidden");
+         //          }
+         //          else if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized))
+         //          {
+         //             response.Redirect("/unauthorized");
+         //          }
+         //          else if (response.StatusCode.Equals((int)HttpStatusCode.NotFound))
+         //          {
+         //             response.Redirect("/notfound");
+         //          }
+         //       });
+
          app.UseAuthentication();
          app.UseAuthorization();
 

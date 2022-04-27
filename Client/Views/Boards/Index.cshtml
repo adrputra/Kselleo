@@ -1,9 +1,10 @@
 @using Client.ViewModels;
-@model NewBoard;
+@model PageBoardVM;
 
 @{
    Layout = "_UserLayout";
    ViewData["Title"] = "My Boards";
+   ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }
 
 <div class="header p-5 bg-white w-100 d-flex justify-content-between align-items-center shadow rounded">
@@ -14,41 +15,59 @@
    </button>
 </div>
 
-<div class="row mt-4">
-   <div class="col-4">
+
+<div class="row mt-4" id="row">
+   @* <div class="col-md-6 col-lg-4 mb-4">
       <a asp-controller="Boards" asp-action="Detail" asp-route-id="1" style="text-decoration: none;">
-         <div class="box shadow rounded" style="padding: 25px;">
-            <h4 style="color: black;">Learning Management System</h4>
-            <p style="color: #646464;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate odio harum
-               maxime
-               dolorem repudiandae,
-               odit voluptas accusamus autem fugiat soluta, pariatur commodi deserunt inventore provident. Aperiam !</p>
+      <div class="box shadow rounded d-flex justify-content-between flex-column"
+      style="padding: 25px; min-height: 200px;">
+      <div class="top">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+      <span class="badge badge-pill badge-info mb-3">Created at 2020-12-04</span>
+      <div class="buttons d-flex" style="gap: 5px;">
+      <button class="btn btn-outline-warning">
+      <i class="fa fa-pencil" aria-hidden="true"></i>
+      </button>
+      <button class="btn btn-outline-danger">
+      <i class="fa fa-trash" aria-hidden="true"></i>
+      </button>
+      </div>
+      </div>
+      <h4 style="color: black;">Learning Management System</h4>
+      <p style="color: #646464;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate odio harum
+      maxime
+      dolorem repudiandae,
+      odit voluptas accusamus autem fugiat soluta, pariatur commodi deserunt inventore provident. Aperiam !
+      </p>
+      </div>
 
-            <div class="d-flex align-items-center justify-content-between">
-               <div class="pm">
-                  <img src="https://ui-avatars.com/api/?name=John+Doe" alt="project-manager" width="40px"
-                     class="rounded-circle">
-                  <span class="pl-1" style="color: black;">John Doe</span>
-               </div>
+      <div class="bottom">
+      <div class="d-flex align-items-center justify-content-between">
+      <div class="pm">
+      <img src="https://ui-avatars.com/api/?name=John+Doe" alt="project-manager" width="40px"
+      class="rounded-circle">
+      <span class="pl-1" style="color: black;">John Doe</span>
+      </div>
 
-               <div class="members d-flex">
-                  <img src="https://ui-avatars.com/api/?name=Rama+Dhani&background=random" alt="project-manager"
-                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
-                     title="Rama Dhani - BE" style="margin-right: -20px;">
-                  <img src="https://ui-avatars.com/api/?name=Neo+Adam&background=random" alt="project-manager"
-                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
-                     title="Neo Adam - BE" style="margin-right: -20px;">
-                  <img src="https://ui-avatars.com/api/?name=Cristiano+Ronaldo&background=random" alt="project-manager"
-                     width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
-                     title="Cristiano Ronaldo - BE" style="margin-right: -20px;">
-                  <img src="https://ui-avatars.com/api/?name=Messi&background=random" alt="project-manager" width="40px"
-                     class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Messi - FE">
-               </div>
-            </div>
-
-         </div>
+      <div class="members d-flex">
+      <img src="https://ui-avatars.com/api/?name=Rama+Dhani&background=random" alt="project-manager"
+      width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+      title="Rama Dhani - BE" style="margin-right: -20px;">
+      <img src="https://ui-avatars.com/api/?name=Neo+Adam&background=random" alt="project-manager"
+      width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+      title="Neo Adam - BE" style="margin-right: -20px;">
+      <img src="https://ui-avatars.com/api/?name=Cristiano+Ronaldo&background=random"
+      alt="project-manager" width="40px" class="rounded-circle" data-toggle="tooltip"
+      data-placement="right" title="Cristiano Ronaldo - BE" style="margin-right: -20px;">
+      <img src="https://ui-avatars.com/api/?name=Messi&background=random" alt="project-manager"
+      width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
+      title="Messi - FE">
+      </div>
+      </div>
+      </div>
+      </div>
       </a>
-   </div>
+      </div> *@
 </div>
 
 
@@ -64,17 +83,19 @@
             </button>
          </div>
          <div class="modal-body">
-            <form asp-controller="Boards" asp-action="Index">
+            <form onsubmit="createBoard()">
+               <input type="hidden" name="userId" id="userId" value="@Model.DecodeJwtVM.Id">
                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                <div class="form-group">
-                  <label asp-for="Name" class="control-label"></label>
-                  <input asp-for="Name" class="form-control" placeholder="enter a name of board ...">
-                  <span asp-validation-for="Name" class="text-danger pt-1"></span>
+                  <label class="control-label">Name</label>
+                  <input id="name" class="form-control" placeholder="enter a name of board ..." required>
+                  <span class="text-danger pt-1"></span>
                </div>
                <div class="form-group">
-                  <label asp-for="Description" class="control-label"></label>
-                  <textarea asp-for="Description" class="form-control" placeholder="enter a description ..."></textarea>
-                  <span asp-validation-for="Description" class="text-danger pt-1"></span>
+                  <label class="control-label">Description</label>
+                  <textarea id="description" class="form-control" placeholder="enter a description ..."
+                     required></textarea>
+                  <span class="text-danger pt-1"></span>
                </div>
                <input type="submit" value="Submit" class="btn text-white float-right"
                   style="background-color: #F8B401; " />
@@ -83,3 +104,42 @@
       </div>
    </div>
 </div>
+
+<!-- Modalupdate -->
+<div class="modal fade" id="updateBoard" tabindex="-1" role="dialog" aria-labelledby="updateBoardLabel"
+   aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateBoardLabel">Update Board</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateBoard()">
+               <input type="hidden" name="boardIdUpdate" id="boardIdUpdate" value="@Model.DecodeJwtVM.Id">
+               <input type="hidden" name="userIdUpdate" id="userIdUpdate" value="@Model.DecodeJwtVM.Id">
+               <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+               <div class="form-group">
+                  <label class="control-label">Name</label>
+                  <input id="name_update" class="form-control" placeholder="enter a name of board ..." required>
+                  <span class="text-danger pt-1"></span>
+               </div>
+               <div class="form-group">
+                  <label class="control-label">Description</label>
+                  <textarea id="description_update" class="form-control" placeholder="enter a description ..."
+                     required></textarea>
+                  <span class="text-danger pt-1"></span>
+               </div>
+               <input type="submit" value="Submit" class="btn text-white float-right"
+                  style="background-color: #F8B401; " />
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+@section Scripts {
+<script src="~/js/Board/Index.js"></script>
+}
