@@ -17,11 +17,11 @@ namespace API.Repository.Data
         {
             var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == verifyInvite.UserId && e.BoardID == verifyInvite.BoardID);
             var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == verifyInvite.UserId && e.BoardID == verifyInvite.BoardID).Id;
-            var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
-            var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
 
             if (checkUserBoard)
             {
+                var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
+                var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
                 if (isAccept)
                 {
                     return 2;

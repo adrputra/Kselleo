@@ -32,7 +32,7 @@ namespace API.Repository.Data
                 Image = "Ini Foto"
             };
 
-            var cekEmail = myContext.Users.Any(e => e.Email == regUser.Email);
+            var cekEmail = myContext.Users.Any(e => e.Email == registerVM.Email);
             if (cekEmail)
             {
                 return 1;
