@@ -267,7 +267,6 @@ namespace API.Repository.Data
 
       public object GetBoardDetailById(int id)
       {
-         Console.WriteLine(id);
          //  var board = myContext.Boards.Find(id).Include()
          var board = myContext.Boards
                         .Include(m => m.MemberBoards).ThenInclude(us => us.User)
