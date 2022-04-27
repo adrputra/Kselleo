@@ -1,5 +1,9 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +21,32 @@ namespace Kselleo.Controllers
       [HttpGet("/boards")]
       public IActionResult Index()
       {
-         return View(new NewBoard());
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
+
+         var handler = new JwtSecurityTokenHandler();
+         var decode = handler.ReadJwtToken(token);
+
+         var id = decode.Claims.First(claim => claim.Type == "Id").Value;
+         var role = decode.Claims.First(claim => claim.Type == "Roles").Value;
+         var fullName = decode.Claims.First(claim => claim.Type == "Fullname").Value;
+         var image = decode.Claims.First(claim => claim.Type == "Image").Value;
+         var email = decode.Claims.First(claim => claim.Type == "Email").Value;
+
+         var decodeJWT = new DecodeJwtVM
+         {
+            Id = id,
+            FullName = fullName,
+            Image = image,
+            Email = email,
+            Roles = role
+         };
+
+         PageBoardVM pageBoardVM = new PageBoardVM();
+         pageBoardVM.NewBoard = new NewBoard();
+         pageBoardVM.DecodeJwtVM = decodeJWT;
+
+         return View(pageBoardVM);
       }
 
       [HttpPost("/boards")]
@@ -30,7 +59,9 @@ namespace Kselleo.Controllers
 
       public IActionResult Detail(int id)
       {
-         Console.WriteLine(id);
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
+
 
          return View();
       }

@@ -48,7 +48,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <div class="d-lg-flex justify-content-between w-100 align-items-center">
                             <div class="pt-3" style="line-height: 10px;">
-                                <p style="color: #595959; font-size: 20px;">Hi, Mario</p>
+                                <p style="color: #595959; font-size: 20px;">Hi, @ViewData["FullName"]</p>
                                 <p style="font-weight: bold; font-size: 20px;">Welcome Back!</p>
                             </div>
                             <div>
@@ -69,8 +69,14 @@
                                         </div>
                                     </li>
                                     <li class="nav-item ">
-                                        <img src="https://ui-avatars.com/api/?name=John+Doe" alt="avatar" width="40"
-                                            class="rounded-circle">
+                                        <img src="https://ui-avatars.com/api/?name=@ViewData["FullName"]&background=random"
+                                            alt="avatar" width="56" class="rounded-circle nav-link dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                            style="cursor: pointer;">
+                                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" asp-controller="Auth"
+                                                asp-action="Logout">Logout</a>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -88,6 +94,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/swal.js"></script>
+    <script src="~/lib/moment.js"></script>
+
+
 
     @RenderSection("Scripts", required: false)
 
@@ -110,10 +120,6 @@
 
         });
 
-
-        $(document).ready(function () {
-            $('#table_id').DataTable();
-        });
     </script>
 
 </body>

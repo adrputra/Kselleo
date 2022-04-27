@@ -2,6 +2,7 @@
 using Client.Models;
 using Client.Repositories.Data;
 using Client.ViewModels;
+using Kselleo.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -36,6 +37,12 @@ namespace Client.Controllers
 
       public IActionResult Login()
       {
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token != null) return RedirectToAction("Index", "Boards");
+
+
+         ViewBag.IsError = false;
+
          return View(new LoginVM());
       }
 
@@ -50,6 +57,7 @@ namespace Client.Controllers
 
          if (token == null)
          {
+            ViewBag.IsError = true;
             ViewBag.Message = jwtToken.message;
             return View("login");
          }
@@ -60,7 +68,18 @@ namespace Client.Controllers
 
          var decode = handler.ReadJwtToken(token);
 
-         var role = decode.Claims.First(claim => claim.Type == "role").Value;
+         var role = decode.Claims.First(claim => claim.Type == "Roles").Value;
+         var fullName = decode.Claims.First(claim => claim.Type == "Fullname").Value;
+         var image = decode.Claims.First(claim => claim.Type == "Image").Value;
+         var email = decode.Claims.First(claim => claim.Type == "Email").Value;
+
+         var decodeJWT = new DecodeJwtVM
+         {
+            FullName = fullName,
+            Image = image,
+            Email = email,
+            Roles = role
+         };
 
          if (role == "Admin")
          {
@@ -75,6 +94,9 @@ namespace Client.Controllers
 
       public IActionResult Register()
       {
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token != null) return RedirectToAction("Index", "Boards");
+
          return View(new RegisterVM());
       }
 
@@ -95,6 +117,11 @@ namespace Client.Controllers
          return View(new ChangePasswordVM());
       }
 
+      public IActionResult Logout()
+      {
+         HttpContext.Session.Remove("JWToken");
+         return RedirectToAction("Login", "Auth");
+      }
 
    }
 }
