@@ -1,4 +1,5 @@
-﻿using API.Repository.Interface;
+﻿using API.Context;
+using API.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace API.Base
         where Repository : IRepository<Entity,Key>
     {
         private readonly Repository repository;
+        internal MyContext myContext;
         public BaseController(Repository repository)
         {
             this.repository = repository;

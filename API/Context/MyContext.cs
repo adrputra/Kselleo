@@ -19,6 +19,7 @@ namespace API.Context
         public DbSet<MemberBoard> MemberBoards{ get; set; }
         public DbSet<MemberCard> MemberCards{ get; set; }
         public DbSet<User> Users{ get; set; }
+        public DbSet<VerifyInvite> VerifyInvites{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

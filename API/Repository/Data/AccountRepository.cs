@@ -46,7 +46,7 @@ namespace API.Repository.Data
                 {
                     UserId = myContext.Users.SingleOrDefault(e => e.Email == registerVM.Email).Id,
                     Password = BCrypt.Net.BCrypt.HashPassword(registerVM.Password, BCrypt.Net.BCrypt.GenerateSalt(12)),
-                    Role = "Admin"
+                    Role = "User"
                 };
 
                 myContext.Accounts.Add(regAccount);
@@ -74,6 +74,8 @@ namespace API.Repository.Data
                                      });
                         var claims = new List<Claim>();
                         claims.Add(new Claim("Email", loginVM.Email));
+                        claims.Add(new Claim("Fullname", checkEmail.FullName));
+                        claims.Add(new Claim("Image", checkEmail.Image));
                         foreach (var item in roles)
                         {
                             claims.Add(new Claim("role", item.role));
