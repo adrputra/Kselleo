@@ -67,7 +67,11 @@ namespace API
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
-            });
+            });// cors
+         services.AddCors(c =>
+      {
+         c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+      });
 
         }
 
@@ -79,17 +83,33 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+      // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+      public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+      {
+         if (env.IsDevelopment())
+         {
+            app.UseDeveloperExceptionPage();
+         }
 
-            app.UseRouting();
+         app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+         app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
+         // cors
+         app.UseCors(x => x
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowed(origin => true)
+            .AllowCredentials());
+
+
+         app.UseAuthentication();
+         app.UseAuthorization();
+
+         app.UseEndpoints(endpoints =>
+         {
+            endpoints.MapControllers();
+         });
+      }
+   }
 }

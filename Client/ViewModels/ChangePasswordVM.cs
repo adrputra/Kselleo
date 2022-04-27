@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Client.ViewModels
 {
-   public class LoginVM
+   public class ChangePasswordVM
    {
       [Display(Name = "Email")]
       [Required(ErrorMessage = "Email is required")]
-      public string EmailAddress { get; set; }
+      public string Email { get; set; }
+      public int OTP { get; set; }
+      public string NewPassword { get; set; }
+      public string ConfirmPassword { get; set; }
 
-      [Required]
-      [DataType(DataType.Password)]
-      public string Password { get; set; }
    }
 }

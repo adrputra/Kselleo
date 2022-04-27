@@ -2,10 +2,13 @@
 using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Client.Controllers
@@ -30,7 +33,7 @@ namespace Client.Controllers
          return View(new LoginVM());
       }
 
-        [HttpPost]
+      [HttpPost]
       public IActionResult Login(LoginVM loginVM)
       {
          if (!ModelState.IsValid) return View(loginVM);
@@ -38,17 +41,28 @@ namespace Client.Controllers
          return View(loginVM);
       }
 
-        public IActionResult Register()
+      public IActionResult Register()
       {
          return View(new RegisterVM());
       }
-
-       [HttpPost]
+        
+      [HttpPost]
       public IActionResult Register(RegisterVM registerVM)
       {
          if (!ModelState.IsValid) return View(registerVM);
 
          return View(registerVM);
       }
+      public IActionResult ForgotPassword()
+      {
+         return View(new ForgetPasswordVM());
+      }
+
+      public IActionResult ChangePassword()
+      {
+         return View(new ChangePasswordVM());
+      }
+
+      
    }
 }
