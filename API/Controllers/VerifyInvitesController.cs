@@ -41,7 +41,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("accept")]
+        [HttpPut("accept")]
         public ActionResult Accept(VerifyInvite verifyInvite)
         {
             try
@@ -49,8 +49,8 @@ namespace API.Controllers
                 int accept = verifyInviteRepository.AcceptInvite(verifyInvite);
                 return accept switch
                 {
-                    0 => Ok(new { code = HttpStatusCode.OK, message = "User added to board Successfull" }),
-                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Failed add user to board!" }),
+                    0 => Ok(new { code = HttpStatusCode.OK, message = "Successfully Accept Invitation" }),
+                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invitation Accept Failed!" }),
                     _ => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Failed!" })
                 };
 

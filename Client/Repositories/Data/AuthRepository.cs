@@ -38,7 +38,6 @@ namespace Client.Repositories.Data
          Console.WriteLine($"content => {content}");
 
          var result = await httpClient.PostAsync(address.link + request + "login", content);
-
          Console.WriteLine($"result => {result}");
          string apiResponse = await result.Content.ReadAsStringAsync();
 

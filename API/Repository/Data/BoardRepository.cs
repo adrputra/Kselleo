@@ -43,9 +43,10 @@ namespace API.Repository.Data
                          join brd in myContext.Boards on memberboard.BoardId equals brd.Id
                          where memberboard.UserId == Id
                          let createdBy = (from cb_user in myContext.Users
-                                          where cb_user.Id == Id
+                                          where cb_user.Id == brd.CreatedBy
                                           select new
                                           {
+                                              id = cb_user.Id,
                                               fullName = cb_user.FullName,
                                               email = cb_user.Email,
                                               gender = cb_user.Gender,
@@ -57,16 +58,19 @@ namespace API.Repository.Data
                                         where m_mb.BoardId == brd.Id
                                         select new
                                         {
+                                            id = m_user.Id,
                                             fullName = m_user.FullName,
                                             email = m_user.Email,
                                             gender = m_user.Gender,
-                                            image = m_user.Image
+                                            image = m_user.Image,
+                                            role = m_mb.Role
                                         }).ToList()
 
                          let lists = (from list in myContext.Lists
                                       where list.BoardId == brd.Id
                                       select new
                                       {
+                                          id = list.Id,
                                           name = list.Name,
                                           createdAt = list.CreatedAt,
                                           status = list.Status,
@@ -74,6 +78,7 @@ namespace API.Repository.Data
                                                        where l_user.Id == list.CreatedBy
                                                        select new
                                                        {
+                                                           id = l_user.Id,
                                                            fullName = l_user.FullName,
                                                            email = l_user.Email,
                                                            gender = l_user.Gender,
@@ -84,6 +89,7 @@ namespace API.Repository.Data
                                                    where card.ListId == list.Id
                                                    select new
                                                    {
+                                                       id = card.Id,
                                                        name = card.Name,
                                                        description = card.Status,
                                                        due = card.Due,
@@ -92,6 +98,7 @@ namespace API.Repository.Data
                                                                     where c_user.Id == card.CreatedBy
                                                                     select new
                                                                     {
+                                                                        id = c_user.Id,
                                                                         fullName = c_user.FullName,
                                                                         email = c_user.Email,
                                                                         gender = c_user.Gender,
@@ -101,6 +108,7 @@ namespace API.Repository.Data
                                                                     where check.CardId == card.Id
                                                                     select new
                                                                     {
+                                                                        id = check.Id,
                                                                         name = check.Name,
                                                                         due = check.Due,
                                                                         assign = (from cl in myContext.CheckListItemsAssigns
@@ -108,6 +116,7 @@ namespace API.Repository.Data
                                                                                   where cl.CheckListItemId == check.Id
                                                                                   select new
                                                                                   {
+                                                                                      id = cl_user.Id,
                                                                                       fullName = cl_user.FullName,
                                                                                       email = cl_user.Email,
                                                                                       gender = cl_user.Gender,
@@ -118,11 +127,13 @@ namespace API.Repository.Data
                                                                    where comment.CardId == card.Id
                                                                    select new
                                                                    {
+                                                                       id = comment.Id,
                                                                        user = (from com in myContext.Comments
                                                                                join com_user in myContext.Users on com.UserId equals com_user.Id
                                                                                where com.CardId == card.Id
                                                                                select new
                                                                                {
+                                                                                   id = com_user.Id,
                                                                                    fullName = com_user.FullName,
                                                                                    email = com_user.Email,
                                                                                    gender = com_user.Gender,
@@ -135,6 +146,7 @@ namespace API.Repository.Data
                                       }).ToList()
                          select new
                          {
+                             id = brd.Id,
                              name = brd.Name,
                              description = brd.Description,
                              createdBy = createdBy,
