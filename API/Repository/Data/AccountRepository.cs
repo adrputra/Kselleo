@@ -73,12 +73,13 @@ namespace API.Repository.Data
                                          role = acc.Role
                                      });
                         var claims = new List<Claim>();
+                        claims.Add(new Claim("Id", checkEmail.Id.ToString()));
                         claims.Add(new Claim("Email", loginVM.Email));
                         claims.Add(new Claim("Fullname", checkEmail.FullName));
                         claims.Add(new Claim("Image", checkEmail.Image));
                         foreach (var item in roles)
                         {
-                            claims.Add(new Claim("role", item.role));
+                            claims.Add(new Claim("Roles", item.role));
                         }
 
                         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
