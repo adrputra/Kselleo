@@ -62,7 +62,8 @@ namespace API.Repository.Data
                                             fullName = m_user.FullName,
                                             email = m_user.Email,
                                             gender = m_user.Gender,
-                                            image = m_user.Image
+                                            image = m_user.Image,
+                                            role = m_mb.Role
                                         }).ToList()
 
                          let lists = (from list in myContext.Lists
