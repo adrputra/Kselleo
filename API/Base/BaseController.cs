@@ -32,7 +32,9 @@ namespace API.Base
             //    return StatusCode(200, new { status = HttpStatusCode.OK, result = repository.Get(), message = "Data Found." });
             //}
 
-            return Ok(repository.Get());
+            //return Ok(repository.Get());
+            var result = repository.Get();
+            return Ok(new { status = HttpStatusCode.OK, Result = result, Message = "DATA DITEMUKAN" });
         }
 
         [HttpGet("{key}")]

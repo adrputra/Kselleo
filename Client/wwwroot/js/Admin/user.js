@@ -9,19 +9,25 @@
         },
         "columns": [
             {
-                "data": "id"
+                "data": "id",
             },
             {
-                "data": "image"
+                "data": "gender",
             },
             {
-                "data": "fullName"
+                "data": "fullName",
             },
             {
-                "data": "email"
+                "data": "email",
             },
             {
-                "data": null
+                "className": "dt-center", "targets": "_all",
+                "orderable": false,
+                "data": null,
+                "render": function (data, type, row) {
+                    return `<button class="bi bi-trash-fill btn-secondary btn-sm" onclick='deletedata("${row["nik"]}")'></button>
+                            <button class='bi bi-pencil-square btn-secondary btn-sm' data-toggle="modal" onclick='GetDataUpdate("${row["nik"]}")' data-target='#UpdateModal'></button>`;
+                }
             }
         ]
     })
