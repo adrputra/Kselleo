@@ -74,10 +74,10 @@ function GetDataUpdate(id) {
 function update() {
     event.preventDefault();
     var obj1 = new Object();
-    obj1.FullName = $("#FullNameUpdate").val()
-    obj1.Email = $("#EmailUpdate").val()
-    obj1.Gender = $("#GenderUpdate").val()
-    console.log(obj1)
+    obj1.FullName = $("#FullNameUpdate").val();
+    obj1.Email = $("#EmailUpdate").val();
+    obj1.Gender = $("#GenderUpdate").val();
+    console.log(obj1);
 
     $.ajax({
         url: "https://localhost:44308/api/users/",
@@ -104,6 +104,37 @@ function update() {
     })
 }
 
-//function adduser() {
-//    event.preventDefault();
-//}
+function adduser() {
+    event.preventDefault();
+    var obj = new Object()
+    obj.FullName = $("#fullName").val();
+    obj.Email = $("#email").val();
+    obj.Gender = $("#gender").val();
+    obj.Password = $("#password").val();
+    obj.ConfirmPassword = $("#confirmPassword").val();
+    console.log(obj);
+
+    $.ajax({
+        url: "https://localhost:44308/api/accounts/login",
+        type: "POST",
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        dataType: 'json',
+        data: JSON.stringify(obj)
+    }).done((result) => {
+        console.log(result);
+        Swal.fire({
+            icon: 'success',
+            title: 'SUCCESS',
+        })
+    }).fail((error) => {
+        console.log(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+        })
+    })
+}
