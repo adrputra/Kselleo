@@ -7,11 +7,13 @@
       }
    },
    "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "API": "Server=LAPTOP-NQ24E1AM;Database=Kselleo;User Id=sa;Password=sapassword;"
+  },
    "Jwt": {
       "Key": "sdfsdfsjdbf78sdyfssdfsdfbuidfs98gdfsdbf",
       "Issuer": "API",
       "ClientId": "PostmanTestClient",
       "Subject": "API"
-   },
-   "Urls": "https://localhost:3000"
+   }
 }

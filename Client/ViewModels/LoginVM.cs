@@ -10,7 +10,7 @@ namespace Client.ViewModels
    {
       [Display(Name = "Email")]
       [Required(ErrorMessage = "Email is required")]
-      public string EmailAddress { get; set; }
+      public string Email { get; set; }
 
       [Required]
       [DataType(DataType.Password)]

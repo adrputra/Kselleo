@@ -1,11 +1,15 @@
-﻿using Client.Models;
+﻿using Client.Base;
+using Client.Models;
+using Client.Repositories.Data;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -13,13 +17,15 @@ using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
-   public class AuthController : Controller
+   public class AuthController : BaseController<LoginVM, AuthRepository, string>
    {
       private readonly ILogger<AuthController> _logger;
+      private readonly AuthRepository repository;
 
-      public AuthController(ILogger<AuthController> logger)
+      public AuthController(ILogger<AuthController> logger, AuthRepository repository) : base(repository)
       {
          _logger = logger;
+         this.repository = repository;
       }
 
 
@@ -34,18 +40,44 @@ namespace Client.Controllers
       }
 
       [HttpPost]
-      public IActionResult Login(LoginVM loginVM)
+      public async Task<IActionResult> Login(LoginVM loginVM)
       {
-         if (!ModelState.IsValid) return View(loginVM);
+         Console.WriteLine($"email => {loginVM.Email}, password => {loginVM.Password}");
 
-         return View(loginVM);
+         var jwtToken = await repository.Auth(loginVM);
+         Console.WriteLine($"jwt token => {jwtToken.token}");
+         var token = jwtToken.token;
+
+         if (token == null)
+         {
+            ViewBag.Message = jwtToken.message;
+            return View("login");
+         }
+
+         HttpContext.Session.SetString("JWToken", token);
+
+         var handler = new JwtSecurityTokenHandler();
+
+         var decode = handler.ReadJwtToken(token);
+
+         var role = decode.Claims.First(claim => claim.Type == "role").Value;
+
+         if (role == "Admin")
+         {
+            return RedirectToAction("dashboard", "admin");
+         }
+         else
+         {
+            return RedirectToAction("index", "boards");
+         }
+
       }
 
       public IActionResult Register()
       {
          return View(new RegisterVM());
       }
-        
+
       [HttpPost]
       public IActionResult Register(RegisterVM registerVM)
       {
@@ -63,6 +95,6 @@ namespace Client.Controllers
          return View(new ChangePasswordVM());
       }
 
-      
+
    }
 }

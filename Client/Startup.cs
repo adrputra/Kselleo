@@ -1,3 +1,5 @@
+using Client.Base;
+using Client.Repositories.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,30 +29,35 @@ namespace Client
       // This method gets called by the runtime. Use this method to add services to the container.
       public void ConfigureServices(IServiceCollection services)
       {
-         services.AddControllersWithViews().AddNewtonsoftJson(); ;
+         services.AddControllersWithViews().AddNewtonsoftJson();
          services.AddSession(options =>
          {
-             options.IdleTimeout = TimeSpan.FromMinutes(10);
+            options.IdleTimeout = TimeSpan.FromMinutes(10);
          });
+
+         services.AddScoped<AuthRepository>();
+         services.AddScoped<Address>();
+
+
 
          services.AddAuthentication(auth =>
          {
-             auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-             auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
          }).AddJwtBearer(options =>
          {
-             options.RequireHttpsMetadata = false;
-             options.SaveToken = true;
-             options.TokenValidationParameters = new TokenValidationParameters()
-             {
-                 ValidateIssuer = true,
-                 ValidateAudience = false,
-                 ValidAudience = Configuration["Jwt:Audience"],
-                 ValidIssuer = Configuration["Jwt:Issuer"],
-                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"])),
-                 ValidateLifetime = true,
-                 ClockSkew = TimeSpan.Zero
-             };
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = true;
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+               ValidateIssuer = true,
+               ValidateAudience = false,
+               ValidAudience = Configuration["Jwt:Audience"],
+               ValidIssuer = Configuration["Jwt:Issuer"],
+               IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:key"])),
+               ValidateLifetime = true,
+               ClockSkew = TimeSpan.Zero
+            };
          });
       }
 
@@ -74,12 +81,14 @@ namespace Client
          app.UseSession();
          app.Use(async (context, next) =>
          {
-             var JWToken = context.Session.GetString("JWToken");
-             if (!string.IsNullOrEmpty(JWToken))
-             {
-                 context.Request.Headers.Add("Authorization", "Bearer" + JWToken);
-             }
-             await next();
+            var JWToken = context.Session.GetString("JWToken");
+            Console.WriteLine($"token from startup => {JWToken}");
+
+            if (!string.IsNullOrEmpty(JWToken))
+            {
+               context.Request.Headers.Add("Authorization", "Bearer" + JWToken);
+            }
+            await next();
          });
          app.UseAuthentication();
          app.UseAuthorization();
