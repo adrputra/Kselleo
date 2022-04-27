@@ -24,6 +24,33 @@ namespace Kselleo.Controllers
          var token = HttpContext.Session.GetString("JWToken");
          if (token == null) return RedirectToAction("Login", "Auth");
 
+         PageBoardVM pageBoardVM = new PageBoardVM();
+         pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+
+         return View(pageBoardVM);
+      }
+
+      [HttpPost("/boards")]
+      public IActionResult Index(NewBoard newBoard)
+      {
+         if (!ModelState.IsValid) return View(newBoard);
+
+         return View(newBoard);
+      }
+
+      public IActionResult Detail(int id)
+      {
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
+
+         ViewBag.BoardId = id;
+         return View();
+      }
+
+      public DecodeJwtVM GetDecodeJwt()
+      {
+         var token = HttpContext.Session.GetString("JWToken");
+
          var handler = new JwtSecurityTokenHandler();
          var decode = handler.ReadJwtToken(token);
 
@@ -42,28 +69,7 @@ namespace Kselleo.Controllers
             Roles = role
          };
 
-         PageBoardVM pageBoardVM = new PageBoardVM();
-         pageBoardVM.NewBoard = new NewBoard();
-         pageBoardVM.DecodeJwtVM = decodeJWT;
-
-         return View(pageBoardVM);
-      }
-
-      [HttpPost("/boards")]
-      public IActionResult Index(NewBoard newBoard)
-      {
-         if (!ModelState.IsValid) return View(newBoard);
-
-         return View(newBoard);
-      }
-
-      public IActionResult Detail(int id)
-      {
-         var token = HttpContext.Session.GetString("JWToken");
-         if (token == null) return RedirectToAction("Login", "Auth");
-
-
-         return View();
+         return decodeJWT;
       }
    }
 }

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Client.Controllers
 {
-   public class AuthController : BaseController<LoginVM, AuthRepository, string>
+   public class AuthController : BaseController<LoginVM, AuthRepository, int>
    {
       private readonly ILogger<AuthController> _logger;
       private readonly AuthRepository repository;
