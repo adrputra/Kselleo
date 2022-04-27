@@ -20,7 +20,8 @@ const register = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/register',
+      /*url: 'https://localhost:5001/api/accounts/register',*/
+      url: 'https://localhost:44308/api/accounts/register',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -44,7 +45,7 @@ const register = () => {
       .done((response) => {
          swal('Success!', 'Your account has been registered!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/auth/login'
+             window.location.href = 'https://localhost:44346/Auth/Login'
          }, 2000)
       })
       .fail((e) => {
