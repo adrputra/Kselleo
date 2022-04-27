@@ -29,7 +29,8 @@ namespace API.Controllers
                 return verify switch
                 {
                     0 => Ok(new { code = HttpStatusCode.OK, message = "Verify Invitation Successfull" }),
-                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Verify Invitation Failed, User ID {verifyInvite.UserId} is already invited to Board ID {verifyInvite.BoardID}!" }),
+                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Verify Invitation Failed, User ID {verifyInvite.UserId} is already invited to Board ID {verifyInvite.BoardID}! (Pending Invitation)" }),
+                    2 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Verify Invitation Failed, User ID {verifyInvite.UserId} is already joined Board ID {verifyInvite.BoardID}!" }),
                     _ => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Verify Invitation Failed!" })
                 };
 
