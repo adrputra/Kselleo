@@ -10,7 +10,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/login',
+      url: 'https://localhost:44308/api/accounts/login',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',

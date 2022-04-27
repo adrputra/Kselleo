@@ -3,6 +3,7 @@ using API.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 
 namespace API.Base
@@ -23,31 +24,33 @@ namespace API.Base
         [HttpGet]
         public ActionResult<Entity> Get()
         {
-            //if (repository.Get().ToList().Count == 0)
-            //{
-            //    return StatusCode(404, new { status = HttpStatusCode.NotFound, result = repository.Get(), message = "Data Not Found." });
-            //}
-            //else
-            //{
-            //    return StatusCode(200, new { status = HttpStatusCode.OK, result = repository.Get(), message = "Data Found." });
-            //}
+            if (repository.Get().ToList().Count == 0)
+            {
+                return StatusCode(404, new { status = HttpStatusCode.NotFound, result = repository.Get(), message = "Data Not Found." });
+            }
+            else
+            {
+                return StatusCode(200, new { status = HttpStatusCode.OK, result = repository.Get(), message = "Data Found." });
+            }
 
-            return Ok(repository.Get());
+            //return Ok(repository.Get());
+            //var result = repository.Get();
+            //return Ok(new { status = HttpStatusCode.OK, Result = result, Message = "DATA DITEMUKAN" });
         }
 
         [HttpGet("{key}")]
         public ActionResult<Entity> GetByID(Key key)
         {
-            //try
-            //{
-            //    var master = repository.Get(key);
-            //    return StatusCode(200, new { status = HttpStatusCode.OK, result = master, message = $"Get Master Data {key} Successfully!" });
-            //}
-            //catch (Exception ex)
-            //{
-            //    return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            //}
-            return Ok(repository.Get(key));
+            try
+            {
+                var master = repository.Get(key);
+                return StatusCode(200, new { status = HttpStatusCode.OK, result = master, message = $"Get Master Data {key} Successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+            //return Ok(repository.Get(key));
         }
 
         [HttpPost]
