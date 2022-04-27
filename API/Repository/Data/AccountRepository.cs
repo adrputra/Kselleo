@@ -46,7 +46,7 @@ namespace API.Repository.Data
                 {
                     UserId = myContext.Users.SingleOrDefault(e => e.Email == registerVM.Email).Id,
                     Password = BCrypt.Net.BCrypt.HashPassword(registerVM.Password, BCrypt.Net.BCrypt.GenerateSalt(12)),
-                    Role = "Admin"
+                    Role = "User"
                 };
 
                 myContext.Accounts.Add(regAccount);
