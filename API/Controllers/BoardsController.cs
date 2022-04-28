@@ -52,23 +52,17 @@ namespace API.Controllers
       [HttpPost("create")]
       public ActionResult CreateBoard(Board board)
       {
-         try
-         {
-            int createBoard = boardRepository.CreateBoard(board);
-            return createBoard switch
+            try
             {
-               0 => Ok(new { code = HttpStatusCode.OK, message = "Board Created Successfull" }),
-               1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Create Board Failed!" }),
-               _ => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Failed!" })
-            };
-
-         }
-         catch (Exception ex)
-         {
-            return StatusCode(500, new { code = HttpStatusCode.InternalServerError, message = ex.Message });
-         }
-         //return Ok(boardRepository.CreateBoard(board));
-      }
+                var result = boardRepository.CreateBoard(board);
+                return StatusCode(200, new { code = HttpStatusCode.OK, message = "Board created successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+            //return Ok(boardRepository.CreateBoard(board));
+        }
 
       [HttpGet("detail/{Id}")]
       public ActionResult GetBoardDetailById(int Id)

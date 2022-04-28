@@ -3,6 +3,7 @@ using API.Models;
 using API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Collections;
 using System.Linq;
 
 namespace API.Repository.Data
@@ -18,10 +19,10 @@ namespace API.Repository.Data
         public int InviteMember(InviteMemberVM inviteMemberVM)
         {
             var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
-            var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId);
 
             if (user != null)
             {
+                var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId);
                 if (checkUserBoard)
                 {
                     var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId).Id;
@@ -93,6 +94,27 @@ namespace API.Repository.Data
             {
                 return 1;
             }
+        }
+
+        public IEnumerable PendingInvitation(int Id)
+        {
+            //var result = myContext.VerifyInvites.Where(e => e.UserId == Id && e.IsUsed == false);
+
+            var result = (from ver in myContext.VerifyInvites
+                          join brd in myContext.Boards on ver.BoardID equals brd.Id
+                          join user in myContext.Users on brd.CreatedBy equals user.Id
+                          where ver.UserId == Id
+                          where ver.IsUsed == false
+                          select new
+                          {
+                              id = ver.Id,
+                              userId = ver.UserId,
+                              boardId = ver.BoardID,
+                              isAccept = ver.IsAccept,
+                              isUsed = ver.IsUsed,
+                              PM = user.FullName
+                          }).ToList();
+            return result;
         }
     }
 }
