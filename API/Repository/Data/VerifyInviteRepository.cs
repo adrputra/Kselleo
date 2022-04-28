@@ -8,113 +8,119 @@ using System.Linq;
 
 namespace API.Repository.Data
 {
-    public class VerifyInviteRepository : GeneralRepository<MyContext, VerifyInvite, int>
+   public class VerifyInviteRepository : GeneralRepository<MyContext, VerifyInvite, int>
 
-    {
-        public VerifyInviteRepository(MyContext myContext) : base(myContext)
-        {
-            this.myContext = myContext;
-        }
+   {
+      public VerifyInviteRepository(MyContext myContext) : base(myContext)
+      {
+         this.myContext = myContext;
+      }
 
-        public int InviteMember(InviteMemberVM inviteMemberVM)
-        {
-            var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
+      public int InviteMember(InviteMemberVM inviteMemberVM)
+      {
+         var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
+       
 
-            if (user != null)
+         if (user != null)
+         {
+            var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId);
+            if (checkUserBoard)
             {
-                var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId);
-                if (checkUserBoard)
-                {
-                    var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId).Id;
-                    var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
-                    var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
-                    if (isUsed)
-                    {
-                        if (isAccept)
-                        {
-                            return 2;
-                        }
-                        else
-                        {
-                            var addVerifyInvite = new VerifyInvite
-                            {
-                                UserId = user.Id,
-                                BoardID = inviteMemberVM.BoardId,
-                                IsAccept = false,
-                                IsUsed = false
-                            };
-                            myContext.VerifyInvites.Add(addVerifyInvite);
-                            myContext.SaveChanges();
-                            return 0;
-                        }
-                    }
-                    return 1;
-                }
-                else
-                {
-                    var addVerifyInvite = new VerifyInvite
-                    {
+               var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId).Id;
+               var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
+               var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
+               if (isUsed)
+               {
+                  if (isAccept)
+                  {
+                     return 2;
+                  }
+                  else
+                  {
+                     var addVerifyInvite = new VerifyInvite
+                     {
                         UserId = user.Id,
                         BoardID = inviteMemberVM.BoardId,
                         IsAccept = false,
-                        IsUsed = false
-                    };
-                    myContext.VerifyInvites.Add(addVerifyInvite);
-                    myContext.SaveChanges();
-                    return 0;
-                }
+                        IsUsed = false,
+                        Role = inviteMemberVM.Role
+                     };
+                     myContext.VerifyInvites.Add(addVerifyInvite);
+                     myContext.SaveChanges();
+                     return 0;
+                  }
+               }
+               return 1;
             }
             else
             {
-                return 3;
-            }
-            
-        }
+               var addVerifyInvite = new VerifyInvite
+               {
+                  UserId = user.Id,
+                  BoardID = inviteMemberVM.BoardId,
+                  IsAccept = false,
+                  IsUsed = false,
+                  Role = inviteMemberVM.Role
 
-        public int AcceptInvite(VerifyInvite verifyInvite)
-        {
-            myContext.Entry(verifyInvite).State = EntityState.Modified;
-            if (verifyInvite.IsAccept == true)
+               };
+               myContext.VerifyInvites.Add(addVerifyInvite);
+               myContext.SaveChanges();
+               return 0;
+            }
+         }
+         else
+         {
+            return 3;
+         }
+
+      }
+
+      public int AcceptInvite(VerifyInvite verifyInvite)
+      {
+         myContext.Entry(verifyInvite).State = EntityState.Modified;
+         if (verifyInvite.IsAccept == true)
+         {
+            var regMemberBoard = new MemberBoard
             {
-                var regMemberBoard = new MemberBoard
-                {
-                    UserId = verifyInvite.UserId,
-                    BoardId = verifyInvite.BoardID,
-                    Role = "Bussiness Analyst"
-                };
-                myContext.MemberBoards.Add(regMemberBoard);
+               UserId = verifyInvite.UserId,
+               BoardId = verifyInvite.BoardID,
+               Role = verifyInvite.Role
+            };
+            myContext.MemberBoards.Add(regMemberBoard);
+         }
 
-            }
+         if (myContext.SaveChanges() != 0)
+         {
+            return 0;
+         }
+         else
+         {
+            return 1;
+         }
+      }
 
-            if (myContext.SaveChanges() != 0)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-        }
+      public IEnumerable PendingInvitation(int Id)
+      {
+         //var result = myContext.VerifyInvites.Where(e => e.UserId == Id && e.IsUsed == false);
 
-        public IEnumerable PendingInvitation(int Id)
-        {
-            //var result = myContext.VerifyInvites.Where(e => e.UserId == Id && e.IsUsed == false);
+         var result = (from ver in myContext.VerifyInvites
+                       join brd in myContext.Boards on ver.BoardID equals brd.Id
+                       join user in myContext.Users on brd.CreatedBy equals user.Id
+                       where ver.UserId == Id
+                       where ver.IsUsed == false
+                       select new
+                       {
+                          id = ver.Id,
+                          userId = ver.UserId,
+                          boardId = ver.BoardID,
+                          isAccept = ver.IsAccept,
+                          isUsed = ver.IsUsed,
+                          PM = user.FullName,
+                          boardName = brd.Name,
+                          role = ver.Role
+                       }).ToList();
+         return result;
+      }
+   }
 
-            var result = (from ver in myContext.VerifyInvites
-                          join brd in myContext.Boards on ver.BoardID equals brd.Id
-                          join user in myContext.Users on brd.CreatedBy equals user.Id
-                          where ver.UserId == Id
-                          where ver.IsUsed == false
-                          select new
-                          {
-                              id = ver.Id,
-                              userId = ver.UserId,
-                              boardId = ver.BoardID,
-                              isAccept = ver.IsAccept,
-                              isUsed = ver.IsUsed,
-                              PM = user.FullName
-                          }).ToList();
-            return result;
-        }
-    }
 }

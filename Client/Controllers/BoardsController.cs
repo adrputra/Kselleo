@@ -43,8 +43,11 @@ namespace Kselleo.Controllers
          var token = HttpContext.Session.GetString("JWToken");
          if (token == null) return RedirectToAction("Login", "Auth");
 
+         PageBoardVM pageBoardVM = new PageBoardVM();
+         pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+
          ViewBag.BoardId = id;
-         return View();
+         return View(pageBoardVM);
       }
 
       public DecodeJwtVM GetDecodeJwt()
@@ -78,6 +81,17 @@ namespace Kselleo.Controllers
             if (token == null) return RedirectToAction("Login", "Auth");
 
             return View();
+      }
+
+      public IActionResult Invitation()
+      {
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
+
+         PageBoardVM pageBoardVM = new PageBoardVM();
+         pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+
+         return View(pageBoardVM);
       }
    }
 }

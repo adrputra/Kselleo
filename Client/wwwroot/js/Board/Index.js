@@ -49,7 +49,8 @@ $(document).ready(function () {
       
                   <div class="bottom">
                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="pm">
+                        <div class="pm" data-toggle="tooltip" data-placement="right"
+                        title="${item.createdBy[0].fullName} - PM">
                            <img src="https://ui-avatars.com/api/?name=${
                               item.createdBy[0].fullName
                            }" alt="project-manager" width="40px"
@@ -78,7 +79,7 @@ $(document).ready(function () {
             `
          })
 
-         const row = document.getElementById('row')
+         // const row = document.getElementById('row')
 
          $('#row').append(html)
       },

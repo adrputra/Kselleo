@@ -1,35 +1,30 @@
+@using Client.ViewModels;
+@model PageBoardVM;
+
 @{
    Layout = "_UserLayout";
    ViewData["Title"] = "Detail Board";
+   ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }
 
 <div class="header row p-4 shadow rounded ">
    <div class="col">
-      <h2 id="title">E-Commerce</h2>
+      <h2 id="title"></h2>
       <p id="description">
-         Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad in non quidem molestiae. Autem veritatis suscipit
-         adipisci possimus tempore consectetur laborum. Exercitationem at aut optio. Aspernatur corporis veniam odio
-         exercitationem?
+
       </p>
    </div>
    <div class="col" style="text-align: right;">
       <p style="color: #646464; font-size: 18px;">Date created</p>
       <p style="color: #646464; font-size: 18px;" id="createdAt">28 April 2022, 20:12 PM</p>
       <div class="d-flex float-right mt-2" style="text-align: right;">
-         <button class="btn btn-outline-secondary mr-4">+ Invite Member</button>
-         <div class="members d-flex">
-            <img src="https://ui-avatars.com/api/?name=Rama+Dhani&background=random" alt="project-manager" width="40px"
-               class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Rama Dhani - BE"
-               style="margin-right: -20px;">
-            <img src="https://ui-avatars.com/api/?name=Neo+Adam&background=random" alt="project-manager" width="40px"
-               class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Neo Adam - BE"
-               style="margin-right: -20px;">
-            <img src="https://ui-avatars.com/api/?name=Cristiano+Ronaldo&background=random" alt="project-manager"
-               width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
-               title="Cristiano Ronaldo - BE" style="margin-right: -20px;">
-            <img src="https://ui-avatars.com/api/?name=Messi&background=random" alt="project-manager" width="40px"
-               class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Messi - FE">
+
+         <div id="display-btn-invite">
+            @* <button class="btn btn-invite mr-4" style="background-color: #FAF5E4; color: #8B8B8B"
+               data-bs-toggle="modal"
+               data-bs-target="#inviteModal">+ Invite Member</button> *@
          </div>
+         <div id="members" class="members d-flex"></div>
       </div>
    </div>
 </div>
@@ -59,10 +54,41 @@
 
 </div>
 
+<!-- Modal Invite -->
+<div class="modal fade" id="inviteModal" tabindex="-1" aria-labelledby="inviteModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="inviteModalLabel">Invite Member</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="inviteMember(@ViewBag.BoardId)">
+               <div class="form-group">
+                  <label for="email" class="col-form-label">Email:</label>
+                  <input type="text" class="form-control" id="email">
+               </div>
+
+               <div class="form-group">
+                  <label for="role" class="col-form-label">Role:</label>
+                  <input type="text" class="form-control" id="role">
+               </div>
+
+               <button type="submit" class="btn float-right"
+                  style="background-color: #F8B401; color: white">Invite</button>
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
 
 @section Scripts {
 <script src="~/js/Board/Detail.js"></script>
 <script>
-   getBoardDetailById(@ViewBag.BoardId)
+   getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
 </script>
 }
