@@ -3,6 +3,7 @@ using API.Models;
 using API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace API.Repository.Data
       public int InviteMember(InviteMemberVM inviteMemberVM)
       {
          var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
-       
+
 
          if (user != null)
          {
@@ -78,6 +79,11 @@ namespace API.Repository.Data
       public int AcceptInvite(VerifyInvite verifyInvite)
       {
          myContext.Entry(verifyInvite).State = EntityState.Modified;
+
+         Console.WriteLine(verifyInvite.UserId);
+         Console.WriteLine(verifyInvite.BoardID);
+         Console.WriteLine(verifyInvite.Role);
+
          if (verifyInvite.IsAccept == true)
          {
             var regMemberBoard = new MemberBoard

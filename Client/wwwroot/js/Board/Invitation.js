@@ -14,10 +14,10 @@ const getInvitations = (userId) => {
             <td>${item.role}</td>
             <td>
                <button class="btn btn-primary mr-1" onclick="handleAccept(
-               ${item.id}, ${item.userId}, ${
-               item.boardId
-            },${true})">Accept</button>
-               <button class="btn btn-outline-danger" onclick="handleAccept(
+               ${item.id}, ${item.userId}, ${item.boardId},${true},'${
+               item.role
+            }')">Accept</button>
+               <button class="btn btn-outline-danger" onclick="handleReject(
                   ${item.id}, ${item.userId}, ${
                item.boardId
             },${false})">Reject</button>
@@ -43,13 +43,14 @@ const getInvitations = (userId) => {
    })
 }
 
-const handleAccept = (id, userId, boardId, isAccept) => {
+const handleAccept = (id, userId, boardId, isAccept, role) => {
    const req = {
       id,
       userId,
       boardId,
       isAccept,
       isUsed: true,
+      role: role,
    }
 
    $.ajax({
