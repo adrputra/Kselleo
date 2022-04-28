@@ -39,9 +39,8 @@
                     @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "isActive" : "")">Boards</a>
             </div>
             <div class="list-group list-group-flush">
-                <a asp-controller="Boards" asp-action="Invitation"
-                    class="list-group-item list-group-item-action list-group-item-light p-3 
-                    @(ViewContext.RouteData.Values["Action"].ToString() == "Invitation" ? "isActive" : "")">Invitation</a>
+                <a asp-controller="Boards" asp-action="Members" class="list-group-item list-group-item-action list-group-item-light p-3 
+                    @(ViewContext.RouteData.Values["Action"].ToString() == "Members" ? "isActive" : "")">Members</a>
             </div>
         </div>
         <!-- Page content wrapper-->
