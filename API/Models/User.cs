@@ -15,6 +15,7 @@ namespace API.Models
         //public virtual Board Board { get; set; }
         //public virtual List List { get; set; }
         //public virtual Card Card { get; set; }
+        public virtual ICollection<VerifyInvite> VerifyInvites{ get; set; }
         public virtual ICollection<Board> Boards { get; set; }
         public virtual ICollection<List> Lists { get; set; }
         public virtual ICollection<Card> Cards { get; set; }

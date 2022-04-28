@@ -82,7 +82,6 @@ namespace API.Controllers
          {
             return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
          }
-         //return Ok(_accountRepository.GetMaster(NIK));
       }
 
    }

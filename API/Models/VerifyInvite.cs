@@ -10,5 +10,7 @@ namespace API.Models
         public int BoardID { get; set; }
         public bool IsAccept { get; set; }
         public bool IsUsed { get; set; }
+        public User User { get; set; }
+        public Board Board { get; set; }
     }
 }
