@@ -277,5 +277,5 @@ namespace API.Repository.Data
 
          return board;
       }
-   }
+    }
 }

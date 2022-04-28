@@ -1,5 +1,6 @@
 ﻿using API.Context;
 using API.Models;
+using API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -14,50 +15,59 @@ namespace API.Repository.Data
             this.myContext = myContext;
         }
 
-        public int VerifyInvite(VerifyInvite verifyInvite)
+        public int InviteMember(InviteMemberVM inviteMemberVM)
         {
-            var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == verifyInvite.UserId && e.BoardID == verifyInvite.BoardID);
+            var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
+            var checkUserBoard = myContext.VerifyInvites.Any(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId);
 
-            if (checkUserBoard)
+            if (user != null)
             {
-                var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == verifyInvite.UserId && e.BoardID == verifyInvite.BoardID).Id;
-                var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
-                var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
-                if (isUsed)
+                if (checkUserBoard)
                 {
-                    if (isAccept)
+                    var verifyId = myContext.VerifyInvites.FirstOrDefault(e => e.UserId == user.Id && e.BoardID == inviteMemberVM.BoardId).Id;
+                    var isUsed = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsUsed;
+                    var isAccept = myContext.VerifyInvites.SingleOrDefault(e => e.Id == verifyId).IsAccept;
+                    if (isUsed)
                     {
-                        return 2;
-                    }
-                    else
-                    {
-                        var addVerifyInvite = new VerifyInvite
+                        if (isAccept)
                         {
-                            UserId = verifyInvite.UserId,
-                            BoardID = verifyInvite.BoardID,
-                            IsAccept = false,
-                            IsUsed = false
-                        };
-                        myContext.VerifyInvites.Add(addVerifyInvite);
-                        myContext.SaveChanges();
-                        return 0;
+                            return 2;
+                        }
+                        else
+                        {
+                            var addVerifyInvite = new VerifyInvite
+                            {
+                                UserId = user.Id,
+                                BoardID = inviteMemberVM.BoardId,
+                                IsAccept = false,
+                                IsUsed = false
+                            };
+                            myContext.VerifyInvites.Add(addVerifyInvite);
+                            myContext.SaveChanges();
+                            return 0;
+                        }
                     }
+                    return 1;
                 }
-                return 1;
+                else
+                {
+                    var addVerifyInvite = new VerifyInvite
+                    {
+                        UserId = user.Id,
+                        BoardID = inviteMemberVM.BoardId,
+                        IsAccept = false,
+                        IsUsed = false
+                    };
+                    myContext.VerifyInvites.Add(addVerifyInvite);
+                    myContext.SaveChanges();
+                    return 0;
+                }
             }
             else
             {
-                var addVerifyInvite = new VerifyInvite
-                {
-                    UserId = verifyInvite.UserId,
-                    BoardID = verifyInvite.BoardID,
-                    IsAccept = false,
-                    IsUsed = false
-                };
-                myContext.VerifyInvites.Add(addVerifyInvite);
-                myContext.SaveChanges();
-                return 0;
+                return 3;
             }
+            
         }
 
         public int AcceptInvite(VerifyInvite verifyInvite)

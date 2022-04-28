@@ -1,6 +1,7 @@
 ﻿using API.Base;
 using API.Context;
 using API.Models;
+using API.ViewModel;
 using API.Repository.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,17 +22,18 @@ namespace API.Controllers
         }
 
         [HttpPost("verify")]
-        public ActionResult Verify(VerifyInvite verifyInvite)
+        public ActionResult Invite(InviteMemberVM inviteMemberVM)
         {
             try
             {
-                int verify = verifyInviteRepository.VerifyInvite(verifyInvite);
+                int verify = verifyInviteRepository.InviteMember(inviteMemberVM);
                 return verify switch
                 {
-                    0 => Ok(new { code = HttpStatusCode.OK, message = "Verify Invitation Successfull" }),
-                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Verify Invitation Failed, User ID {verifyInvite.UserId} is already invited to Board ID {verifyInvite.BoardID}! (Pending Invitation)" }),
-                    2 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Verify Invitation Failed, User ID {verifyInvite.UserId} is already joined Board ID {verifyInvite.BoardID}!" }),
-                    _ => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Verify Invitation Failed!" })
+                    0 => Ok(new { code = HttpStatusCode.OK, message = "Invite Member Successfull" }),
+                    1 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Invite Member Failed, User {inviteMemberVM.Email} is already invited to Board ID {inviteMemberVM.BoardId}! (Pending Invitation)" }),
+                    2 => BadRequest(new { code = HttpStatusCode.BadRequest, message = $"Invite Member Failed, User {inviteMemberVM.Email} is already joined Board ID {inviteMemberVM.BoardId}!" }),
+                    3 => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Email not found" }),
+                    _ => BadRequest(new { code = HttpStatusCode.BadRequest, message = "Invite Member Failed!" })
                 };
 
             }

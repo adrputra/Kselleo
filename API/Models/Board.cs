@@ -13,6 +13,7 @@ namespace API.Models
       public DateTime CreatedAt { get; set; } = DateTime.Now;
       public int CreatedBy { get; set; }
       public virtual User User { get; set; }
+      public virtual ICollection<VerifyInvite> VerifyInvites { get; set; }
       public virtual ICollection<List> Lists { get; set; }
       public virtual ICollection<MemberBoard> MemberBoards { get; set; }
    }

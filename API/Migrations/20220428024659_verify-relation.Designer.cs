@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220427040218_stable-270422")]
-    partial class stable270422
+    [Migration("20220428024659_verify-relation")]
+    partial class verifyrelation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -299,6 +299,10 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BoardID");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("VerifyInvites");
                 });
 
@@ -449,11 +453,32 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("API.Models.VerifyInvite", b =>
+                {
+                    b.HasOne("API.Models.Board", "Board")
+                        .WithMany("VerifyInvites")
+                        .HasForeignKey("BoardID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany("VerifyInvites")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Board");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("API.Models.Board", b =>
                 {
                     b.Navigation("Lists");
 
                     b.Navigation("MemberBoards");
+
+                    b.Navigation("VerifyInvites");
                 });
 
             modelBuilder.Entity("API.Models.Card", b =>
@@ -492,6 +517,8 @@ namespace API.Migrations
                     b.Navigation("MemberBoards");
 
                     b.Navigation("MemberCards");
+
+                    b.Navigation("VerifyInvites");
                 });
 #pragma warning restore 612, 618
         }
