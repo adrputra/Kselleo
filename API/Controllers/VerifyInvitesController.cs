@@ -62,5 +62,19 @@ namespace API.Controllers
                 return StatusCode(500, new { code = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+
+        [HttpGet("pending/{Id}")]
+        public ActionResult Pending(int Id)
+        {
+            try
+            {
+                var result = verifyInviteRepository.PendingInvitation(Id);
+                return StatusCode(200, new { code = HttpStatusCode.OK, message = "Success", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
     }
 }
