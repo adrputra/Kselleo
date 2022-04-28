@@ -19,7 +19,7 @@
       dataType: 'json',
    })
       .done((response) => {
-         Swal.fire('Success!', 'Your account has been registered!', 'success')
+         Swal.fire('Success!', 'Your login success', 'success')
          setTimeout(() => {
             window.location.href = 'https://localhost:44346/Admin/Dashboard'
          }, 2000)
