@@ -3,7 +3,7 @@ using API.Models;
 using API.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
+using System.Collections;
 using System.Linq;
 
 namespace API.Repository.Data
@@ -18,7 +18,6 @@ namespace API.Repository.Data
 
       public int InviteMember(InviteMemberVM inviteMemberVM)
       {
-
          var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
 
          if (user != null)
@@ -42,7 +41,8 @@ namespace API.Repository.Data
                         UserId = user.Id,
                         BoardID = inviteMemberVM.BoardId,
                         IsAccept = false,
-                        IsUsed = false
+                        IsUsed = false,
+                        Role = inviteMemberVM.Role
                      };
                      myContext.VerifyInvites.Add(addVerifyInvite);
                      myContext.SaveChanges();
@@ -58,7 +58,9 @@ namespace API.Repository.Data
                   UserId = user.Id,
                   BoardID = inviteMemberVM.BoardId,
                   IsAccept = false,
-                  IsUsed = false
+                  IsUsed = false,
+                  Role = inviteMemberVM.Role
+
                };
                myContext.VerifyInvites.Add(addVerifyInvite);
                myContext.SaveChanges();
@@ -81,10 +83,9 @@ namespace API.Repository.Data
             {
                UserId = verifyInvite.UserId,
                BoardId = verifyInvite.BoardID,
-               Role = "Bussiness Analyst"
+               Role = verifyInvite.Role
             };
             myContext.MemberBoards.Add(regMemberBoard);
-
          }
 
          if (myContext.SaveChanges() != 0)
@@ -95,6 +96,29 @@ namespace API.Repository.Data
          {
             return 1;
          }
+      }
+
+      public IEnumerable PendingInvitation(int Id)
+      {
+         //var result = myContext.VerifyInvites.Where(e => e.UserId == Id && e.IsUsed == false);
+
+         var result = (from ver in myContext.VerifyInvites
+                       join brd in myContext.Boards on ver.BoardID equals brd.Id
+                       join user in myContext.Users on brd.CreatedBy equals user.Id
+                       where ver.UserId == Id
+                       where ver.IsUsed == false
+                       select new
+                       {
+                          id = ver.Id,
+                          userId = ver.UserId,
+                          boardId = ver.BoardID,
+                          isAccept = ver.IsAccept,
+                          isUsed = ver.IsUsed,
+                          PM = user.FullName,
+                          boardName = brd.Name,
+                          role = ver.Role
+                       }).ToList();
+         return result;
       }
    }
 }

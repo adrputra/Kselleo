@@ -122,6 +122,5 @@ namespace Client.Controllers
          HttpContext.Session.Remove("JWToken");
          return RedirectToAction("Login", "Auth");
       }
-
    }
 }

@@ -20,6 +20,10 @@
             background-color: #FAF5E4;
             font-weight: bold;
         }
+
+        .btn-invite:hover {
+            background-color: #f5edd5 !important;
+        }
     </style>
 </head>
 
@@ -33,6 +37,11 @@
             <div class="list-group list-group-flush">
                 <a asp-controller="Boards" asp-action="Index" class="list-group-item list-group-item-action list-group-item-light p-3 
                     @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "isActive" : "")">Boards</a>
+            </div>
+            <div class="list-group list-group-flush">
+                <a asp-controller="Boards" asp-action="Invitation"
+                    class="list-group-item list-group-item-action list-group-item-light p-3 
+                    @(ViewContext.RouteData.Values["Action"].ToString() == "Invitation" ? "isActive" : "")">Invitation</a>
             </div>
         </div>
         <!-- Page content wrapper-->
