@@ -9,17 +9,17 @@ namespace API.Context
         {
 
         }
-        public DbSet<Account> Accounts{ get; set; }
-        public DbSet<Board> Boards{ get; set; }
-        public DbSet<Card> Cards{ get; set; }
-        public DbSet<CheckListItem> CheckListItems{ get; set; }
-        public DbSet<CheckListItemAssign> CheckListItemsAssigns{ get; set; }
-        public DbSet<Comment> Comments{ get; set; }
-        public DbSet<List> Lists{ get; set; }
-        public DbSet<MemberBoard> MemberBoards{ get; set; }
-        public DbSet<MemberCard> MemberCards{ get; set; }
-        public DbSet<User> Users{ get; set; }
-        public DbSet<VerifyInvite> VerifyInvites{ get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public DbSet<Board> Boards { get; set; }
+        public DbSet<Card> Cards { get; set; }
+        public DbSet<CheckListItem> CheckListItems { get; set; }
+        public DbSet<CheckListItemAssign> CheckListItemsAssigns { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<List> Lists { get; set; }
+        public DbSet<MemberBoard> MemberBoards { get; set; }
+        public DbSet<MemberCard> MemberCards { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<VerifyInvite> VerifyInvites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,25 +28,20 @@ namespace API.Context
                 .WithOne(acc => acc.User)
                 .HasForeignKey<Account>(acc => acc.UserId);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.Board)
-            //    .WithOne(board => board.User)
-            //    .HasForeignKey<Board>(board => board.CreatedBy);
+            modelBuilder.Entity<VerifyInvite>()
+                .HasOne(ver => ver.User)
+                .WithMany(user => user.VerifyInvites)
+                .HasForeignKey(ver => ver.UserId);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.List)
-            //    .WithOne(list => list.User)
-            //    .HasForeignKey<List>(list => list.CreatedBy);
-
-            //modelBuilder.Entity<User>()
-            //    .HasOne(user => user.Card)
-            //    .WithOne(card => card.User)
-            //    .HasForeignKey<Card>(card => card.CreatedBy);
+            modelBuilder.Entity<VerifyInvite>()
+                .HasOne(ver => ver.Board)
+                .WithMany(board => board.VerifyInvites)
+                .HasForeignKey(ver => ver.BoardID);
 
             modelBuilder.Entity<Board>()
-                .HasOne(board => board.User)
-                .WithMany(user => user.Boards)
-                .HasForeignKey(board => board.CreatedBy);
+                 .HasOne(board => board.User)
+                 .WithMany(user => user.Boards)
+                 .HasForeignKey(board => board.CreatedBy);
 
             modelBuilder.Entity<List>()
                 .HasOne(list => list.User)

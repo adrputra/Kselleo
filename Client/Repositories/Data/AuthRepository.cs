@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Client.Repositories.Data
 {
-   public class AuthRepository : GeneralRepository<LoginVM, string>
+   public class AuthRepository : GeneralRepository<LoginVM, int>
    {
       private readonly Address address;
       private readonly HttpClient httpClient;

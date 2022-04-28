@@ -1,13 +1,12 @@
 @{
    Layout = "_UserLayout";
    ViewData["Title"] = "Detail Board";
-
 }
 
 <div class="header row p-4 shadow rounded ">
    <div class="col">
-      <h2>E-Commerce</h2>
-      <p>
+      <h2 id="title">E-Commerce</h2>
+      <p id="description">
          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad in non quidem molestiae. Autem veritatis suscipit
          adipisci possimus tempore consectetur laborum. Exercitationem at aut optio. Aspernatur corporis veniam odio
          exercitationem?
@@ -15,7 +14,7 @@
    </div>
    <div class="col" style="text-align: right;">
       <p style="color: #646464; font-size: 18px;">Date created</p>
-      <p style="color: #646464; font-size: 18px;">28 April 2022, 20:12 PM</p>
+      <p style="color: #646464; font-size: 18px;" id="createdAt">28 April 2022, 20:12 PM</p>
       <div class="d-flex float-right mt-2" style="text-align: right;">
          <button class="btn btn-outline-secondary mr-4">+ Invite Member</button>
          <div class="members d-flex">
@@ -59,3 +58,11 @@
    </div>
 
 </div>
+
+
+@section Scripts {
+<script src="~/js/Board/Detail.js"></script>
+<script>
+   getBoardDetailById(@ViewBag.BoardId)
+</script>
+}
