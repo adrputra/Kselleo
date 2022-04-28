@@ -115,7 +115,7 @@ function adduser() {
     console.log(obj);
 
     $.ajax({
-        url: "https://localhost:44308/api/accounts/login",
+        url: "https://localhost:44308/api/accounts/register",
         type: "POST",
         headers: {
             Accept: 'application/json',

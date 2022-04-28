@@ -1,0 +1,8 @@
+@using Client.ViewModels;
+@model PageBoardVM;
+
+@{
+   Layout = "_AdminLayout";
+   ViewData["Title"] = "Admin Dashboard";
+   ViewData["FullName"] = Model.DecodeJwtVM.FullName;
+}

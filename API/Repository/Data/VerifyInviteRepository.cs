@@ -19,6 +19,7 @@ namespace API.Repository.Data
       public int InviteMember(InviteMemberVM inviteMemberVM)
       {
          var user = myContext.Users.SingleOrDefault(e => e.Email == inviteMemberVM.Email);
+       
 
          if (user != null)
          {
@@ -121,4 +122,5 @@ namespace API.Repository.Data
          return result;
       }
    }
+
 }
