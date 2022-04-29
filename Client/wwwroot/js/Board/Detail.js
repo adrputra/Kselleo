@@ -17,7 +17,7 @@ const getBoardDetailById = (id, userId) => {
             .filter((member) => member.role != 'PM')
             .map((member) => {
                html += `<img src="https://ui-avatars.com/api/?name=${member.user.fullName}&background=random" alt="${member.role}" width="40px"
-            class="rounded-circle" data-toggle="tooltip" data-placement="right" title="Rama Dhani - BE"
+            class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${member.user.fullName} - ${member.role}"
             style="margin-right: -20px;">`
             })
 

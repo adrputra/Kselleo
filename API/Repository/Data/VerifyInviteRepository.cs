@@ -104,7 +104,6 @@ namespace API.Repository.Data
             return 1;
          }
       }
-
       public IEnumerable PendingInvitation(int Id)
       {
          //var result = myContext.VerifyInvites.Where(e => e.UserId == Id && e.IsUsed == false);
@@ -127,6 +126,18 @@ namespace API.Repository.Data
                        }).ToList();
          return result;
       }
+
+      public IEnumerable PendingInvitationBoard(int Id)
+      {
+         var pending = myContext.VerifyInvites
+                           .Where(vi => vi.BoardID == Id && vi.IsUsed == false)
+                           .Include(vi => vi.User)
+                           .Include(vi => vi.Board)
+                           .ToList();
+
+         return pending;
+      }
    }
+
 
 }

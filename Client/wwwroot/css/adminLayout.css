@@ -7217,6 +7217,7 @@ fieldset:disabled .btn {
 
 .border-end {
    border-right: 1px solid #dee2e6 !important;
+   height: 100%;
 }
 
 .border-end-0 {
