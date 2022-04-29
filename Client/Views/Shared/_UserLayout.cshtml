@@ -43,6 +43,10 @@
                     class="list-group-item list-group-item-action list-group-item-light p-3 
                     @(ViewContext.RouteData.Values["Action"].ToString() == "Invitation" ? "isActive" : "")">Invitation</a>
             </div>
+
+            <hr>
+
+            @RenderSection("Navs", required: false)
         </div>
         <!-- Page content wrapper-->
         <div id="page-content-wrapper">

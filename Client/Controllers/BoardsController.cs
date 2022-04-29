@@ -80,7 +80,11 @@ namespace Kselleo.Controllers
          var token = HttpContext.Session.GetString("JWToken");
          if (token == null) return RedirectToAction("Login", "Auth");
 
-         return View();
+
+         PageBoardVM pageBoardVM = new PageBoardVM();
+         pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+
+         return View(pageBoardVM);
       }
 
       public IActionResult Invitation()
