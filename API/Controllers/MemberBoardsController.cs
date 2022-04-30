@@ -21,7 +21,7 @@ namespace API.Controllers
       }
 
       [HttpGet("board/{Id}")]
-      public ActionResult GetBoard(int Id)
+      public ActionResult GetBoard(string Id)
       {
          try
          {

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace API.Repository.Data
 {
-    public class BoardRepository : GeneralRepository<MyContext, Board, int>
+    public class BoardRepository : GeneralRepository<MyContext, Board, string>
     {
         public BoardRepository(MyContext myContext) : base(myContext)
         {
@@ -17,6 +17,7 @@ namespace API.Repository.Data
         }
         public object CreateBoard(Board board)
         {
+            board.Id = Guid.NewGuid().ToString();
             myContext.Boards.Add(board);
             myContext.SaveChanges();
 
@@ -263,7 +264,7 @@ namespace API.Repository.Data
             return board;
         }
 
-        public object GetBoardDetailById(int id)
+        public object GetBoardDetailById(string id)
         {
             //  var board = myContext.Boards.Find(id).Include()
             var board = myContext.Boards
@@ -276,12 +277,12 @@ namespace API.Repository.Data
             return board;
         }
 
-        public object GetBoardById(int Id)
+        public object GetBoardById(string Id)
         {
             var board = (from brd in myContext.Boards
                          where brd.Id == Id
                          let createdBy = (from cb_user in myContext.Users
-                                          where cb_user.Id == Id
+                                          where cb_user.Id == brd.CreatedBy
                                           select new
                                           {
                                               fullName = cb_user.FullName,

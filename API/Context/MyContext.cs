@@ -92,6 +92,10 @@ namespace API.Context
                 .HasOne(assign => assign.CheckListItem)
                 .WithMany(check => check.CheckListItemAssigns)
                 .HasForeignKey(assign => assign.CheckListItemId);
+
+            modelBuilder.Entity<List>()
+                .Property(l => l.Status)
+                .HasDefaultValue("Todo");
         }
     }
 }

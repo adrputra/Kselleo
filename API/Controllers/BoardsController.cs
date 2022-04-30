@@ -11,7 +11,7 @@ namespace API.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   public class BoardsController : BaseController<Board, BoardRepository, int>
+   public class BoardsController : BaseController<Board, BoardRepository, string>
    {
       private BoardRepository boardRepository;
       public BoardsController(BoardRepository boardRepository, MyContext myContext) : base(boardRepository)
@@ -65,7 +65,7 @@ namespace API.Controllers
         }
 
       [HttpGet("detail/{Id}")]
-      public ActionResult GetBoardDetailById(int Id)
+      public ActionResult GetBoardDetailById(string Id)
       {
          try
          {

@@ -78,7 +78,7 @@ namespace API.Controllers
       }
 
       [HttpGet("pending/board/{Id}")]
-      public ActionResult PendingBoard(int Id)
+      public ActionResult PendingBoard(string Id)
       {
          try
          {
