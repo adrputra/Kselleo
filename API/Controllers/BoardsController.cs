@@ -69,7 +69,7 @@ namespace API.Controllers
       {
          try
          {
-            var board = boardRepository.GetBoardDetailById(Id);
+            var board = boardRepository.GetBoardById(Id);
             return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
          }
          catch (Exception ex)
