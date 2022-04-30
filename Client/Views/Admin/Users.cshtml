@@ -1,6 +1,10 @@
+@using Client.ViewModels;
+@model PageAdminVM;
+
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Admin - User Page";
+    ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }
 
 <div class="container">

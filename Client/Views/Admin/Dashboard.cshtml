@@ -1,6 +1,10 @@
+@using Client.ViewModels;
+@model PageAdminVM;
+
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Admin - Dashboard Page";
+    ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }
 
 <div class="row">
@@ -12,7 +16,7 @@
                <div class="col mr-2">
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                      Users</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">1200</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800" id="sumUser"></div>
                </div>
                <div class="col-auto">
                   <i class="fa fa-users fa-2x" aria-hidden="true"></i>
@@ -30,7 +34,7 @@
                <div class="col mr-2">
                   <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                      Board</div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">239</div>
+                  <div class="h5 mb-0 font-weight-bold text-gray-800">21312</div>
                </div>
                <div class="col-auto">
                   <i class="fas fa-calendar fa-2x text-gray-300"></i>

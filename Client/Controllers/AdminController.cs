@@ -21,10 +21,42 @@ namespace Client.Controllers
          _logger = logger;
       }
 
+      
       public IActionResult Index()
       {
             var token = HttpContext.Session.GetString("JWToken");
             if (token == null) return RedirectToAction("Login", "Auth");
+
+            PageAdminVM pageAdminVM = new PageAdminVM();
+            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+            return View();
+      }
+
+      
+      public IActionResult Dashboard()
+      {
+            var token = HttpContext.Session.GetString("JWToken");
+            if (token == null) return RedirectToAction("Login", "Auth");
+
+            PageAdminVM pageAdminVM = new PageAdminVM();
+            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+
+            return View(pageAdminVM);
+        }
+
+      public IActionResult Users()
+      {
+            var token = HttpContext.Session.GetString("JWToken");
+            if (token == null) return RedirectToAction("Login", "Auth");
+
+            PageAdminVM pageAdminVM = new PageAdminVM();
+            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+            return View(pageAdminVM);
+        }
+
+        public DecodeJwtVM GetDecodeJwt()
+        {
+            var token = HttpContext.Session.GetString("JWToken");
 
             var handler = new JwtSecurityTokenHandler();
             var decode = handler.ReadJwtToken(token);
@@ -44,21 +76,9 @@ namespace Client.Controllers
                 Roles = role
             };
 
-            PageBoardVM pageBoardVM = new PageBoardVM();
-            pageBoardVM.NewBoard = new NewBoard();
-            pageBoardVM.DecodeJwtVM = decodeJWT;
-            return View(pageBoardVM);
-      }
-      public IActionResult Dashboard()
-      {
-         return View();
-      }
+            return decodeJWT;
+        }
 
-      public IActionResult Users()
-      {
-         ViewBag.isDashboard = false;
-         ViewBag.isUsers = true;
-         return View();
-      }
-   }
+
+    }
 }
