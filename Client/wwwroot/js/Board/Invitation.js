@@ -6,7 +6,6 @@ const getInvitations = (userId) => {
       success: function (response) {
          let html = ''
          response.data.map((item, i) => {
-            console.log(item)
             html += ` <tr>
             <td>${i + 1}</td>
             <td>${item.pm}</td>
@@ -14,8 +13,8 @@ const getInvitations = (userId) => {
             <td>${item.role}</td>
             <td>
                <button class="btn btn-primary mr-1" onclick="handleAccept(
-               ${item.id}, ${item.userId}, ${item.boardId},${true},'${
-               item.role
+               ${item.id}, ${item.userId}, ${true},'${item.role}', '${
+               item.boardId
             }')">Accept</button>
                <button class="btn btn-outline-danger" onclick="handleReject(
                   ${item.id}, ${item.userId}, ${
@@ -43,14 +42,14 @@ const getInvitations = (userId) => {
    })
 }
 
-const handleAccept = (id, userId, boardId, isAccept, role) => {
+const handleAccept = (id, userId, isAccept, role, boardId) => {
    const req = {
       id,
       userId,
-      boardId,
       isAccept,
       isUsed: true,
       role: role,
+      boardId,
    }
 
    $.ajax({
@@ -62,14 +61,12 @@ const handleAccept = (id, userId, boardId, isAccept, role) => {
       },
       data: JSON.stringify(req),
       success: function (response) {
-         console.log(response)
          swal('Horee! you have joined the board!', {
             icon: 'success',
          })
          location.reload()
       },
       error: function (e) {
-         console.log(e.responseText)
          swal(`upps! ${JSON.parse(e.responseText).message}`, {
             icon: 'error',
          })

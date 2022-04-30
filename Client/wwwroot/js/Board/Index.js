@@ -25,13 +25,13 @@ $(document).ready(function () {
                        ${
                           item.createdBy[0].id == userId
                              ? `<div class='buttons d-flex' style='gap: 5px;'>
-                              <button class='btn btn-outline-warning' onclick="updateModal(${item.id}, ${userId}, '${item.name}', '${item.description}')">
+                              <button class='btn btn-outline-warning btn-sm' onclick="updateModal(${item.id}, ${userId}, '${item.name}', '${item.description}')">
                                    <i
                                       class='fa fa-pencil'
                                       aria-hidden='true'
                                    ></i>
                                 </button>
-                                <button class='btn btn-outline-danger' onclick="deleteModal(${item.id})">
+                                <button class='btn btn-outline-danger btn-sm' onclick="deleteModal(${item.id})">
                                 <i
                                    class='fa fa-trash'
                                    aria-hidden='true'
@@ -143,7 +143,7 @@ const deleteModal = (id) => {
             type: 'DELETE',
             url: `https://localhost:5001/api/boards/${id}`,
             success: function (response) {
-               swal('Poof! Your board file has been deleted!', {
+               swal('Poof! Your board has been deleted!', {
                   icon: 'success',
                })
                location.reload()
@@ -155,7 +155,7 @@ const deleteModal = (id) => {
             },
          })
       } else {
-         swal('Your imaginary file is safe!')
+         swal('Your board is safe!')
       }
    })
 }

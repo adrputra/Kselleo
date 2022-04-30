@@ -38,13 +38,14 @@ namespace Kselleo.Controllers
          return View(newBoard);
       }
 
-      public IActionResult Detail(int id)
+      public IActionResult Detail(string id)
       {
          var token = HttpContext.Session.GetString("JWToken");
          if (token == null) return RedirectToAction("Login", "Auth");
 
          PageBoardVM pageBoardVM = new PageBoardVM();
          pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+         pageBoardVM.BoardId = id;
 
          ViewBag.BoardId = id;
          return View(pageBoardVM);

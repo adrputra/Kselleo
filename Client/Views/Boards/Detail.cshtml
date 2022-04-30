@@ -22,6 +22,8 @@
 </div>
 }
 
+<input type="hidden" name="boardId" id="boardId" value="@Model.BoardId">
+
 <div class="header row p-4 shadow rounded ">
    <div class="col">
       <h2 id="title"></h2>
@@ -45,28 +47,37 @@
 </div>
 
 <div class="row mt-5">
-   <div class="col-3">
+   <div class="col-md-3">
       <h3 style="color: #2231B6;">Todo</h3>
+      <div class="todos" id="todos"></div>
 
-      <div class="list">
-
-      </div>
    </div>
 
-   <div class="col-3">
+   <div class="col-md-3">
       <h3 style="color: #16BDD3;">In Progress</h3>
+      <div class="in-progress" id="in-progress"></div>
    </div>
 
 
-   <div class="col-3">
+   <div class="col-md-3">
       <h3 style="color: #B43CED;">Review</h3>
+      <div class="review" id="review"></div>
+
    </div>
 
 
-   <div class="col-3">
+   <div class="col-md-3">
       <h3 style="color: #10D024;">Done</h3>
+      <div class="done" id="done"></div>
    </div>
 
+</div>
+
+
+@* button create list *@
+<div class="create-list" style="position: fixed; bottom: 30px; right: 50px; ">
+   <button class="btn text-white" style="background-color: #F8B401;" data-bs-toggle="modal"
+      data-bs-target="#createListModal">+ Create List</button>
 </div>
 
 <!-- Modal Invite -->
@@ -78,7 +89,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
          </div>
          <div class="modal-body">
-            <form onsubmit="inviteMember(@ViewBag.BoardId)">
+            <form onsubmit="inviteMember()" id="form-invite">
                <div class="form-group">
                   <label for="email" class="col-form-label">Email:</label>
                   <input type="text" class="form-control" id="email">
@@ -100,10 +111,82 @@
    </div>
 </div>
 
+<!-- Modal Create List -->
+<div class="modal fade" id="createListModal" tabindex="-1" aria-labelledby="createListModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="createListModalLabel">Create List</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="createList(@Model.DecodeJwtVM.Id)">
+               <div class="form-group">
+                  <label for="name-list" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-list">
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Create
+                  List</button>
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal Update List -->
+<div class="modal fade" id="updateListModal" tabindex="-1" aria-labelledby="updateListModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateListModalLabel">Update List</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateList(@ViewBag.BoardId)">
+               <input type="hidden" name="id-list-update" id="id-list-update">
+               <input type="hidden" name="createdby-list-update" id="createdby-list-update">
+               <input type="hidden" name="boardid-list-update" id="boardid-list-update">
+
+
+               <div class="form-group">
+                  <label for="name-list-update" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-list-update">
+               </div>
+
+               <div class="form-group">
+                  <label for="name-list-update" class="col-form-label">Status:</label>
+                  <select class="form-select" name="status-list-update" id="status-list-update"
+                     aria-label="Default select example">
+                     <option value="Todo">Todo</option>
+                     <option value="In Progress">In Progress</option>
+                     <option value="Review">Review</option>
+                     <option value="Done">Done</option>
+                  </select>
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white"
+                  onclick="updateList()">Update
+                  List</button>
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+
 
 @section Scripts {
 <script src="~/js/Board/Detail.js"></script>
 <script>
    getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
+   getListByBoardId(`@ViewBag.BoardId`);
 </script>
 }

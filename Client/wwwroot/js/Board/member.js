@@ -7,7 +7,6 @@ const getMembersBoardById = (id, userId) => {
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       success: function (response) {
-         console.log(response)
          let html = ''
          response.data.map((item, i) => {
             html += `
