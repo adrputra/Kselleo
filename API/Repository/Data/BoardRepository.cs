@@ -304,6 +304,7 @@ namespace API.Repository.Data
 
                          let lists = (from list in myContext.Lists
                                       where list.BoardId == brd.Id
+                                      orderby list.CreatedAt ascending
                                       select new
                                       {
                                           name = list.Name,
