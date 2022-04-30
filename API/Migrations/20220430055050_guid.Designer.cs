@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220428024659_verify-relation")]
-    partial class verifyrelation
+    [Migration("20220430055050_guid")]
+    partial class guid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,10 +45,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Board", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -183,8 +181,8 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BoardId")
-                        .HasColumnType("int");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -196,7 +194,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Todo");
 
                     b.HasKey("Id");
 
@@ -214,8 +214,8 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BoardId")
-                        .HasColumnType("int");
+                    b.Property<string>("BoardId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
@@ -285,14 +285,17 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("BoardID")
-                        .HasColumnType("int");
+                    b.Property<string>("BoardID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsAccept")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -400,9 +403,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Board", "Board")
                         .WithMany("Lists")
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BoardId");
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("Lists")
@@ -419,9 +420,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Board", "Board")
                         .WithMany("MemberBoards")
-                        .HasForeignKey("BoardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BoardId");
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("MemberBoards")
@@ -457,9 +456,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.Board", "Board")
                         .WithMany("VerifyInvites")
-                        .HasForeignKey("BoardID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BoardID");
 
                     b.HasOne("API.Models.User", "User")
                         .WithMany("VerifyInvites")

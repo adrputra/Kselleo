@@ -8,7 +8,7 @@ namespace API.Models
     {
         [Key]
         public int Id { get; set; }
-        public int BoardId { get; set; }
+        public string BoardId { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int CreatedBy { get; set; }

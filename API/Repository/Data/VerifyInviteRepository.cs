@@ -127,7 +127,7 @@ namespace API.Repository.Data
          return result;
       }
 
-      public IEnumerable PendingInvitationBoard(int Id)
+      public IEnumerable PendingInvitationBoard(string Id)
       {
          var pending = myContext.VerifyInvites
                            .Where(vi => vi.BoardID == Id && vi.IsUsed == false)

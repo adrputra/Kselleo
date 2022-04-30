@@ -16,7 +16,7 @@ namespace API.Repository.Data
          this.myContext = myContext;
       }
 
-      public IEnumerable GetMemberByBoard(int Id)
+      public IEnumerable GetMemberByBoard(string Id)
       {
          var members = myContext.MemberBoards.Include(mb => mb.User).Include(mb => mb.Board).Where(mb => mb.BoardId == Id).ToList();
          return members;

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class verifyrelation : Migration
+    public partial class guid : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,8 +48,7 @@ namespace API.Migrations
                 name: "Boards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -72,11 +71,11 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BoardId = table.Column<int>(type: "int", nullable: false),
+                    BoardId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "Todo")
                 },
                 constraints: table =>
                 {
@@ -102,7 +101,7 @@ namespace API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    BoardId = table.Column<int>(type: "int", nullable: false),
+                    BoardId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -129,9 +128,10 @@ namespace API.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    BoardID = table.Column<int>(type: "int", nullable: false),
+                    BoardID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsAccept = table.Column<bool>(type: "bit", nullable: false),
-                    IsUsed = table.Column<bool>(type: "bit", nullable: false)
+                    IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
