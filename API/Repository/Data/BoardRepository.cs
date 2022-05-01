@@ -37,6 +37,21 @@ namespace API.Repository.Data
          return getBoard;
       }
 
+      public IEnumerable GetBoardByMember2(int id)
+      {
+
+         var board = myContext.Boards.Where(x => x.MemberBoards.Any(y => y.UserId == id)).AsSplitQuery()
+                        .Include(x => x.Lists)
+                        .ThenInclude(x => x.Cards)
+                        .Include(x => x.VerifyInvites)
+                        .Include(x => x.MemberBoards)
+                        .ThenInclude(x => x.User)
+                        .Include(x => x.MemberBoards)
+                        .OrderByDescending(x => x.CreatedAt)
+                        .ToList();
+         return board;
+      }
+
       public IEnumerable GetBoardByMember(int Id)
       {
          var board = (from memberboard in myContext.MemberBoards
@@ -270,7 +285,9 @@ namespace API.Repository.Data
          var board = myContext.Boards
                         .Include(m => m.MemberBoards).ThenInclude(us => us.User)
                         .Include(l => l.Lists)
-                        .FirstOrDefault(col => col.Id == id);
+                        .ThenInclude(c => c.Cards).ThenInclude(m => m.MemberCards).ThenInclude(us => us.User)
+                        .OrderBy(a => a.CreatedAt)
+                        .AsSplitQuery().FirstOrDefault(col => col.Id == id);
 
          if (board == null) throw new Exception("Board not found");
 

@@ -14,26 +14,27 @@ const getBoardDetailById = (id, userId) => {
 }
 
 const renderBoardDetail = (response, userId) => {
+   console.log(response)
    $('#title').html(response.data.name)
    $('#description').html(response.data.description)
    $('#createdAt').html(moment(response.data.createdAt).format('LLL'))
 
-   let html = `<img src="https://ui-avatars.com/api/?name=${response.data.createdBy[0].fullName}&background=random" alt="${response.data.createdBy[0].fullName}" width="40px"
-   class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${response.data.createdBy[0].fullName} - PM"
+   let html = `<img src="https://ui-avatars.com/api/?name=${response.data.user.fullName}&background=random" alt="${response.data.user.fullName}" width="40px"
+   class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${response.data.user.fullName} - PM"
    style="margin-right: -20px;">`
 
    // append html to tag #members
-   response.data.members
+   response.data.memberBoards
       .filter((member) => member.role != 'PM')
       .map((member) => {
-         html += `<img src="https://ui-avatars.com/api/?name=${member.fullName}&background=random" alt="${member.role}" width="40px"
-      class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${member.fullName} - ${member.role}"
+         html += `<img src="https://ui-avatars.com/api/?name=${member.user.fullName}&background=random" alt="${member.role}" width="40px"
+      class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${member.user.fullName} - ${member.role}"
       style="margin-right: -20px;">`
       })
 
    $('#members').append(html)
 
-   if (response.data.createdBy[0].id == userId) {
+   if (response.data.user.id == userId) {
       $('#display-btn-invite').append(
          `
          <button class="btn btn-invite mr-4" style="background-color: #FAF5E4; color: #8B8B8B"
@@ -91,6 +92,8 @@ const renderList = (lists, userId) => {
 const renderListByStatus = (items, status, userId) => {
    let html = ``
    items.forEach((item, i) => {
+      console.log('list', item)
+
       html += `
       <div class="list-item rounded shadow mt-4" style="padding: 18px; background-color: #FAF5E4;">
             <div class="list-item-header d-flex justify-content-between align-items-center">
@@ -99,8 +102,8 @@ const renderListByStatus = (items, status, userId) => {
                }</p>
                <div>
                   ${
-                     item.createdBy[0].id == userId
-                        ? `<button class="btn btn-outline-warning btn-sm" onclick="updateListModal(${item.id}, '${item.name}', ${item.createdBy[0].id},'${item.status}', '${item.boardId}')">
+                     item.user.id == userId
+                        ? `<button class="btn btn-outline-warning btn-sm" onclick="updateListModal(${item.id}, '${item.name}', ${item.user.id},'${item.status}', '${item.boardId}')">
                      <i class="fa fa-pencil" aria-hidden="true"></i>
                   </button>
                   <button class="btn btn-outline-danger btn-sm" onclick="deleteList(${item.id})">
@@ -111,12 +114,14 @@ const renderListByStatus = (items, status, userId) => {
                </div>
             </div>
 
-            <div class="cards"></div>
+            <div class="cards mt-4">
+               ${renderCard(item.cards, userId)}
+            </div>
 
             ${
-               item.createdBy[0].id == userId
+               item.user.id == userId
                   ? `<a class="m-auto w-100 pt-4"
-               style="text-decoration: underline; text-align: center; cursor: pointer; color: #736D6D" type="button">+
+               style="text-decoration: underline; text-align: center; cursor: pointer; color: #736D6D" type="button" onclick="createCardModal(${item.id}, '${item.name}')">+
                Add
                a card</a>`
                   : ''
@@ -126,6 +131,98 @@ const renderListByStatus = (items, status, userId) => {
    })
 
    $(`#${status}`).append(html)
+}
+
+const renderCard = (cards, userId) => {
+   let html = ``
+   cards.forEach((card, i) => {
+      console.log('card', card)
+      html += `
+         <button id="card-detail" class="btn shadow rounded bg-white mb-3 d-flex justify-content-between flex-column" style="padding: 10px; width: 100%;" onclick="openDetailCard(${
+            card.id
+         })">
+            <p style="color: #717171; text-align: left; font-size: 16px">${
+               card.name
+            }</p>
+
+            <div class="d-flex justify-content-between w-100 " style="align-items: center;">
+               <p style="font-size: 14px; color: #717171; margin: 0px;"> Due ${moment(
+                  card.due
+               ).format('l')}
+               </p>
+
+
+                  <div>
+                  <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                     class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM""
+                     </div>
+                  
+            </div>
+         </button>`
+   })
+
+   return html
+}
+
+const openDetailCard = (cardId) => {
+   $.ajax({
+      type: 'GET',
+      url: `https://localhost:5001/api/cards/detail/${cardId}`,
+      data: 'data',
+      dataType: 'json',
+      success: function (response) {
+         console.log(response)
+
+         $('#name-card-detail').html(response.data.name)
+         $('#name-list-detail').html('in list ' + response.data.list.name)
+         $('#description-card-detail').html(response.data.description)
+      },
+   })
+
+   $('#detailCardModal').modal('show')
+}
+
+const createCardModal = (listId) => {
+   $('#list-id-card').val(listId)
+   $('#createCardModal').modal('show')
+}
+
+const createCard = (userId) => {
+   event.preventDefault()
+   event.stopPropagation()
+
+   /**
+    * ListId
+    * Name
+    * CreatedBy
+    * Due
+    */
+   const req = {
+      ListId: parseInt($('#list-id-card').val()),
+      Name: $('#name-card').val(),
+      Description: $('#description-card').val().replace(/\n/g, ' '),
+      CreatedBy: userId,
+      Due: $('#due-card').val(),
+   }
+
+   $.ajax({
+      type: 'POST',
+      url: `https://localhost:5001/api/cards`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify(req),
+      success: function (response) {
+         swal('Success!', 'Your card has been created!', 'success')
+         location.reload()
+         $('#createCardModal').modal('hide')
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
 }
 
 const updateListModal = (id, name, createdBy, status, boardId) => {
