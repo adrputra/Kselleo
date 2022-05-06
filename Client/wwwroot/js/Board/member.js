@@ -9,6 +9,7 @@ const getMembersBoardById = (id, userId) => {
       success: function (response) {
          let html = ''
          response.data.map((item, i) => {
+            console.log(item)
             html += `
             <tr>
                <td>${i + 1}</td>
@@ -19,7 +20,7 @@ const getMembersBoardById = (id, userId) => {
                ${
                   item.board.createdBy == userId
                      ? item.role != 'PM'
-                        ? `<button class="btn btn-warning mr-2">
+                        ? `<button class="btn btn-warning mr-2" onclick="openUpdateMemberModal(${item.id}, ${item.user.id}, '${item.boardId}', '${item.user.email}', '${item.role}')">
                      <i class="fa fa-pencil" aria-hidden="true"></i>
                   </button>
                   <button class="btn btn-outline-danger" onclick="kickMember(${item.id})">
@@ -97,4 +98,55 @@ const leaveMember = (id) => {
          swal('Your member is safe!')
       }
    })
+}
+
+const openUpdateMemberModal = (id, userId, boardId, email, role) => {
+   console.log(id, userId, boardId, email, role)
+
+   $('#memberId').val(id)
+   $('#userId').val(userId)
+   $('#boardId').val(boardId)
+   $('#email').val(email)
+   $('#role').val(role)
+
+   $('#updateMemberModal').modal('show')
+}
+
+const updateMember = () => {
+   event.preventDefault()
+
+   let id = parseInt($('#memberId').val())
+   let userId = parseInt($('#userId').val())
+   let boardId = $('#boardId').val()
+   let email = $('#email').val()
+   let role = $('#role').val()
+   console.log(id, userId, boardId, email, role)
+
+   $.ajax({
+      type: 'PUT',
+      url: `https://localhost:5001/api/memberboards`,
+      data: JSON.stringify({
+         id,
+         userId: userId,
+         boardId: boardId,
+         role: role,
+      }),
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      success: function (response) {
+         swal('Success!', 'Your member has been updated!', 'success')
+
+         setTimeout(() => {
+            location.reload()
+         }, 1000)
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+
+   console.log(userId, boardId, email, role)
 }

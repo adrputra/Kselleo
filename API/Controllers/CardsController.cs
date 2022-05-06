@@ -11,7 +11,7 @@ namespace API.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   public class CardsController : BaseController<Card, CardRepository, string>
+   public class CardsController : BaseController<Card, CardRepository, int>
    {
       CardRepository cardRepository;
       public CardsController(CardRepository CardRepository, MyContext myContext) : base(CardRepository)

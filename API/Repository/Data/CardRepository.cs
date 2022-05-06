@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace API.Repository.Data
 {
-   public class CardRepository : GeneralRepository<MyContext, Card, string>
+   public class CardRepository : GeneralRepository<MyContext, Card, int>
 
    {
       public CardRepository(MyContext myContext) : base(myContext)

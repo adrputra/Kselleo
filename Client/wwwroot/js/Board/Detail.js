@@ -14,7 +14,6 @@ const getBoardDetailById = (id, userId) => {
 }
 
 const renderBoardDetail = (response, userId) => {
-   console.log(response)
    $('#title').html(response.data.name)
    $('#description').html(response.data.description)
    $('#createdAt').html(moment(response.data.createdAt).format('LLL'))
@@ -92,14 +91,19 @@ const renderList = (lists, userId) => {
 const renderListByStatus = (items, status, userId) => {
    let html = ``
    items.forEach((item, i) => {
-      console.log('list', item)
-
       html += `
       <div class="list-item rounded shadow mt-4" style="padding: 18px; background-color: #FAF5E4;">
-            <div class="list-item-header d-flex justify-content-between align-items-center">
+            <div class="list-item-header d-flex justify-content-between align-items-start">
+               <div>
                <p style="font-size: 18px; color: #272727; font-weight: 500; margin-block: auto;">${
                   item.name
                }</p>
+               <p style="font-size: 12px; color: #535454; font-weight: 300; margin-block: auto;">Created at ${moment(
+                  item.createdAt
+               ).format('ll')}
+               </p>
+               </div>
+               
                <div>
                   ${
                      item.user.id == userId
@@ -136,7 +140,6 @@ const renderListByStatus = (items, status, userId) => {
 const renderCard = (cards, userId) => {
    let html = ``
    cards.forEach((card, i) => {
-      console.log('card', card)
       html += `
          <button id="card-detail" class="btn shadow rounded bg-white mb-3 d-flex justify-content-between flex-column" style="padding: 10px; width: 100%;" onclick="openDetailCard(${
             card.id
@@ -146,16 +149,16 @@ const renderCard = (cards, userId) => {
             }</p>
 
             <div class="d-flex justify-content-between w-100 " style="align-items: center;">
-               <p style="font-size: 14px; color: #717171; margin: 0px;"> Due ${moment(
+               <p style="font-size: 11px; color: #717171; margin: 0px;"> Due ${moment(
                   card.due
-               ).format('l')}
+               ).format('ll')}
                </p>
 
-
                   <div>
-                  <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                     class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM""
-                     </div>
+                     <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                     </img>
+                  </div>
                   
             </div>
          </button>`
@@ -171,11 +174,23 @@ const openDetailCard = (cardId) => {
       data: 'data',
       dataType: 'json',
       success: function (response) {
-         console.log(response)
-
+         $('#card-id').val(response.data.id)
          $('#name-card-detail').html(response.data.name)
          $('#name-list-detail').html('in list ' + response.data.list.name)
          $('#description-card-detail').html(response.data.description)
+
+         // card update
+         $('#card-id-card-update').val(response.data.id)
+         $('#list-id-card-update').val(response.data.listId)
+         $('#name-card-update').val(response.data.name)
+         $('#description-card-update').val(response.data.description)
+
+         let due = new Date(response.data.due)
+         const year = due.getFullYear()
+         const month = String(due.getMonth() + 1).padStart(2, '0')
+         const day = String(due.getDate()).padStart(2, '0')
+         const joined = [year, month, day].join('-')
+         $('#due-card-update').val(joined)
       },
    })
 
@@ -222,6 +237,77 @@ const createCard = (userId) => {
       error: function (e) {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
       },
+   })
+}
+
+const updateCard = (userId) => {
+   event.preventDefault()
+   event.stopPropagation()
+
+   /**
+    * Id
+    * ListId
+    * Name
+    * Description
+    * CreatedBy
+    * Due
+    */
+   const req = {
+      Id: parseInt($('#card-id-card-update').val()),
+      ListId: parseInt($('#list-id-card-update').val()),
+      Name: $('#name-card-update').val(),
+      Description: $('#description-card-update').val().replace(/\n/g, ' '),
+      CreatedBy: userId,
+      Due: $('#due-card-update').val(),
+   }
+
+   $.ajax({
+      type: 'PUT',
+      url: `https://localhost:5001/api/cards`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify(req),
+      success: function (response) {
+         swal('Success!', 'Your card has been updated!', 'success')
+         location.reload()
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+}
+
+const deleteCard = () => {
+   const cardId = $('#card-id').val()
+   swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this card!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+   }).then((willDelete) => {
+      if (willDelete) {
+         $.ajax({
+            type: 'DELETE',
+            url: `https://localhost:5001/api/cards/${cardId}`,
+            success: function (response) {
+               swal('Poof! Your card has been deleted!', {
+                  icon: 'success',
+               })
+               location.reload()
+            },
+            error: function (response) {
+               swal('upps! delete failed', {
+                  icon: 'error',
+               })
+            },
+         })
+      } else {
+         swal('Your card is safe!')
+      }
    })
 }
 

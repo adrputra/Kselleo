@@ -221,26 +221,37 @@
    </div>
 </div>
 
-
-<!-- Modal Detail Card -->
-<div class="modal fade" id="detailCardModal" tabindex="-1" aria-labelledby="detailCardModalLabel" aria-hidden="true">
-   <div class="modal-dialog modal-lg">
+<!-- Modal Update Card -->
+<div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
       <div class="modal-content">
-         <div class="modal-body p-4">
-            <div class="header-detail-card">
-               <h4 id="name-card-detail">
-                  Loading ...
-               </h4>
-               <p id="name-list-detail">Loading ...</p>
-            </div>
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateCardModalLabel">Update Card</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateCard(@Model.DecodeJwtVM.Id)">
+               <input type="hidden" class="form-control" id="card-id-card-update">
+               <input type="hidden" class="form-control" id="list-id-card-update">
 
-            <div class="description-detail-card">
-               <h5>Description</h5>
-               <p id="description-card-detail">
-                  Loading ...
-               </p>
-            </div>
+               <div class="form-group">
+                  <label for="name-card" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-card-update">
+               </div>
 
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Description:</label>
+                  <textarea type="text" class="form-control" id="description-card-update"></textarea>
+               </div>
+
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-card-update">
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Update
+                  Card</button>
+            </form>
          </div>
          <div class="modal-footer">
 
@@ -250,10 +261,148 @@
 </div>
 
 
-@section Scripts {
-<script src="~/js/Board/Detail.js"></script>
-<script>
-   getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
-   getListByBoardId(`@ViewBag.BoardId`);
-</script>
-}
+<!-- Modal Detail Card -->
+<div class="modal fade" id="detailCardModal" tabindex="-1" aria-labelledby="detailCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <input type="hidden" class="form-control" id="card-id">
+         <div class="modal-body p-4">
+            <div class="header-detail-card mb-2">
+               <div class="d-flex justify-content-between align-items-center">
+                  <h4 id="name-card-detail">
+                     Loading ...
+                  </h4>
+                  <div class="">
+                     <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                     </button>
+                     <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                     </button>
+                  </div>
+               </div>
+               <p id="name-list-detail" class="text-secondary">Loading ...</p>
+            </div>
+
+            @* Description *@
+            <div class="description-detail-card mt-4">
+               <h5>Description</h5>
+               <p id="description-card-detail" class="text-secondary">
+                  Loading ...
+               </p>
+            </div>
+
+            <div class="checklist-detail-card mt-4">
+               <h5>Checklist</h5>
+               <div class="progress">
+                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
+                     aria-valuemax="100">25%</div>
+               </div>
+
+               @* tasks *@
+               <div class="tasks mt-4 d-flex flex-column" style="gap: 20px;">
+                  <div class="task d-flex justify-content-between align-items-center">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label text-secondary" for="flexCheckDefault">
+                           Slicing design dari figma no 32
+                        </label>
+                     </div>
+
+                     <div class="detail-task d-flex justify-content-center align-items-center" style="gap: 12px;">
+                        <div class="due-task text-secondary"> 22 Juni 2022</div>
+                        <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="task d-flex justify-content-between align-items-center">
+                     <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="1">
+                        <label class="form-check-label text-secondary" for="1">
+                           Slicing design dari figma no 32
+                        </label>
+                     </div>
+
+                     <div class="detail-task d-flex justify-content-center align-items-center" style="gap: 12px;">
+                        <div class="due-task text-secondary"> 22 Juni 2022</div>
+                        <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="w-100 mt-4 d-flex justify-between-center">
+                  <button onclick="console.log('ok')" class="btn-add-task btn text-center m-auto">
+                     + add a task
+                  </button>
+               </div>
+
+               @* Comments *@
+               <div class="comments-detail-card mt-4">
+                  <h5>Comments</h5>
+
+                  <div class="comments mt-3 d-flex flex-column" style="gap: 10px;">
+                     <div class="comment d-flex justify-content-center align-items-start" style="gap: 14px;">
+                        <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
+                           class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                        </img>
+
+                        <p style="font-size: 14px;" class="text-secondary">
+                           Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, delectus maiores alias sint
+                           velit voluptas vero omnis magni similique veritatis optio tempora mollitia nobis at dolor et
+                           architecto nemo! Perferendis?
+                        </p>
+                     </div>
+
+                     <div class="comment d-flex justify-content-center align-items-start" style="gap: 14px;">
+                        <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
+                           class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                        </img>
+
+                        <p style="font-size: 14px;" class="text-secondary">
+                           Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, delectus maiores alias sint
+                           velit voluptas vero omnis magni similique veritatis optio tempora mollitia nobis at dolor et
+                           architecto nemo! Perferendis?
+                        </p>
+                     </div>
+                  </div>
+
+                  <div class="input-group mb-3 mt-4">
+                     <input type="text" class="form-control" placeholder="Write a comment..."
+                        aria-label="Write a comment..." aria-describedby="button-comment">
+                     <button class="btn" style="background-color: #F8B401; color: white;" type="button"
+                        id="button-comment">Send</button>
+                  </div>
+               </div>
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+         </div>
+      </div>
+   </div>
+
+
+   @section Scripts {
+   <script src="~/js/Board/Detail.js"></script>
+   <script>
+      getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
+      getListByBoardId(`@ViewBag.BoardId`);
+   </script>
+   }
