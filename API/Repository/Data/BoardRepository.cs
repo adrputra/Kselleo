@@ -41,13 +41,12 @@ namespace API.Repository.Data
       {
 
          var board = myContext.Boards.Where(x => x.MemberBoards.Any(y => y.UserId == id)).AsSplitQuery()
-                        .Include(x => x.Lists)
-                        .ThenInclude(x => x.Cards)
+                        .Include(x => x.Lists.OrderByDescending(y => y.CreatedAt))
+                        .ThenInclude(x => x.Cards.OrderByDescending(y => y.CreatedAt))
                         .Include(x => x.VerifyInvites)
                         .Include(x => x.MemberBoards)
                         .ThenInclude(x => x.User)
                         .Include(x => x.MemberBoards)
-                        .OrderByDescending(x => x.CreatedAt)
                         .ToList();
          return board;
       }
@@ -286,6 +285,8 @@ namespace API.Repository.Data
                         .Include(m => m.MemberBoards).ThenInclude(us => us.User)
                         .Include(l => l.Lists)
                         .ThenInclude(c => c.Cards).ThenInclude(m => m.MemberCards).ThenInclude(us => us.User)
+                        .Include(l => l.Lists)
+                        .ThenInclude(c => c.Cards).ThenInclude(c => c.CheckListItems).ThenInclude(m => m.CheckListItemAssigns).ThenInclude(us => us.User)
                         .OrderBy(a => a.CreatedAt)
                         .AsSplitQuery().FirstOrDefault(col => col.Id == id);
 

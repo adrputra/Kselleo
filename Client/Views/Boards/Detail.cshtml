@@ -23,6 +23,8 @@
 }
 
 <input type="hidden" name="boardId" id="boardId" value="@Model.BoardId">
+<input type="hidden" name="userId" id="userId" value="@Model.DecodeJwtVM.Id">
+
 
 <div class="header row p-4 shadow rounded ">
    <div class="col">
@@ -272,13 +274,13 @@
                   <h4 id="name-card-detail">
                      Loading ...
                   </h4>
-                  <div class="">
-                     <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
+                  <div class="display-actions-card">
+                     @* <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
                         <i class="fa fa-trash" aria-hidden="true"></i>
-                     </button>
-                     <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
+                        </button>
+                        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
                         <i class="fa fa-pencil" aria-hidden="true"></i>
-                     </button>
+                        </button> *@
                   </div>
                </div>
                <p id="name-list-detail" class="text-secondary">Loading ...</p>
@@ -293,61 +295,20 @@
             </div>
 
             <div class="checklist-detail-card mt-4">
-               <h5>Checklist</h5>
-               <div class="progress">
-                  <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0"
+               <h5>Tasks</h5>
+               <div class="progress" id="progress-tasks">
+                  <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
                      aria-valuemax="100">25%</div>
                </div>
 
                @* tasks *@
                <div class="tasks mt-4 d-flex flex-column" style="gap: 20px;">
-                  <div class="task d-flex justify-content-between align-items-center">
-                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label text-secondary" for="flexCheckDefault">
-                           Slicing design dari figma no 32
-                        </label>
-                     </div>
-
-                     <div class="detail-task d-flex justify-content-center align-items-center" style="gap: 12px;">
-                        <div class="due-task text-secondary"> 22 Juni 2022</div>
-                        <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
-                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                           </img>
-
-                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                           </img>
-                        </div>
-                     </div>
-                  </div>
-
-                  <div class="task d-flex justify-content-between align-items-center">
-                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="1">
-                        <label class="form-check-label text-secondary" for="1">
-                           Slicing design dari figma no 32
-                        </label>
-                     </div>
-
-                     <div class="detail-task d-flex justify-content-center align-items-center" style="gap: 12px;">
-                        <div class="due-task text-secondary"> 22 Juni 2022</div>
-                        <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
-                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                           </img>
-
-                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                           </img>
-                        </div>
-                     </div>
-                  </div>
+                  <p>Loading ...</p>
                </div>
 
                <div class="w-100 mt-4 d-flex justify-between-center">
-                  <button onclick="console.log('ok')" class="btn-add-task btn text-center m-auto">
+                  <button class="btn-add-task btn text-center m-auto" data-bs-toggle="modal"
+                     data-bs-target="#createTaskModal">
                      + add a task
                   </button>
                </div>
@@ -397,12 +358,92 @@
          </div>
       </div>
    </div>
+</div>
+
+<!-- Modal Create Checklist -->
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="createTaskModalLabel">Create Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="createTask(@Model.DecodeJwtVM.Id)">
+               <div class="form-group">
+                  <label for="name-task" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-task" placeholder="Name of task..." required>
+               </div>
+
+               <div class="form-group">
+                  <label for="members-task" class="col-form-label">Members:</label>
+                  <select class="form-control" id="members-task" multiple>
+                  </select>
+
+               </div>
+
+               <div class="form-group">
+                  <label for="due-task" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-task" required>
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Create
+                  Task</button>
+
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
 
 
-   @section Scripts {
-   <script src="~/js/Board/Detail.js"></script>
-   <script>
-      getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
-      getListByBoardId(`@ViewBag.BoardId`);
-   </script>
-   }
+<!-- Modal Update Checklist -->
+<div class="modal fade" id="updateTaskModal" tabindex="-1" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateTaskModalLabel">Update Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateTask(@Model.DecodeJwtVM.Id)">
+               <input type="hidden" id="id-task-update">
+               <div class="form-group">
+                  <label for="name-task" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-task-update" placeholder="Name of task..." required>
+               </div>
+
+               <div class="form-group">
+                  <label for="members-task" class="col-form-label">Members:</label>
+                  <select class="form-control" id="members-task-update" multiple>
+                  </select>
+
+               </div>
+
+               <div class="form-group">
+                  <label for="due-task" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-task-update" required>
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Update
+                  Task</button>
+
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+@section Scripts {
+<script src="~/js/Board/Detail.js"></script>
+<script>
+   getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
+   getListByBoardId(`@ViewBag.BoardId`);
+</script>
+}

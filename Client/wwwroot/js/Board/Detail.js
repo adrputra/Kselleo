@@ -4,8 +4,18 @@ const getBoardDetailById = (id, userId) => {
       url: `https://localhost:5001/api/boards/detail/${id}`,
       dataType: 'json',
       success: function (response) {
+         console.log(response)
          renderBoardDetail(response, userId)
          renderList(response.data.lists, userId)
+
+         // render members to modal create task -> select members.
+         response.data.memberBoards
+            .filter((member) => member.role != 'PM')
+            .map((member) => {
+               $('#members-task').append(
+                  `<option value="${member.user.id}">${member.user.fullName}</option>`
+               )
+            })
       },
       error: function (e) {
          location.href = '/boards'
@@ -77,10 +87,12 @@ const createList = (userId) => {
 }
 
 const renderList = (lists, userId) => {
-   const todo = lists.filter((list) => list.status == 'Todo')
-   const inProgress = lists.filter((list) => list.status == 'In Progress')
-   const review = lists.filter((list) => list.status == 'Review')
-   const done = lists.filter((list) => list.status == 'Done')
+   const todo = lists.filter((list) => list.status == 'Todo').reverse()
+   const inProgress = lists
+      .filter((list) => list.status == 'In Progress')
+      .reverse()
+   const review = lists.filter((list) => list.status == 'Review').reverse()
+   const done = lists.filter((list) => list.status == 'Done').reverse()
 
    renderListByStatus(todo, 'todos', userId)
    renderListByStatus(inProgress, 'in-progress', userId)
@@ -174,6 +186,9 @@ const openDetailCard = (cardId) => {
       data: 'data',
       dataType: 'json',
       success: function (response) {
+         const userId = parseInt($('#userId').val())
+         console.log('resss', response)
+
          $('#card-id').val(response.data.id)
          $('#name-card-detail').html(response.data.name)
          $('#name-list-detail').html('in list ' + response.data.list.name)
@@ -185,16 +200,244 @@ const openDetailCard = (cardId) => {
          $('#name-card-update').val(response.data.name)
          $('#description-card-update').val(response.data.description)
 
-         let due = new Date(response.data.due)
-         const year = due.getFullYear()
-         const month = String(due.getMonth() + 1).padStart(2, '0')
-         const day = String(due.getDate()).padStart(2, '0')
-         const joined = [year, month, day].join('-')
-         $('#due-card-update').val(joined)
+         $('#due-card-update').val(convertDateToInput(response.data.due))
+
+         // render edit and delete card
+         if (userId == response.data.createdBy) {
+            $('.display-actions-card').html(
+               `
+               <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
+               <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
+               <i class="fa fa-pencil" aria-hidden="true"></i>
+            </button>
+               `
+            )
+         }
+
+         // render progressbar
+         const totalTask = response.data.checkListItems.length
+         const isChecked = response.data.checkListItems.filter(
+            (x) => x.isChecked == true
+         )
+
+         const progress = (isChecked.length / totalTask) * 100
+
+         $('#progress-tasks').html(
+            `
+            <div class="progress-bar" role="progressbar" style="width: ${progress}%;" aria-valuenow="${progress}" aria-valuemin="0"
+            aria-valuemax="100">${progress}%</div>
+            `
+         )
+         console.log('o', progress)
+
+         // render tasks
+         let checkListHTML = ''
+         response.data.checkListItems.map((x) => {
+            let assignTasks = ''
+            x.checkListItemAssigns.map((item) => {
+               assignTasks += `
+               <img src="https://ui-avatars.com/api/?name=${item.user.fullName}&background=random" alt="${item.user.fullName}" width="25px"
+               class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${item.user.fullName} - ${item.user.memberBoards[0].role}"></img>
+            `
+            })
+
+            checkListHTML += `
+            <div class="task d-flex justify-content-between align-items-center">
+                     <div class="form-check" style="flex: 0.7;">
+                        <input class="form-check-input" type="checkbox" value="${
+                           x.isChecked
+                        }" id="${x.id}" ${
+               x.isChecked == true && 'checked'
+            } onclick="checkingTask(${x.id}, ${x.isChecked})">
+                        <label class="form-check-label text-secondary" for="${
+                           x.id
+                        }">
+                           ${x.name}
+                        </label>
+                     </div>
+
+                     <div class="detail-task d-flex justify-content-end align-items-center" style="gap: 12px; flex: 0.3;">
+                        <div class="due-task text-secondary"> ${moment(
+                           x.due
+                        ).format('LL')} </div>
+                        <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
+                          ${assignTasks}
+                        </div>
+                     </div>
+
+                    
+                     ${
+                        userId == response.data.createdBy
+                           ? `<div class="detail-task-action ml-4">
+                        <div class='buttons d-flex' style='gap: 5px;'>
+                           <div>
+                              <button class='btn btn-outline-warning btn-sm mr-1' onclick="openModalUpdateTask(${x.id})">
+                                   <i
+                                      class='fa fa-pencil'
+                                      aria-hidden='true'
+                                   ></i>
+                              </button>
+                           </div>
+                           <div>
+                               <button class='btn btn-outline-danger btn-sm' onclick="deleteTask(${x.id})">
+                               <i
+                                  class='fa fa-trash'
+                                  aria-hidden='true'
+                               ></i>
+                            </button>
+                           </div>
+                        </div>
+                     </div>`
+                           : ''
+                     }
+                    
+                  </div>
+            `
+         })
+
+         $('.tasks').html(checkListHTML)
       },
    })
 
    $('#detailCardModal').modal('show')
+}
+
+const checkingTask = (taskId, isChecked) => {
+   event.preventDefault()
+   console.log(taskId, isChecked)
+
+   // ajax method put /cards/task
+   $.ajax({
+      type: 'PUT',
+      url: `https://localhost:5001/api/cards/task/checking`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify({ Id: parseInt(taskId), IsChecked: isChecked }),
+      success: function (response) {
+         swal('Success!', 'Your task has been checking!', 'success')
+         setTimeout(() => {
+            location.reload()
+         }, 1000)
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+}
+
+const openModalUpdateTask = (taskId) => {
+   const members = []
+
+   $('#members-task option').each(function () {
+      members.push({ id: parseInt($(this).val()), name: $(this).text() })
+   })
+
+   // get checklistitems by taskId
+   $.ajax({
+      type: 'GET',
+      url: `https://localhost:5001/api/checklistitems/detail/${taskId}`,
+      data: 'data',
+      dataType: 'json',
+      success: function (response) {
+         $('#id-task-update').val(taskId)
+         // show modal update task
+         $('#name-task-update').val(response.data.name)
+
+         // render members to modal create task -> select members.
+         let optionHTML = ''
+
+         const assignIds = response.data.checkListItemAssigns.map(
+            (x) => x.user.id
+         )
+
+         members.map((member) => {
+            optionHTML += `<option value="${member.id}" ${
+               assignIds.includes(member.id) && 'selected'
+            }>${member.name}</option>`
+         })
+
+         $('#members-task-update').html(optionHTML)
+
+         $('#due-task-update').val(convertDateToInput(response.data.due))
+
+         $('#updateTaskModal').modal('show')
+         console.log('ress', response)
+      },
+   })
+   console.log(taskId)
+}
+
+const updateTask = (userId) => {
+   event.preventDefault()
+
+   const req = {
+      Id: parseInt($('#id-task-update').val()),
+      Name: $('#name-task-update').val(),
+      Members: $('#members-task-update').val(),
+      Due: $('#due-task-update').val(),
+      CardId: parseInt($('#card-id').val()),
+   }
+
+   if (req.Members.length === 0) {
+      return swal('Oops!', 'You need to add at least one member!', 'error')
+   }
+
+   // ajax method put /cards/task
+   $.ajax({
+      type: 'PUT',
+      url: `https://localhost:5001/api/cards/task`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify(req),
+      success: function (response) {
+         swal('Success!', 'Your task has been updated!', 'success')
+         setTimeout(() => {
+            location.reload()
+         }, 1000)
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+   console.log(req)
+}
+
+const deleteTask = (taskId) => {
+   swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this task!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+   }).then((willDelete) => {
+      if (willDelete) {
+         $.ajax({
+            type: 'DELETE',
+            url: `https://localhost:5001/api/checklistitems/${taskId}`,
+            success: function (response) {
+               swal('Poof! Your task has been deleted!', {
+                  icon: 'success',
+               })
+               location.reload()
+            },
+            error: function (response) {
+               swal('upps! delete failed', {
+                  icon: 'error',
+               })
+            },
+         })
+      } else {
+         swal('Your task is safe!')
+      }
+   })
 }
 
 const createCardModal = (listId) => {
@@ -416,6 +659,55 @@ const inviteMember = () => {
    })
 }
 
+const createTask = () => {
+   event.preventDefault()
+
+   const req = {
+      Name: $('#name-task').val(),
+      Members: $('#members-task').val(),
+      Due: $('#due-task').val(),
+      CardId: parseInt($('#card-id').val()),
+   }
+
+   if (req.Members.length === 0) {
+      return swal('Oops!', 'You need to add at least one member!', 'error')
+   }
+
+   console.log(req)
+
+   // // ajax method post /cards/task
+   $.ajax({
+      type: 'POST',
+      url: `https://localhost:5001/api/cards/task`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify(req),
+      success: function (response) {
+         swal('Success!', 'Your task has been created!', 'success')
+         setTimeout(() => {
+            location.reload()
+         }, 1000)
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+   // console.log(req)
+}
+
 const getListByBoardId = (id) => {
    // console.log('ASdasd', id)
+}
+
+const convertDateToInput = (date) => {
+   let due = new Date(date)
+   const year = due.getFullYear()
+   const month = String(due.getMonth() + 1).padStart(2, '0')
+   const day = String(due.getDate()).padStart(2, '0')
+   const joined = [year, month, day].join('-')
+
+   return joined
 }
