@@ -4,7 +4,6 @@ const getBoardDetailById = (id, userId) => {
       url: `https://localhost:5001/api/boards/detail/${id}`,
       dataType: 'json',
       success: function (response) {
-         console.log(response)
          renderBoardDetail(response, userId)
          renderList(response.data.lists, userId)
 
@@ -43,12 +42,22 @@ const renderBoardDetail = (response, userId) => {
 
    $('#members').append(html)
 
+   // display btn invite and btn create list
    if (response.data.user.id == userId) {
       $('#display-btn-invite').append(
          `
          <button class="btn btn-invite mr-4" style="background-color: #FAF5E4; color: #8B8B8B"
          data-bs-toggle="modal"
          data-bs-target="#inviteModal">+ Invite Member</button>
+         `
+      )
+
+      $('#display-btn-create-list').html(
+         `
+         <div class="create-list" style="position: fixed; bottom: 30px; right: 50px; ">
+            <button class="btn text-white" style="background-color: #F8B401;" data-bs-toggle="modal"
+               data-bs-target="#createListModal">+ Create List</button>
+         </div>
          `
       )
    }
@@ -155,7 +164,7 @@ const renderCard = (cards, userId) => {
       html += `
          <button id="card-detail" class="btn shadow rounded bg-white mb-3 d-flex justify-content-between flex-column" style="padding: 10px; width: 100%;" onclick="openDetailCard(${
             card.id
-         })">
+         }, ${userId})">
             <p style="color: #717171; text-align: left; font-size: 16px">${
                card.name
             }</p>
@@ -179,7 +188,7 @@ const renderCard = (cards, userId) => {
    return html
 }
 
-const openDetailCard = (cardId) => {
+const openDetailCard = (cardId, userId) => {
    $.ajax({
       type: 'GET',
       url: `https://localhost:5001/api/cards/detail/${cardId}`,
@@ -230,12 +239,13 @@ const openDetailCard = (cardId) => {
             aria-valuemax="100">${progress}%</div>
             `
          )
-         console.log('o', progress)
 
          // render tasks
          let checkListHTML = ''
          response.data.checkListItems.map((x) => {
             let assignTasks = ''
+            let assignIds = x.checkListItemAssigns.map((y) => y.userId)
+
             x.checkListItemAssigns.map((item) => {
                assignTasks += `
                <img src="https://ui-avatars.com/api/?name=${item.user.fullName}&background=random" alt="${item.user.fullName}" width="25px"
@@ -250,7 +260,11 @@ const openDetailCard = (cardId) => {
                            x.isChecked
                         }" id="${x.id}" ${
                x.isChecked == true && 'checked'
-            } onclick="checkingTask(${x.id}, ${x.isChecked})">
+            } onclick="checkingTask(${x.id}, ${x.isChecked})" ${
+               assignIds.includes(userId) || userId == response.data.createdBy
+                  ? ''
+                  : 'disabled'
+            }>
                         <label class="form-check-label text-secondary" for="${
                            x.id
                         }">
@@ -298,6 +312,56 @@ const openDetailCard = (cardId) => {
          })
 
          $('.tasks').html(checkListHTML)
+
+         // render btn add task
+         if (userId == response.data.createdBy) {
+            $('#display-btn-add-task').html(
+               `
+               <button class="btn-add-task btn text-center m-auto" data-bs-toggle="modal"
+               data-bs-target="#createTaskModal">
+               + add a task
+            </button>
+            `
+            )
+         }
+
+         // render comments
+         let commentHTML = ''
+         response.data.comments.map((x) => {
+            commentHTML += `
+            <div class="row">
+               <div class="col-md-1">
+                  <img src="https://ui-avatars.com/api/?name=${
+                     x.user.fullName
+                  }&background=random" alt="${x.user.fullName}" width="40px"
+                     class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${
+                        x.user.fullName
+                     }">
+                  </img>
+               </div>
+               <div class="col-md-10">
+                  <p style="font-size: 14px;" class="text-secondary">
+                     ${x.text}
+                  </p>
+                 <p class="text-secondary" style="font-size: 12px;">
+                     ${moment(x.createdAt).format('lll')}
+                  </p>
+               </div>
+               <div class="col-md-1">
+                  ${
+                     x.userId == userId
+                        ? `
+                     <button class="btn btn-outline-danger mr-1 btn-sm" onclick="deleteComment(${x.id})">
+                     <i class="fa fa-trash" aria-hidden="true"></i>
+                  </button>`
+                        : ''
+                  }
+               </div>
+            </div>
+            `
+         })
+
+         $('.comments').html(commentHTML)
       },
    })
 
@@ -306,7 +370,6 @@ const openDetailCard = (cardId) => {
 
 const checkingTask = (taskId, isChecked) => {
    event.preventDefault()
-   console.log(taskId, isChecked)
 
    // ajax method put /cards/task
    $.ajax({
@@ -366,10 +429,8 @@ const openModalUpdateTask = (taskId) => {
          $('#due-task-update').val(convertDateToInput(response.data.due))
 
          $('#updateTaskModal').modal('show')
-         console.log('ress', response)
       },
    })
-   console.log(taskId)
 }
 
 const updateTask = (userId) => {
@@ -407,7 +468,6 @@ const updateTask = (userId) => {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
       },
    })
-   console.log(req)
 }
 
 const deleteTask = (taskId) => {
@@ -673,8 +733,6 @@ const createTask = () => {
       return swal('Oops!', 'You need to add at least one member!', 'error')
    }
 
-   console.log(req)
-
    // // ajax method post /cards/task
    $.ajax({
       type: 'POST',
@@ -695,12 +753,9 @@ const createTask = () => {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
       },
    })
-   // console.log(req)
 }
 
-const getListByBoardId = (id) => {
-   // console.log('ASdasd', id)
-}
+const getListByBoardId = (id) => {}
 
 const convertDateToInput = (date) => {
    let due = new Date(date)
@@ -710,4 +765,62 @@ const convertDateToInput = (date) => {
    const joined = [year, month, day].join('-')
 
    return joined
+}
+
+const sendComment = (userId) => {
+   event.preventDefault()
+   const req = {
+      UserId: userId,
+      CardId: parseInt($('#card-id').val()),
+      Text: $('#comment-text').val(),
+   }
+
+   $.ajax({
+      type: 'POST',
+      url: `https://localhost:5001/api/comments`,
+      headers: {
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+      },
+      dataType: 'json',
+      data: JSON.stringify(req),
+      success: function (response) {
+         $('#comment-text').val('')
+         $('#commentModal').modal('hide')
+         swal('Success!', 'Your comment has been sent!', 'success')
+         location.reload()
+      },
+      error: function (e) {
+         swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
+      },
+   })
+}
+
+const deleteComment = (commentId) => {
+   event.preventDefault()
+   // delete with alert swal
+   swal({
+      title: 'Are you sure?',
+      text: 'Once deleted, you will not be able to recover this comment!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+   }).then((willDelete) => {
+      if (willDelete) {
+         $.ajax({
+            type: 'DELETE',
+            url: `https://localhost:5001/api/comments/${commentId}`,
+            success: function (response) {
+               swal('Poof! Your comment has been deleted!', {
+                  icon: 'success',
+               })
+               setTimeout(() => {
+                  location.reload()
+               }, 1000)
+            },
+         })
+      } else {
+         swal('Your comment is safe!')
+      }
+   })
 }

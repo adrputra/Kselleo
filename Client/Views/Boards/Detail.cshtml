@@ -77,11 +77,8 @@
 
 
 @* button create list *@
-<div class="display-btn-create-list">
-   <div class="create-list" style="position: fixed; bottom: 30px; right: 50px; ">
-      <button class="btn text-white" style="background-color: #F8B401;" data-bs-toggle="modal"
-         data-bs-target="#createListModal">+ Create List</button>
-   </div>
+<div id="display-btn-create-list">
+
 </div>
 
 <!-- Modal Invite -->
@@ -306,11 +303,8 @@
                   <p>Loading ...</p>
                </div>
 
-               <div class="w-100 mt-4 d-flex justify-between-center">
-                  <button class="btn-add-task btn text-center m-auto" data-bs-toggle="modal"
-                     data-bs-target="#createTaskModal">
-                     + add a task
-                  </button>
+               <div class="w-100 mt-4 d-flex justify-between-center" id="display-btn-add-task">
+
                </div>
 
                @* Comments *@
@@ -318,37 +312,34 @@
                   <h5>Comments</h5>
 
                   <div class="comments mt-3 d-flex flex-column" style="gap: 10px;">
-                     <div class="comment d-flex justify-content-center align-items-start" style="gap: 14px;">
-                        <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
-                           class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                        </img>
-
-                        <p style="font-size: 14px;" class="text-secondary">
-                           Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, delectus maiores alias sint
-                           velit voluptas vero omnis magni similique veritatis optio tempora mollitia nobis at dolor et
-                           architecto nemo! Perferendis?
-                        </p>
+                     <div class="row">
+                        <div class="col-md-1">
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+                        </div>
+                        <div class="col-md-10">
+                           <p style="font-size: 14px;" class="text-secondary">
+                              Lorem ipsum ?
+                           </p>
+                        </div>
+                        <div class="col-md-1">
+                           <button class="btn btn-outline-danger mr-1 btn-sm" onclick="console.log('delete')">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                           </button>
+                        </div>
                      </div>
 
-                     <div class="comment d-flex justify-content-center align-items-start" style="gap: 14px;">
-                        <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
-                           class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
-                        </img>
+                  </div>
 
-                        <p style="font-size: 14px;" class="text-secondary">
-                           Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero, delectus maiores alias sint
-                           velit voluptas vero omnis magni similique veritatis optio tempora mollitia nobis at dolor et
-                           architecto nemo! Perferendis?
-                        </p>
+                  <form onsubmit="sendComment(@Model.DecodeJwtVM.Id)">
+                     <div class="input-group mb-3 mt-4">
+                        <input type="text" class="form-control" placeholder="Write a comment..." id="comment-text"
+                           aria-label="Write a comment..." aria-describedby="button-comment" required>
+                        <button class="btn" style="background-color: #F8B401; color: white;" type="submit"
+                           id="button-comment">Send</button>
                      </div>
-                  </div>
-
-                  <div class="input-group mb-3 mt-4">
-                     <input type="text" class="form-control" placeholder="Write a comment..."
-                        aria-label="Write a comment..." aria-describedby="button-comment">
-                     <button class="btn" style="background-color: #F8B401; color: white;" type="button"
-                        id="button-comment">Send</button>
-                  </div>
+                  </form>
                </div>
 
             </div>

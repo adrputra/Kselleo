@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CommentsController : BaseController<Comment, CommentRepository, string>
-    {
-        public CommentsController(CommentRepository CommentRepository, MyContext myContext) : base(CommentRepository)
-        {
-           
-        }
-    }
+   [Route("api/[controller]")]
+   [ApiController]
+   public class CommentsController : BaseController<Comment, CommentRepository, int>
+   {
+      public CommentsController(CommentRepository CommentRepository, MyContext myContext) : base(CommentRepository)
+      {
+
+      }
+   }
 }

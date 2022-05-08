@@ -153,7 +153,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()
@@ -261,7 +261,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()
@@ -390,7 +390,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()

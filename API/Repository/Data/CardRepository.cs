@@ -22,6 +22,7 @@ namespace API.Repository.Data
          return myContext.Cards
              .Include(list => list.List)
              .Include(comment => comment.Comments)
+             .ThenInclude(u => u.User)
              .Include(check => check.CheckListItems)
              .ThenInclude(assign => assign.CheckListItemAssigns)
              .ThenInclude(user => user.User)
