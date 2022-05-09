@@ -161,6 +161,28 @@ const renderListByStatus = (items, status, userId) => {
 const renderCard = (cards, userId) => {
    let html = ``
    cards.forEach((card, i) => {
+      console.log('card', card)
+      const members = card.checkListItems.map((item) => {
+         return item.checkListItemAssigns.map((assign) => {
+            return assign.user
+         })
+      })
+
+      const uniqueIds = []
+      const uniqueMembers = members.filter((el) => {
+         let result = false
+
+         el.forEach((user) => {
+            const isDuplicate = uniqueIds.includes(user.id)
+            if (!isDuplicate) {
+               uniqueIds.push(user.id)
+               result = true
+            }
+         })
+
+         return result
+      })
+
       html += `
          <button id="card-detail" class="btn shadow rounded bg-white mb-3 d-flex justify-content-between flex-column" style="padding: 10px; width: 100%;" onclick="openDetailCard(${
             card.id
@@ -176,8 +198,18 @@ const renderCard = (cards, userId) => {
                </p>
 
                   <div>
-                     <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="25px"
-                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                  
+                  ${uniqueMembers.flat().forEach((element) => {
+                     console.log('ed', element)
+                     return `
+                        <img src="https://ui-avatars.com/api/?name=${element.fullName}&background=random" alt="${element.fullName}" width="25px"
+                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${element.fullName} - PM">
+                     </img>
+                     `
+                  })}
+
+                   <img src="https://ui-avatars.com/api/?name=asdasd&background=random" alt="asda" width="25px"
+                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="asdas - PM">
                      </img>
                   </div>
                   
@@ -231,7 +263,11 @@ const openDetailCard = (cardId, userId) => {
             (x) => x.isChecked == true
          )
 
-         const progress = (isChecked.length / totalTask) * 100
+         let progress = 0
+
+         if (totalTask > 0 && isChecked.length > 0) {
+            progress = (isChecked.length / totalTask) * 100
+         }
 
          $('#progress-tasks').html(
             `
