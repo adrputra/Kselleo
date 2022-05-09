@@ -1,17 +1,20 @@
 // Get boards by user
 $(document).ready(function () {
    const userId = $('#userId').val()
+   $.LoadingOverlay('show')
 
    $.ajax({
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
-      url: `https://localhost:5001/api/boards/user/${userId}`,
+      url: `https://localhost:44308/api/boards/user/${userId}`,
       data: 'data',
       success: function (response) {
-         console.log('Response', response)
+         $.LoadingOverlay('hide')
+
          let html = ''
          response.data.map((item) => {
+            console.log(item)
             html += `
             <div class="col-md-6 col-lg-4 mb-4">
             <a href="/boards/detail/${item.id}" style="text-decoration: none;">
@@ -23,20 +26,24 @@ $(document).ready(function () {
                            item.createdAt
                         ).format('LL')}</span>
                        ${
-                          item.createdBy[0].id == userId
+                          item.user.id == userId
                              ? `<div class='buttons d-flex' style='gap: 5px;'>
-                              <button class='btn btn-outline-warning btn-sm' onclick="updateModal(${item.id}, ${userId}, '${item.name}', '${item.description}')">
+                              <div>
+                              <button class='btn btn-outline-warning btn-sm' onclick="updateModal('${item.id}', ${userId}, '${item.name}', '${item.description}')">
                                    <i
                                       class='fa fa-pencil'
                                       aria-hidden='true'
                                    ></i>
                                 </button>
-                                <button class='btn btn-outline-danger btn-sm' onclick="deleteModal(${item.id})">
-                                <i
-                                   class='fa fa-trash'
-                                   aria-hidden='true'
-                                ></i>
-                             </button>
+                                </div>
+                               <div>
+                               <button class='btn btn-outline-danger btn-sm' onclick="deleteModal('${item.id}')">
+                               <i
+                                  class='fa fa-trash'
+                                  aria-hidden='true'
+                               ></i>
+                            </button>
+                            </div>
                              </div>`
                              : ''
                        }
@@ -50,24 +57,24 @@ $(document).ready(function () {
                   <div class="bottom">
                      <div class="d-flex align-items-center justify-content-between">
                         <div class="pm" data-toggle="tooltip" data-placement="right"
-                        title="${item.createdBy[0].fullName} - PM">
+                        title="${item.user.fullName} - PM">
                            <img src="https://ui-avatars.com/api/?name=${
-                              item.createdBy[0].fullName
+                              item.user.fullName
                            }" alt="project-manager" width="40px"
                               class="rounded-circle">
                            <span class="pl-1" style="color: black;">${
-                              item.createdBy[0].fullName
+                              item.user.fullName
                            }</span>
                         </div>
       
                         <div class="members d-flex pr-3">
-                        ${item.members
+                        ${item.memberBoards
                            .filter((member) => member.role !== 'PM')
                            .map((member) => {
                               return `
-                              <img src="https://ui-avatars.com/api/?name=${member.fullName}&background=random" alt="${member.fullName}"
+                              <img src="https://ui-avatars.com/api/?name=${member.user.fullName}&background=random" alt="${member.user.fullName}"
                               width="40px" class="rounded-circle" data-toggle="tooltip" data-placement="right"
-                              title="${member.fullName} - ${member.role}" style="margin-right: -20px;">
+                              title="${member.user.fullName} - ${member.role}" style="margin-right: -20px;">
                               `
                            })}
                         </div>
@@ -90,7 +97,7 @@ const updateModal = (idBoard, idUser, name, description) => {
    event.stopPropagation()
    event.preventDefault()
 
-   console.log(idBoard, idUser)
+   console.log(idBoard, idUser, name, description)
 
    $('#boardIdUpdate').val(idBoard)
    $('#userIdUpdate').val(idUser)
@@ -106,7 +113,7 @@ const updateBoard = () => {
    const id = $('#boardIdUpdate').val()
    const createdBy = $('#userIdUpdate').val()
    const name = $('#name_update').val()
-   const description = $('#description_update').val()
+   const description = $('#description_update').val().replace(/\n/g, ' ')
 
    const request = {
       id,
@@ -119,7 +126,7 @@ const updateBoard = () => {
       type: 'PUT',
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
-      url: 'https://localhost:5001/api/boards/',
+      url: 'https://localhost:44308/api/boards/',
       data: JSON.stringify(request),
       success: function (response) {
          location.reload()
@@ -141,7 +148,7 @@ const deleteModal = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/boards/${id}`,
+            url: `https://localhost:44308/api/boards/${id}`,
             success: function (response) {
                swal('Poof! Your board has been deleted!', {
                   icon: 'success',
@@ -165,11 +172,11 @@ const createBoard = () => {
 
    const userId = $('#userId').val()
    const name = $('#name').val()
-   const description = $('#description').val()
+   const description = $('#description').val().replace(/\n/g, ' ')
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/boards/create',
+      url: 'https://localhost:44308/api/boards/create',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',

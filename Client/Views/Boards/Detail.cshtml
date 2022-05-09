@@ -23,6 +23,8 @@
 }
 
 <input type="hidden" name="boardId" id="boardId" value="@Model.BoardId">
+<input type="hidden" name="userId" id="userId" value="@Model.DecodeJwtVM.Id">
+
 
 <div class="header row p-4 shadow rounded ">
    <div class="col">
@@ -75,9 +77,8 @@
 
 
 @* button create list *@
-<div class="create-list" style="position: fixed; bottom: 30px; right: 50px; ">
-   <button class="btn text-white" style="background-color: #F8B401;" data-bs-toggle="modal"
-      data-bs-target="#createListModal">+ Create List</button>
+<div id="display-btn-create-list">
+
 </div>
 
 <!-- Modal Invite -->
@@ -181,7 +182,254 @@
    </div>
 </div>
 
+<!-- Modal Create Card -->
+<div class="modal fade" id="createCardModal" tabindex="-1" aria-labelledby="createCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="createCardModalLabel">Create Card</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="createCard(@Model.DecodeJwtVM.Id)">
+               <input type="hidden" class="form-control" id="list-id-card">
 
+               <div class="form-group">
+                  <label for="name-card" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-card">
+               </div>
+
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Description:</label>
+                  <textarea type="text" class="form-control" id="description-card"></textarea>
+               </div>
+
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-card">
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Create
+                  Card</button>
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Modal Update Card -->
+<div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateCardModalLabel">Update Card</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateCard(@Model.DecodeJwtVM.Id)">
+               <input type="hidden" class="form-control" id="card-id-card-update">
+               <input type="hidden" class="form-control" id="list-id-card-update">
+
+               <div class="form-group">
+                  <label for="name-card" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-card-update">
+               </div>
+
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Description:</label>
+                  <textarea type="text" class="form-control" id="description-card-update"></textarea>
+               </div>
+
+               <div class="form-group">
+                  <label for="description-card" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-card-update">
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Update
+                  Card</button>
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal Detail Card -->
+<div class="modal fade" id="detailCardModal" tabindex="-1" aria-labelledby="detailCardModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <input type="hidden" class="form-control" id="card-id">
+         <div class="modal-body p-4">
+            <div class="header-detail-card mb-2">
+               <div class="d-flex justify-content-between align-items-center">
+                  <h4 id="name-card-detail">
+                     Loading ...
+                  </h4>
+                  <div class="display-actions-card">
+                     @* <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </button> *@
+                  </div>
+               </div>
+               <p id="name-list-detail" class="text-secondary">Loading ...</p>
+            </div>
+
+            @* Description *@
+            <div class="description-detail-card mt-4">
+               <h5>Description</h5>
+               <p id="description-card-detail" class="text-secondary">
+                  Loading ...
+               </p>
+            </div>
+
+            <div class="checklist-detail-card mt-4">
+               <h5>Tasks</h5>
+               <div class="progress" id="progress-tasks">
+                  <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+                     aria-valuemax="100">25%</div>
+               </div>
+
+               @* tasks *@
+               <div class="tasks mt-4 d-flex flex-column" style="gap: 20px;">
+                  <p>Loading ...</p>
+               </div>
+
+               <div class="w-100 mt-4 d-flex justify-between-center" id="display-btn-add-task">
+
+               </div>
+
+               @* Comments *@
+               <div class="comments-detail-card mt-4">
+                  <h5>Comments</h5>
+
+                  <div class="comments mt-3 d-flex flex-column" style="gap: 10px;">
+                     <div class="row">
+                        <div class="col-md-1">
+                           <img src="https://ui-avatars.com/api/?name=test&background=random" alt="test" width="40px"
+                              class="rounded-circle" data-toggle="tooltip" data-placement="right" title="test - PM">
+                           </img>
+                        </div>
+                        <div class="col-md-10">
+                           <p style="font-size: 14px;" class="text-secondary">
+                              Lorem ipsum ?
+                           </p>
+                        </div>
+                        <div class="col-md-1">
+                           <button class="btn btn-outline-danger mr-1 btn-sm" onclick="console.log('delete')">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                           </button>
+                        </div>
+                     </div>
+
+                  </div>
+
+                  <form onsubmit="sendComment(@Model.DecodeJwtVM.Id)">
+                     <div class="input-group mb-3 mt-4">
+                        <input type="text" class="form-control" placeholder="Write a comment..." id="comment-text"
+                           aria-label="Write a comment..." aria-describedby="button-comment" required>
+                        <button class="btn" style="background-color: #F8B401; color: white;" type="submit"
+                           id="button-comment">Send</button>
+                     </div>
+                  </form>
+               </div>
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Modal Create Checklist -->
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="createTaskModalLabel">Create Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="createTask(@Model.DecodeJwtVM.Id)">
+               <div class="form-group">
+                  <label for="name-task" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-task" placeholder="Name of task..." required>
+               </div>
+
+               <div class="form-group">
+                  <label for="members-task" class="col-form-label">Members:</label>
+                  <select class="form-control" id="members-task" multiple>
+                  </select>
+
+               </div>
+
+               <div class="form-group">
+                  <label for="due-task" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-task" required>
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Create
+                  Task</button>
+
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal Update Checklist -->
+<div class="modal fade" id="updateTaskModal" tabindex="-1" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="updateTaskModalLabel">Update Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form onsubmit="updateTask(@Model.DecodeJwtVM.Id)">
+               <input type="hidden" id="id-task-update">
+               <div class="form-group">
+                  <label for="name-task" class="col-form-label">Name:</label>
+                  <input type="text" class="form-control" id="name-task-update" placeholder="Name of task..." required>
+               </div>
+
+               <div class="form-group">
+                  <label for="members-task" class="col-form-label">Members:</label>
+                  <select class="form-control" id="members-task-update" multiple>
+                  </select>
+
+               </div>
+
+               <div class="form-group">
+                  <label for="due-task" class="col-form-label">Due Date:</label>
+                  <input type="date" class="form-control" id="due-task-update" required>
+               </div>
+
+               <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Update
+                  Task</button>
+
+            </form>
+         </div>
+         <div class="modal-footer">
+
+         </div>
+      </div>
+   </div>
+</div>
 
 @section Scripts {
 <script src="~/js/Board/Detail.js"></script>

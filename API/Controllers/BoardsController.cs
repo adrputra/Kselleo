@@ -24,7 +24,8 @@ namespace API.Controllers
       {
          try
          {
-            var board = boardRepository.GetBoardByMember(Id);
+            // var board = boardRepository.GetBoardByMember(Id);
+            var board = boardRepository.GetBoardByMember2(Id);
             return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By User {Id} Successfully!", data = board });
          }
          catch (Exception ex)
@@ -52,24 +53,24 @@ namespace API.Controllers
       [HttpPost("create")]
       public ActionResult CreateBoard(Board board)
       {
-            try
-            {
-                var result = boardRepository.CreateBoard(board);
-                return StatusCode(200, new { code = HttpStatusCode.OK, message = "Board created successfully", data = result });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-            }
-            //return Ok(boardRepository.CreateBoard(board));
-        }
+         try
+         {
+            var result = boardRepository.CreateBoard(board);
+            return StatusCode(200, new { code = HttpStatusCode.OK, message = "Board created successfully", data = result });
+         }
+         catch (Exception ex)
+         {
+            return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+         }
+         //return Ok(boardRepository.CreateBoard(board));
+      }
 
       [HttpGet("detail/{Id}")]
       public ActionResult GetBoardDetailById(string Id)
       {
          try
          {
-            var board = boardRepository.GetBoardById(Id);
+            var board = boardRepository.GetBoardDetailById(Id);
             return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
          }
          catch (Exception ex)

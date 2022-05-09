@@ -4,13 +4,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace API.Repository.Data
 {
-    public class CommentRepository : GeneralRepository<MyContext, Comment, string>
+   public class CommentRepository : GeneralRepository<MyContext, Comment, int>
 
-    {
-        public CommentRepository(MyContext myContext) : base(myContext)
-        {
-        }
+   {
+      public CommentRepository(MyContext myContext) : base(myContext)
+      {
+      }
 
 
-    }
+   }
 }

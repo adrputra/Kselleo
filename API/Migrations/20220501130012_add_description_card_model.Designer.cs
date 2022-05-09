@@ -4,14 +4,16 @@ using API.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20220501130012_add_description_card_model")]
+    partial class add_description_card_model
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,9 +117,6 @@ namespace API.Migrations
                     b.Property<DateTime>("Due")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsChecked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -160,11 +159,11 @@ namespace API.Migrations
                     b.Property<int>("CardId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Comment_")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");

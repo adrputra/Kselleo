@@ -37,6 +37,20 @@ namespace API.Repository.Data
          return getBoard;
       }
 
+      public IEnumerable GetBoardByMember2(int id)
+      {
+
+         var board = myContext.Boards.Where(x => x.MemberBoards.Any(y => y.UserId == id)).AsSplitQuery()
+                        .Include(x => x.Lists.OrderByDescending(y => y.CreatedAt))
+                        .ThenInclude(x => x.Cards.OrderByDescending(y => y.CreatedAt))
+                        .Include(x => x.VerifyInvites)
+                        .Include(x => x.MemberBoards)
+                        .ThenInclude(x => x.User)
+                        .Include(x => x.MemberBoards)
+                        .ToList();
+         return board;
+      }
+
       public IEnumerable GetBoardByMember(int Id)
       {
          var board = (from memberboard in myContext.MemberBoards
@@ -139,7 +153,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()
@@ -247,7 +261,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()
@@ -270,7 +284,11 @@ namespace API.Repository.Data
          var board = myContext.Boards
                         .Include(m => m.MemberBoards).ThenInclude(us => us.User)
                         .Include(l => l.Lists)
-                        .FirstOrDefault(col => col.Id == id);
+                        .ThenInclude(c => c.Cards).ThenInclude(m => m.MemberCards).ThenInclude(us => us.User)
+                        .Include(l => l.Lists)
+                        .ThenInclude(c => c.Cards).ThenInclude(c => c.CheckListItems).ThenInclude(m => m.CheckListItemAssigns).ThenInclude(us => us.User)
+                        .OrderBy(a => a.CreatedAt)
+                        .AsSplitQuery().FirstOrDefault(col => col.Id == id);
 
          if (board == null) throw new Exception("Board not found");
 
@@ -372,7 +390,7 @@ namespace API.Repository.Data
                                                                             gender = com_user.Gender,
                                                                             image = com_user.Image
                                                                          }).ToList(),
-                                                                 comment = comment.Comment_,
+                                                                 comment = comment.Text,
                                                                  createdAt = comment.CreatedAt
                                                               }).ToList()
                                                }).ToList()

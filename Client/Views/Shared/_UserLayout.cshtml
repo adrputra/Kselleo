@@ -98,7 +98,7 @@
                 </div>
             </nav>
             <!-- Page content-->
-            <div class="container-fluid p-5" style="background-color: #F7FAFD; height: 100%;">
+            <div class="container-fluid p-5" style="background-color: #F7FAFD; height: max-content;">
                 @RenderBody()
             </div>
         </div>
@@ -110,6 +110,8 @@
     <script src="~/lib/swal.js"></script>
     <script src="~/lib/moment.js"></script>
 
+    <script
+        src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 
 
     @RenderSection("Scripts", required: false)
