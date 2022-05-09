@@ -1,7 +1,7 @@
 const getBoardDetailById = (id, userId) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:44308/api/boards/detail/${id}`,
+      url: `https://localhost:5001/api/boards/detail/${id}`,
       dataType: 'json',
       success: function (response) {
          renderBoardDetail(response, userId)
@@ -77,7 +77,7 @@ const createList = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:44308/api/lists`,
+      url: `https://localhost:5001/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -161,28 +161,6 @@ const renderListByStatus = (items, status, userId) => {
 const renderCard = (cards, userId) => {
    let html = ``
    cards.forEach((card, i) => {
-      console.log('card', card)
-      const members = card.checkListItems.map((item) => {
-         return item.checkListItemAssigns.map((assign) => {
-            return assign.user
-         })
-      })
-
-      const uniqueIds = []
-      const uniqueMembers = members.filter((el) => {
-         let result = false
-
-         el.forEach((user) => {
-            const isDuplicate = uniqueIds.includes(user.id)
-            if (!isDuplicate) {
-               uniqueIds.push(user.id)
-               result = true
-            }
-         })
-
-         return result
-      })
-
       html += `
          <button id="card-detail" class="btn shadow rounded bg-white mb-3 d-flex justify-content-between flex-column" style="padding: 10px; width: 100%;" onclick="openDetailCard(${
             card.id
@@ -196,23 +174,9 @@ const renderCard = (cards, userId) => {
                   card.due
                ).format('ll')}
                </p>
-
-                  <div>
-                  
-                  ${uniqueMembers.flat().forEach((element) => {
-                     console.log('ed', element)
-                     return `
-                        <img src="https://ui-avatars.com/api/?name=${element.fullName}&background=random" alt="${element.fullName}" width="25px"
-                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${element.fullName} - PM">
-                     </img>
-                     `
-                  })}
-
-                   <img src="https://ui-avatars.com/api/?name=asdasd&background=random" alt="asda" width="25px"
-                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="asdas - PM">
-                     </img>
-                  </div>
-                  
+               <div>
+                  ${renderMemberCards(card.checkListItems)}
+               </div>
             </div>
          </button>`
    })
@@ -220,10 +184,40 @@ const renderCard = (cards, userId) => {
    return html
 }
 
+const renderMemberCards = (checkListItems) => {
+   const ids = []
+   const members = checkListItems.map((item) => {
+      return item.checkListItemAssigns.map((assign) => {
+         return assign.user
+      })
+   })
+
+   const uniqueMembers = []
+
+   members.forEach((items) => {
+      items.forEach((item) => {
+         if (!ids.includes(item.id)) {
+            ids.push(item.id)
+            uniqueMembers.push(item)
+         }
+      })
+   })
+
+   let html = ``
+   uniqueMembers.forEach((member) => {
+      html += `
+      <img src="https://ui-avatars.com/api/?name=${member.fullName}&background=random" alt="${member.fullName}" width="25px"
+                        class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${member.fullName}">
+                     </img>
+            `
+   })
+   return html
+}
+
 const openDetailCard = (cardId, userId) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:44308/api/cards/detail/${cardId}`,
+      url: `https://localhost:5001/api/cards/detail/${cardId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -410,7 +404,7 @@ const checkingTask = (taskId, isChecked) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:44308/api/cards/task/checking`,
+      url: `https://localhost:5001/api/cards/task/checking`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -439,7 +433,7 @@ const openModalUpdateTask = (taskId) => {
    // get checklistitems by taskId
    $.ajax({
       type: 'GET',
-      url: `https://localhost:44308/api/checklistitems/detail/${taskId}`,
+      url: `https://localhost:5001/api/checklistitems/detail/${taskId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -487,7 +481,7 @@ const updateTask = (userId) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:44308/api/cards/task`,
+      url: `https://localhost:5001/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -517,7 +511,7 @@ const deleteTask = (taskId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:44308/api/checklistitems/${taskId}`,
+            url: `https://localhost:5001/api/checklistitems/delete/${taskId}`,
             success: function (response) {
                swal('Poof! Your task has been deleted!', {
                   icon: 'success',
@@ -561,7 +555,7 @@ const createCard = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:44308/api/cards`,
+      url: `https://localhost:5001/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -602,7 +596,7 @@ const updateCard = (userId) => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:44308/api/cards`,
+      url: `https://localhost:5001/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -631,7 +625,7 @@ const deleteCard = () => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:44308/api/cards/${cardId}`,
+            url: `https://localhost:5001/api/cards/${cardId}`,
             success: function (response) {
                swal('Poof! Your card has been deleted!', {
                   icon: 'success',
@@ -672,7 +666,7 @@ const updateList = () => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:44308/api/lists`,
+      url: `https://localhost:5001/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -704,7 +698,7 @@ const deleteList = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:44308/api/lists/${id}`,
+            url: `https://localhost:5001/api/lists/${id}`,
             success: function (response) {
                swal('Poof! Your list has been deleted!', {
                   icon: 'success',
@@ -734,7 +728,7 @@ const inviteMember = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:44308/api/verifyinvites/verify',
+      url: 'https://localhost:5001/api/verifyinvites/verify',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -772,7 +766,7 @@ const createTask = () => {
    // // ajax method post /cards/task
    $.ajax({
       type: 'POST',
-      url: `https://localhost:44308/api/cards/task`,
+      url: `https://localhost:5001/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -813,7 +807,7 @@ const sendComment = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:44308/api/comments`,
+      url: `https://localhost:5001/api/comments`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -845,7 +839,7 @@ const deleteComment = (commentId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:44308/api/comments/${commentId}`,
+            url: `https://localhost:5001/api/comments/${commentId}`,
             success: function (response) {
                swal('Poof! Your comment has been deleted!', {
                   icon: 'success',

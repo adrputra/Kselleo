@@ -25,24 +25,27 @@ namespace API.Repository.Data
                 .AsSplitQuery().FirstOrDefault();
       }
 
-        public void DeleteCheckListItem(int checklistId)
-        {
-            var assign = myContext.CheckListItemsAssigns.Where(x => x.CheckListItemId == checklistId);
-            var cardId = myContext.CheckListItems.FirstOrDefault(x => x.Id == checklistId).CardId;
-            var userList = new List<int>();
-            foreach (var item in assign)
-            {
-                userList.Add(item.UserId);
-            }
+      public void DeleteCheckListItem(int checklistId)
+      {
+         var assign = myContext.CheckListItemsAssigns.Where(x => x.CheckListItemId == checklistId);
+         var cardId = myContext.CheckListItems.FirstOrDefault(x => x.Id == checklistId).CardId;
+         var userList = new List<int>();
+         foreach (var item in assign)
+         {
+            userList.Add(item.UserId);
+         }
 
-            foreach (var item in userList)
+         foreach (var item in userList)
+         {
+            var memberCard = myContext.MemberCards.FirstOrDefault(x => x.CardId == cardId && x.UserId == item);
+            if (memberCard != null)
             {
-                var memberCard = myContext.MemberCards.FirstOrDefault(x => x.CardId == cardId && x.UserId == item);
-                myContext.MemberCards.Remove(memberCard);
+               myContext.MemberCards.Remove(memberCard);
             }
-            myContext.Remove(myContext.CheckListItems.FirstOrDefault(x => x.Id == checklistId));
-            myContext.SaveChanges();
-        }
+         }
+         myContext.Remove(myContext.CheckListItems.FirstOrDefault(x => x.Id == checklistId));
+         myContext.SaveChanges();
+      }
 
 
    }
