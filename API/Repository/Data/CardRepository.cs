@@ -27,6 +27,8 @@ namespace API.Repository.Data
              .ThenInclude(assign => assign.CheckListItemAssigns)
              .ThenInclude(user => user.User)
              .ThenInclude(user => user.MemberBoards)
+             .Include(x => x.MemberCards)
+             .ThenInclude(u => u.User)
              .AsSplitQuery()
              .OrderByDescending(x => x.CreatedAt)
              .FirstOrDefault(x => x.Id == id);
@@ -54,6 +56,13 @@ namespace API.Repository.Data
                UserId = member
             };
             myContext.CheckListItemsAssigns.Add(checkListItemAssign);
+
+            // var memberCard = new MemberCard
+            // {
+            //    CardId = createTaskVM.CardId,
+            //    UserId = member
+            // };
+            // myContext.MemberCards.Add(memberCard);
          }
          myContext.SaveChanges();
       }
@@ -72,6 +81,14 @@ namespace API.Repository.Data
          {
             myContext.CheckListItemsAssigns.Remove(checkListItemAssign);
          }
+
+         // delete memberCard
+         // var memberCards = myContext.MemberCards.Where(x => x.CardId == updateTask.CardId);
+         // foreach (var memberCard in memberCards)
+         // {
+         //    myContext.MemberCards.Remove(memberCard);
+         // }
+
          foreach (var member in updateTask.Members)
          {
             CheckListItemAssign checkListItemAssign = new CheckListItemAssign
@@ -80,6 +97,13 @@ namespace API.Repository.Data
                UserId = member
             };
             myContext.CheckListItemsAssigns.Add(checkListItemAssign);
+
+            // var memberCard = new MemberCard
+            // {
+            //    CardId = updateTask.CardId,
+            //    UserId = member
+            // };
+            // myContext.MemberCards.Add(memberCard);
          }
          myContext.SaveChanges();
       }
