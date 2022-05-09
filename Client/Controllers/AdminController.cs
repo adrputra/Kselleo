@@ -1,5 +1,6 @@
 using Client.Models;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,64 +22,70 @@ namespace Client.Controllers
          _logger = logger;
       }
 
-      
       public IActionResult Index()
       {
-            var token = HttpContext.Session.GetString("JWToken");
-            if (token == null) return RedirectToAction("Login", "Auth");
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
 
-            PageAdminVM pageAdminVM = new PageAdminVM();
-            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
-            return View();
+         PageAdminVM pageAdminVM = new PageAdminVM();
+         pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+
+         if (pageAdminVM.DecodeJwtVM.Roles != "Admin") return RedirectToAction("NotFound");
+
+         return View();
       }
 
-      
+
       public IActionResult Dashboard()
       {
-            var token = HttpContext.Session.GetString("JWToken");
-            if (token == null) return RedirectToAction("Login", "Auth");
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
 
-            PageAdminVM pageAdminVM = new PageAdminVM();
-            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+         PageAdminVM pageAdminVM = new PageAdminVM();
+         pageAdminVM.DecodeJwtVM = GetDecodeJwt();
 
-            return View(pageAdminVM);
-        }
+         if (pageAdminVM.DecodeJwtVM.Roles != "Admin") return RedirectToAction("NotFound");
+
+
+         return View(pageAdminVM);
+      }
 
       public IActionResult Users()
       {
-            var token = HttpContext.Session.GetString("JWToken");
-            if (token == null) return RedirectToAction("Login", "Auth");
+         var token = HttpContext.Session.GetString("JWToken");
+         if (token == null) return RedirectToAction("Login", "Auth");
 
-            PageAdminVM pageAdminVM = new PageAdminVM();
-            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
-            return View(pageAdminVM);
-        }
+         PageAdminVM pageAdminVM = new PageAdminVM();
+         pageAdminVM.DecodeJwtVM = GetDecodeJwt();
 
-        public DecodeJwtVM GetDecodeJwt()
-        {
-            var token = HttpContext.Session.GetString("JWToken");
+         if (pageAdminVM.DecodeJwtVM.Roles != "Admin") return RedirectToAction("NotFound");
 
-            var handler = new JwtSecurityTokenHandler();
-            var decode = handler.ReadJwtToken(token);
+         return View(pageAdminVM);
+      }
 
-            var id = decode.Claims.First(claim => claim.Type == "Id").Value;
-            var role = decode.Claims.First(claim => claim.Type == "Roles").Value;
-            var fullName = decode.Claims.First(claim => claim.Type == "Fullname").Value;
-            var image = decode.Claims.First(claim => claim.Type == "Image").Value;
-            var email = decode.Claims.First(claim => claim.Type == "Email").Value;
+      public DecodeJwtVM GetDecodeJwt()
+      {
+         var token = HttpContext.Session.GetString("JWToken");
 
-            var decodeJWT = new DecodeJwtVM
-            {
-                Id = id,
-                FullName = fullName,
-                Image = image,
-                Email = email,
-                Roles = role
-            };
+         var handler = new JwtSecurityTokenHandler();
+         var decode = handler.ReadJwtToken(token);
 
-            return decodeJWT;
-        }
+         var id = decode.Claims.First(claim => claim.Type == "Id").Value;
+         var role = decode.Claims.First(claim => claim.Type == "Roles").Value;
+         var fullName = decode.Claims.First(claim => claim.Type == "Fullname").Value;
+         var image = decode.Claims.First(claim => claim.Type == "Image").Value;
+         var email = decode.Claims.First(claim => claim.Type == "Email").Value;
 
+         var decodeJWT = new DecodeJwtVM
+         {
+            Id = id,
+            FullName = fullName,
+            Image = image,
+            Email = email,
+            Roles = role
+         };
 
-    }
+         return decodeJWT;
+      }
+   }
 }

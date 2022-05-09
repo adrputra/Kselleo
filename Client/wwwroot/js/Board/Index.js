@@ -14,7 +14,6 @@ $(document).ready(function () {
 
          let html = ''
          response.data.map((item) => {
-            console.log(item)
             html += `
             <div class="col-md-6 col-lg-4 mb-4">
             <a href="/boards/detail/${item.id}" style="text-decoration: none;">
