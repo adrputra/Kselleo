@@ -3,7 +3,7 @@
       filter: true,
       orderMulti: false,
       ajax: {
-         url: 'https://localhost:5001/api/users',
+         url: 'https://localhost:44308/api/users',
          datatype: 'json',
          dataSrc: 'result',
       },
@@ -45,7 +45,7 @@ function deleteuser(id) {
       if (result.isConfirmed) {
          $.ajax({
             type: 'DELETE',
-            url: 'https://localhost:5001/api/users/' + id,
+            url: 'https://localhost:44308/api/users/' + id,
          })
             .done((result) => {
                console.log(result)

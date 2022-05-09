@@ -9,31 +9,44 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-   [Route("api/[controller]")]
-   [ApiController]
-   public class CheckListItemsController : BaseController<CheckListItem, CheckListItemRepository, int>
-   {
-      CheckListItemRepository checkListItemRepository;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CheckListItemsController : BaseController<CheckListItem, CheckListItemRepository, int>
+    {
+        CheckListItemRepository checkListItemRepository;
 
-      public CheckListItemsController(CheckListItemRepository CheckListItemRepository, MyContext myContext) : base(CheckListItemRepository)
-      {
-         this.checkListItemRepository = CheckListItemRepository;
-      }
+        public CheckListItemsController(CheckListItemRepository CheckListItemRepository, MyContext myContext) : base(CheckListItemRepository)
+        {
+            this.checkListItemRepository = CheckListItemRepository;
+        }
 
-      [HttpGet("detail/{Id}")]
-      public ActionResult GetCard(int Id)
-      {
-         try
-         {
-            var card = checkListItemRepository.GetDetailChecklistItem(Id);
-            return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get ChecklistItem {Id} Successfully!", data = card });
-         }
-         catch (Exception ex)
-         {
-            return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-         }
-      }
+        [HttpGet("detail/{Id}")]
+        public ActionResult GetCard(int Id)
+        {
+            try
+            {
+                var card = checkListItemRepository.GetDetailChecklistItem(Id);
+                return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get ChecklistItem {Id} Successfully!", data = card });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
 
+        [HttpDelete("delete/{Id}")]
+        public ActionResult DeleteTask(int Id)
+        {
+            try
+            {
+                checkListItemRepository.DeleteCheckListItem(Id);
+                return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Delete ChecklistItem {Id} Successfully!"});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
 
-   }
+    }
 }
