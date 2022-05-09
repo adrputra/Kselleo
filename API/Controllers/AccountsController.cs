@@ -65,5 +65,52 @@ namespace API.Controllers
                 return StatusCode(500, new { code = HttpStatusCode.InternalServerError, message = ex.Message });
             }
         }
+
+        [HttpPost("forgotpassword")]
+        public ActionResult ForgotPassword(ChangePasswordVM changePasswordVM)
+        {
+            //return Ok(_accountRepository.ForgotPassword(emailVM));
+
+            try
+            {
+                var entry = accountRepository.ForgotPassword(changePasswordVM);
+                return entry switch
+                {
+                    0 => Ok(new { status = HttpStatusCode.OK, message = "New Password Request Successfull. Verification email has been sent." }),
+                    1 => BadRequest(new { status = HttpStatusCode.BadRequest, message = "Request Failed. Email Not Found!" }),
+                    2 => BadRequest(new { status = HttpStatusCode.BadRequest, message = "Request Failed. Email Found but cant send verification code!" }),
+                    _ => BadRequest(new { status = HttpStatusCode.BadRequest, message = "Request Failed!" })
+
+                };
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
+
+        [HttpPost("changepassword")]
+        public ActionResult ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            try
+            {
+                var entry = accountRepository.ChangePassword(changePasswordVM);
+                return entry switch
+                {
+                    0 => Ok(new { status = HttpStatusCode.OK, result = changePasswordVM, message = "Password Changed Successfully" }),
+                    1 => BadRequest(new { status = HttpStatusCode.BadRequest, result = changePasswordVM, message = "Request Failed. Password Doesn't Match!" }),
+                    2 => BadRequest(new { status = HttpStatusCode.BadRequest, result = changePasswordVM, message = "Request Failed. Token Already Expired!" }),
+                    3 => BadRequest(new { status = HttpStatusCode.BadRequest, result = changePasswordVM, message = "Request Failed. Token is Used!" }),
+                    4 => BadRequest(new { status = HttpStatusCode.BadRequest, result = changePasswordVM, message = "Request Failed. Wrong Token!" }),
+                    5 => BadRequest(new { status = HttpStatusCode.BadRequest, result = changePasswordVM, message = "Request Failed. Email Not Found!" }),
+                    _ => BadRequest(new { status = HttpStatusCode.BadRequest, message = "Request Failed!" })
+
+                };
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
     }
 }
