@@ -1,12 +1,15 @@
 ﻿using API.Context;
 using API.Models;
 using API.ViewModel;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -109,6 +112,94 @@ namespace API.Repository.Data
             {
                 return "2";
             }
+        }
+
+        public int ForgotPassword(ChangePasswordVM changePasswordVM)
+        {
+            var checkEmail = myContext.Users.FirstOrDefault(e => e.Email == changePasswordVM.Email);
+            if (checkEmail != null)
+            {
+                Random random = new Random();
+                int OTP = random.Next(100000, 999999);
+                var account = myContext.Accounts.Find(checkEmail.Id);
+                account.IsUsed = false;
+                account.OTP = OTP;
+                account.ExpiredToken = DateTime.Now.AddMinutes(5);
+                myContext.Entry(account).State = EntityState.Modified;
+                myContext.SaveChanges();
+                if (SendEmail(changePasswordVM.Email, OTP))
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+            else
+            {
+                return 1;
+            }
+        }
+
+        public bool SendEmail(string Email, int OTP)
+        {
+            string to = Email;
+            string from = "8andraputra@gmail.com";
+            MailMessage message = new MailMessage(from, to);
+
+            string mailbody = $"You have requested new password. Do not give this authentication code to anyone. OTP : {OTP}";
+            message.Subject = "Forgot Password OTP";
+            message.Body = mailbody;
+            message.BodyEncoding = Encoding.UTF8;
+            message.IsBodyHtml = true;
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient("smtp.gmail.com", 587); //Gmail smtp    
+            NetworkCredential basicCredential1 = new
+            NetworkCredential("8andraputra@gmail.com", "gmail@adr");
+            client.EnableSsl = true;
+            client.UseDefaultCredentials = false;
+            client.Credentials = basicCredential1;
+            try
+            {
+                client.Send(message);
+                return true;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            var checkEmail = myContext.Users.FirstOrDefault(e => e.Email == changePasswordVM.Email);
+            var account = myContext.Accounts.Find(checkEmail.Id);
+            if (checkEmail != null)
+            {
+                if (changePasswordVM.OTP == account.OTP)
+                {
+                    if (account.IsUsed == false)
+                    {
+                        if (DateTime.Now < account.ExpiredToken)
+                        {
+                            if (changePasswordVM.NewPassword == changePasswordVM.ConfirmPassword)
+                            {
+                                account.IsUsed = true;
+                                account.Password = BCrypt.Net.BCrypt.HashPassword(changePasswordVM.ConfirmPassword, BCrypt.Net.BCrypt.GenerateSalt(12));
+                                myContext.Entry(account).State = EntityState.Modified;
+                                myContext.SaveChanges();
+                                return 0;
+                            }
+                            else { return 1; }
+                        }
+                        else { return 2; }
+                    }
+                    else { return 3; }
+                }
+                else { return 4; }
+            }
+            else { return 5; }
         }
 
     }
