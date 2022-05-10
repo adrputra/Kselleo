@@ -43,7 +43,6 @@
                     class="list-group-item list-group-item-action list-group-item-light p-3 
                     @(ViewContext.RouteData.Values["Action"].ToString() == "Invitation" ? "isActive" : "")">Invitation</a>
             </div>
-
             <hr>
 
             @RenderSection("Navs", required: false)
@@ -112,7 +111,9 @@
 
     <script
         src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
+    <script src="~/js/board/Timeline.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 
