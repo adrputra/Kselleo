@@ -11,6 +11,7 @@ namespace API.Models
       public int CardId { get; set; }
       public string Name { get; set; }
       public bool IsChecked { get; set; } = false;
+      public DateTime StartDate { get; set; } = DateTime.Now;
       public DateTime Due { get; set; }
       public virtual Card Card { get; set; }
       public virtual ICollection<CheckListItemAssign> CheckListItemAssigns { get; set; }

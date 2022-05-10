@@ -7,6 +7,7 @@ namespace API.ViewModel
    {
       public string Name { get; set; }
       public int CardId { get; set; }
+      public DateTime StartDate { get; set; }
       public DateTime Due { get; set; }
       public List<int> Members { get; set; }
    }

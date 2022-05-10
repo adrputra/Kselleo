@@ -13,6 +13,10 @@
       @(ViewContext.RouteData.Values["Action"].ToString() == "Detail" ? "isActive" : "")">Board</a>
 </div>
 <div class="list-group list-group-flush">
+   <a asp-controller="Boards" asp-action="Timeline" asp-route-id="@Context.Request.RouteValues["id"]" class="list-group-item list-group-item-action list-group-item-light p-3 
+      @(ViewContext.RouteData.Values["Action"].ToString() == "Timeline" ? "isActive" : "")">Timeline</a>
+</div>
+<div class="list-group list-group-flush">
    <a asp-controller="Boards" asp-action="Members" asp-route-id="@Context.Request.RouteValues["id"]" class="list-group-item list-group-item-action list-group-item-light p-3 
       @(ViewContext.RouteData.Values["Action"].ToString() == "Members" ? "isActive" : "")">Members</a>
 </div>
@@ -374,6 +378,11 @@
                </div>
 
                <div class="form-group">
+                  <label for="start-task" class="col-form-label">Start Date:</label>
+                  <input type="date" class="form-control" id="start-task" required>
+               </div>
+
+               <div class="form-group">
                   <label for="due-task" class="col-form-label">Due Date:</label>
                   <input type="date" class="form-control" id="due-task" required>
                </div>
@@ -412,6 +421,11 @@
                   <select class="form-control" id="members-task-update" multiple>
                   </select>
 
+               </div>
+
+               <div class="form-group">
+                  <label for="start-task-update" class="col-form-label">Start Date:</label>
+                  <input type="date" class="form-control" id="start-task-update" required>
                </div>
 
                <div class="form-group">

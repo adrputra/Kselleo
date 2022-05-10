@@ -43,7 +43,9 @@ namespace API.Repository.Data
          {
             Name = createTaskVM.Name,
             CardId = createTaskVM.CardId,
+            StartDate = createTaskVM.StartDate,
             Due = createTaskVM.Due
+
          };
          myContext.CheckListItems.Add(checkListItem);
          myContext.SaveChanges();
@@ -75,7 +77,9 @@ namespace API.Repository.Data
          // update checklistitems
          checkListItem.Name = updateTask.Name;
          checkListItem.CardId = updateTask.CardId;
+         checkListItem.StartDate = updateTask.StartDate;
          checkListItem.Due = updateTask.Due;
+
          // update checklistitemsassign
          var checkListItemAssigns = myContext.CheckListItemsAssigns.Where(x => x.CheckListItemId == updateTask.Id);
          foreach (var checkListItemAssign in checkListItemAssigns)
