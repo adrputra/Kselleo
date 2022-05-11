@@ -46,6 +46,7 @@ namespace Kselleo.Controllers
          PageBoardVM pageBoardVM = new PageBoardVM();
          pageBoardVM.DecodeJwtVM = GetDecodeJwt();
          pageBoardVM.BoardId = id;
+         pageBoardVM.Token = token;
 
          ViewBag.BoardId = id;
          return View(pageBoardVM);

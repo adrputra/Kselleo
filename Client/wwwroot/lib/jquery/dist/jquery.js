@@ -4297,7 +4297,7 @@
                !remaining
             )
 
-            // Use .then() to unwrap secondary thenables (cf. gh-3000)
+            // Use .then() to unwrap secondary thenables (cf. gh-44346)
             if (
                master.state() === 'pending' ||
                isFunction(resolveValues[i] && resolveValues[i].then)

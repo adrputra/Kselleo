@@ -1,9 +1,9 @@
 const getPendingMembers = (boardId) => {
    console.log(boardId)
 
-   // get data method GET url https://localhost:5001/api/verifyinvites/pending/{boardId} by ajax
+   // get data method GET url https://localhost:44308/api/verifyinvites/pending/{boardId} by ajax
    $.ajax({
-      url: `https://localhost:5001/api/verifyinvites/pending/board/${boardId}`,
+      url: `https://localhost:44308/api/verifyinvites/pending/board/${boardId}`,
       type: 'GET',
       dataType: 'json',
       success: function (response) {

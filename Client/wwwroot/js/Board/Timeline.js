@@ -1,6 +1,6 @@
 ﻿const getTimelineBoard = (boardId) => {
    $.ajax({
-      url: `https://localhost:5001/api/boards/detail/${boardId}`,
+      url: `https://localhost:44308/api/boards/detail/${boardId}`,
       type: 'GET',
       success: (response) => {
          // get member board

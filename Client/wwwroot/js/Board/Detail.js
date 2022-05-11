@@ -1,7 +1,10 @@
-const getBoardDetailById = (id, userId) => {
+const getBoardDetailById = (id, userId, token) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:5001/api/boards/detail/${id}`,
+       url: `https://localhost:44308/api/boards/detail/${id}`,
+       headers: {
+           Authorization: 'Bearer ' + token
+       },
       dataType: 'json',
       success: function (response) {
          renderBoardDetail(response, userId)
@@ -77,7 +80,7 @@ const createList = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:5001/api/lists`,
+      url: `https://localhost:44308/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -217,7 +220,7 @@ const renderMemberCards = (checkListItems) => {
 const openDetailCard = (cardId, userId) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:5001/api/cards/detail/${cardId}`,
+      url: `https://localhost:44308/api/cards/detail/${cardId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -404,7 +407,7 @@ const checkingTask = (taskId, isChecked) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:5001/api/cards/task/checking`,
+      url: `https://localhost:44308/api/cards/task/checking`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -433,7 +436,7 @@ const openModalUpdateTask = (taskId) => {
    // get checklistitems by taskId
    $.ajax({
       type: 'GET',
-      url: `https://localhost:5001/api/checklistitems/detail/${taskId}`,
+      url: `https://localhost:44308/api/checklistitems/detail/${taskId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -486,7 +489,7 @@ const updateTask = (userId) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:5001/api/cards/task`,
+      url: `https://localhost:44308/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -516,7 +519,7 @@ const deleteTask = (taskId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/checklistitems/delete/${taskId}`,
+            url: `https://localhost:44308/api/checklistitems/delete/${taskId}`,
             success: function (response) {
                swal('Poof! Your task has been deleted!', {
                   icon: 'success',
@@ -559,7 +562,7 @@ const createCard = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:5001/api/cards`,
+      url: `https://localhost:44308/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -600,7 +603,7 @@ const updateCard = (userId) => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:5001/api/cards`,
+      url: `https://localhost:44308/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -629,7 +632,7 @@ const deleteCard = () => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/cards/${cardId}`,
+            url: `https://localhost:44308/api/cards/${cardId}`,
             success: function (response) {
                swal('Poof! Your card has been deleted!', {
                   icon: 'success',
@@ -670,7 +673,7 @@ const updateList = () => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:5001/api/lists`,
+      url: `https://localhost:44308/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -702,7 +705,7 @@ const deleteList = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/lists/${id}`,
+            url: `https://localhost:44308/api/lists/${id}`,
             success: function (response) {
                swal('Poof! Your list has been deleted!', {
                   icon: 'success',
@@ -732,7 +735,7 @@ const inviteMember = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/verifyinvites/verify',
+      url: 'https://localhost:44308/api/verifyinvites/verify',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -773,7 +776,7 @@ const createTask = () => {
    // // ajax method post /cards/task
    $.ajax({
       type: 'POST',
-      url: `https://localhost:5001/api/cards/task`,
+      url: `https://localhost:44308/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -814,7 +817,7 @@ const sendComment = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:5001/api/comments`,
+      url: `https://localhost:44308/api/comments`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -846,7 +849,7 @@ const deleteComment = (commentId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/comments/${commentId}`,
+            url: `https://localhost:44308/api/comments/${commentId}`,
             success: function (response) {
                swal('Poof! Your comment has been deleted!', {
                   icon: 'success',
