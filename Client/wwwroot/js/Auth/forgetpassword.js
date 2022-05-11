@@ -8,7 +8,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/forgotpassword',
+      url: 'https://localhost:44308/api/accounts/forgotpassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -23,7 +23,7 @@
             'success'
          )
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/ChangePassword'
+            window.location.href = 'https://localhost:44346/Auth/ChangePassword'
          }, 2000)
       })
       .fail((e) => {
@@ -55,7 +55,7 @@ function ChangePassword() {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/changepassword',
+      url: 'https://localhost:44308/api/accounts/changepassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function ChangePassword() {
       .done((response) => {
          Swal.fire('Success!', 'Change Password Successfully!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/Login'
+            window.location.href = 'https://localhost:44346/Auth/Login'
          }, 2000)
       })
       .fail((e) => {

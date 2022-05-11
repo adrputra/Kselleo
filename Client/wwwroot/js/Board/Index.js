@@ -7,7 +7,7 @@ $(document).ready(function () {
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
-      url: `https://localhost:5001/api/boards/user/${userId}`,
+      url: `https://localhost:44308/api/boards/user/${userId}`,
       data: 'data',
       success: function (response) {
          $.LoadingOverlay('hide')
@@ -125,7 +125,7 @@ const updateBoard = () => {
       type: 'PUT',
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
-      url: 'https://localhost:5001/api/boards/',
+      url: 'https://localhost:44308/api/boards/',
       data: JSON.stringify(request),
       success: function (response) {
          location.reload()
@@ -147,7 +147,7 @@ const deleteModal = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:5001/api/boards/${id}`,
+            url: `https://localhost:44308/api/boards/${id}`,
             success: function (response) {
                swal('Poof! Your board has been deleted!', {
                   icon: 'success',
@@ -175,7 +175,7 @@ const createBoard = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/boards/create',
+      url: 'https://localhost:44308/api/boards/create',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
