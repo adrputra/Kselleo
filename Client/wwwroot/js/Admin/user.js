@@ -144,3 +144,11 @@ function adduser() {
          })
       })
 }
+
+$.ajax({
+    url: "https://localhost:44308/api/users/3",
+    success: function (result) {
+        var fullName = result.fullName;
+        console.log(fullName);
+    }
+})

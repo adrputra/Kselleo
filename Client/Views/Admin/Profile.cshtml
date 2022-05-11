@@ -1,0 +1,49 @@
+@using Client.ViewModels;
+@model PageAdminVM;
+
+@{
+   Layout = "_AdminLayout";
+   ViewData["Title"] = "Admin Profile";
+   ViewData["FullName"] = Model.DecodeJwtVM.FullName;
+}
+<link rel="stylesheet" href="~/css/profile.css" />
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+<h1>Profile</h1>
+<div class="container bootstrap snippets bootdey">
+<div class="row">
+  <div class="profile-nav col-md-3">
+      <div class="panel">
+          <div class="user-heading round">
+              <a>
+                  <img src="https://ui-avatars.com/api/?name=@ViewData["FullName"]&background=random"
+                                            alt="avatar" width="56" class="rounded-circle nav-link dropdown-toggle"
+                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                            style="cursor: pointer;">
+              </a>
+              <h1>Camila Smith</h1>
+              <p>deydey@theEmail.com</p>
+          </div>
+      </div>
+  </div>
+  <div class="profile-info col-md-9">
+      <div class="panel">
+          <div class="panel-body bio-graph-info">
+              <div class="row">
+                  <div class="bio-row">
+                      <p><span>Full Name </span>: <div id="IdFullName"></div></p>
+                  </div>
+                  <div class="bio-row">
+                      <p><span>Gender </span>: <div id="IdGender"></div></p>
+                  </div>
+                  <div class="bio-row">
+                      <p><span>Email </span>: <div id="IdEmail"></div></p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+
+<button class="btn text-white" style="background-color: #F8B401; margin-top: 25px;">Edit Profile</button>

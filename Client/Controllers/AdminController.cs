@@ -54,6 +54,16 @@ namespace Client.Controllers
             return View(pageAdminVM);
         }
 
+        public IActionResult Profile()
+        {
+            var token = HttpContext.Session.GetString("JWToken");
+            if (token == null) return RedirectToAction("Login", "Auth");
+
+            PageAdminVM pageAdminVM = new PageAdminVM();
+            pageAdminVM.DecodeJwtVM = GetDecodeJwt();
+            return View(pageAdminVM);
+        }
+
         public DecodeJwtVM GetDecodeJwt()
         {
             var token = HttpContext.Session.GetString("JWToken");
