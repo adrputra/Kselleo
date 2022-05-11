@@ -106,7 +106,6 @@ namespace API.Repository.Data
                                                   id = card.Id,
                                                   name = card.Name,
                                                   description = card.Status,
-                                                  due = card.Due,
                                                   createdAt = card.CreatedAt,
                                                   createdBy = (from c_user in myContext.Users
                                                                where c_user.Id == card.CreatedBy
@@ -219,7 +218,6 @@ namespace API.Repository.Data
                                                {
                                                   name = card.Name,
                                                   description = card.Status,
-                                                  due = card.Due,
                                                   createdAt = card.CreatedAt,
                                                   createdBy = (from c_user in myContext.Users
                                                                where c_user.Id == card.CreatedBy
@@ -349,7 +347,6 @@ namespace API.Repository.Data
                                                {
                                                   name = card.Name,
                                                   description = card.Status,
-                                                  due = card.Due,
                                                   createdAt = card.CreatedAt,
                                                   createdBy = (from c_user in myContext.Users
                                                                where c_user.Id == card.CreatedBy

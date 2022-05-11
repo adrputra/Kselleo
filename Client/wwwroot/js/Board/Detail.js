@@ -170,8 +170,8 @@ const renderCard = (cards, userId) => {
             }</p>
 
             <div class="d-flex justify-content-between w-100 " style="align-items: center;">
-               <p style="font-size: 11px; color: #717171; margin: 0px;"> Due ${moment(
-                  card.due
+               <p style="font-size: 11px; color: #717171; margin: 0px;"> Created at ${moment(
+                  card.createdAt
                ).format('ll')}
                </p>
                <div>
@@ -555,7 +555,6 @@ const createCard = (userId) => {
       Name: $('#name-card').val(),
       Description: $('#description-card').val().replace(/\n/g, ' '),
       CreatedBy: userId,
-      Due: $('#due-card').val(),
    }
 
    $.ajax({

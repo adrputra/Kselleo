@@ -14,7 +14,6 @@ namespace API.Models
       public DateTime CreatedAt { get; set; } = DateTime.Now;
       public int CreatedBy { get; set; }
       public string Status { get; set; }
-      public DateTime Due { get; set; }
       public virtual User User { get; set; }
       public virtual List List { get; set; }
       public virtual ICollection<Comment> Comments { get; set; }
