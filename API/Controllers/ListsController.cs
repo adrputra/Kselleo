@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ListsController : BaseController<List, ListRepository, int>
-    {
-        public ListsController(ListRepository ListRepository, MyContext myContext) : base(ListRepository)
-        {
-           
-        }
-    }
+   [Route("api/[controller]")]
+   [ApiController]
+   public class ListsController : BaseController<List, ListRepository, int>
+   {
+      public ListsController(ListRepository ListRepository, MyContext myContext) : base(ListRepository)
+      {
+
+      }
+   }
 }

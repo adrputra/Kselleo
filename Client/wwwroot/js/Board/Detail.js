@@ -285,7 +285,7 @@ const openDetailCard = (cardId, userId) => {
 
             checkListHTML += `
             <div class="task d-flex justify-content-between align-items-center">
-                     <div class="form-check" style="flex: 0.7;">
+                     <div class="form-check" style="flex: 0.5;">
                         <input class="form-check-input" type="checkbox" value="${
                            x.isChecked
                         }" id="${x.id}" ${
@@ -302,10 +302,10 @@ const openDetailCard = (cardId, userId) => {
                         </label>
                      </div>
 
-                     <div class="detail-task d-flex justify-content-end align-items-center" style="gap: 12px; flex: 0.3;">
+                     <div class="detail-task d-flex justify-content-end align-items-center" style="gap: 12px; flex: 0.5;">
                         <div class="due-task text-secondary"> ${moment(
-                           x.due
-                        ).format('LL')} </div>
+                           x.startDate
+                        ).format('LL')} - ${moment(x.due).format('LL')} </div>
                         <div class="assisn-task d-flex justify-content-between align-items-center" style="gap: 8px;">
                           ${assignTasks}
                         </div>
