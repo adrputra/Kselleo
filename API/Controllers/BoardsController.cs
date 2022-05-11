@@ -67,28 +67,28 @@ namespace API.Controllers
             //return Ok(boardRepository.CreateBoard(board));
         }
 
-        //[HttpGet("detail/{Id}")]
-        //public ActionResult GetBoardDetailById(string Id)
-        //{
-        //    try
-        //    {
-        //        var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-        //        var auth = boardRepository.AuthenticateMember(token,Id);
-        //        if (auth)
-        //        {
-        //            var board = boardRepository.GetBoardDetailById(Id);
-        //            return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
-        //        }
-        //        else
-        //        {
-        //            return Unauthorized();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-        //    }
-        //}
+        [HttpGet("detail/{Id}")]
+        public ActionResult GetBoardDetailById(string Id)
+        {
+            try
+            {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var auth = boardRepository.AuthenticateMember(token, Id);
+                if (auth)
+                {
+                    var board = boardRepository.GetBoardDetailById(Id);
+                    return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
 
         [HttpGet("Token/{Id}")]
         public ActionResult GetToken(string Id)

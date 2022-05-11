@@ -408,7 +408,7 @@ namespace API.Repository.Data
             return board.FirstOrDefault();
         }
 
-        public int AuthenticateMember(string token, string BoardId)
+        public bool AuthenticateMember(string token, string BoardId)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -419,12 +419,25 @@ namespace API.Repository.Data
             var fullName = decode.Claims.First(claim => claim.Type == "Fullname").Value;
             var image = decode.Claims.First(claim => claim.Type == "Image").Value;
             var email = decode.Claims.First(claim => claim.Type == "Email").Value;
-            
-            //var memberBoard = memberBoardRepository.GetMemberByBoard(BoardId).Cast<object>().ToList();
-            var memberBoard = memberBoardRepository.GetMemberByBoard(BoardId);
-            var idList = new List<string>();
-            var a = memberBoard[0];
-            return a;
+
+            var memberBoard = memberBoardRepository.GetMemberByBoard(BoardId).Cast<object>().ToList();
+            //var memberBoard = memberBoardRepository.GetMemberByBoard(BoardId);
+            var idList = new List<int>();
+
+            foreach (object member in memberBoard)
+            {
+                PropertyInfo type = member.GetType().GetProperty("UserId");
+                int userId = (int)(type.GetValue(member, null));
+                idList.Add(userId);
+            }
+            if (idList.Contains(Int32.Parse(id)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
