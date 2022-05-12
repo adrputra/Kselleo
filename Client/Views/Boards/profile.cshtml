@@ -1,8 +1,8 @@
 @using Client.ViewModels;
-@model PageAdminVM;
+@model PageBoardVM;
 
 @{
-    Layout = "_AdminLayout";
+    Layout = "_UserLayout";
     ViewData["Title"] = "Profile";
     ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }

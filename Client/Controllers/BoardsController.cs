@@ -122,5 +122,15 @@ namespace Kselleo.Controllers
 
          return View(pageBoardVM);
       }
-   }
+
+        public IActionResult Profile()
+        {
+            var token = HttpContext.Session.GetString("JWToken");
+            if (token == null) return RedirectToAction("Login", "Auth");
+
+            PageBoardVM pageBoardVM = new PageBoardVM();
+            pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+            return View(pageBoardVM);
+        }
+    }
 }

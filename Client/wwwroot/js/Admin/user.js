@@ -76,9 +76,9 @@ function GetDataUpdate(id) {
 function update() {
    event.preventDefault()
    var obj1 = new Object()
-   obj1.FullName = $('#FullNameUpdate').val()
-   obj1.Email = $('#EmailUpdate').val()
-   obj1.Gender = $('#GenderUpdate').val()
+   obj1.fullName = $('#FullNameUpdate').val()
+   obj1.email = $('#EmailUpdate').val()
+   obj1.gender = $('#GenderUpdate').val()
    console.log(obj1)
 
    $.ajax({
@@ -144,3 +144,21 @@ function adduser() {
          })
       })
 }
+
+$.ajax({
+    url: "https://localhost:44308/api/users",
+    success: function (result) {
+        var a = result.result.length;
+        console.log(a);
+        document.getElementById("sumUser").innerHTML = a;
+    }
+})
+
+$.ajax({
+    url: "https://localhost:44308/api/cards",
+    success: function (result) {
+        var a = result.result.length;
+        console.log(a);
+        document.getElementById("sumCard").innerHTML = a;
+    }
+})
