@@ -120,6 +120,8 @@ namespace Kselleo.Controllers
 
          PageBoardVM pageBoardVM = new PageBoardVM();
          pageBoardVM.DecodeJwtVM = GetDecodeJwt();
+         pageBoardVM.Token = token;
+
 
          return View(pageBoardVM);
       }
