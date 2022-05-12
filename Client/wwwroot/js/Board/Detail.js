@@ -226,7 +226,7 @@ const renderMemberCards = (checkListItems) => {
    return html
 }
 
-const openDetailCard = (cardId, userId) => {
+const ajaxDetailCard = (cardId, userId) => {
    $.ajax({
       type: 'GET',
       url: `https://localhost:5001/api/cards/detail/${cardId}`,
@@ -340,7 +340,7 @@ const openDetailCard = (cardId, userId) => {
                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                  <li><a class="dropdown-item" type="button" onclick="openModalUpdateTask(${x.id})">Edit</a>
                                  </li>
-                                 <li><a class="dropdown-item" type="button" onclick="deleteTask(${x.id})">Delete</a></li>
+                                 <li><a class="dropdown-item" type="button" onclick="deleteTask(${x.id}, ${response.data.id})">Delete</a></li>
                               </ul>
                            </div>
                      </div>`
@@ -392,7 +392,7 @@ const openDetailCard = (cardId, userId) => {
                      x.userId == userId
                         ? `
                      <button class="btn btn-outline-danger mr-1 btn-sm" onclick="deleteComment(${x.id})">
-                     <i class="fa fa-trash" aria-hidden="true"></i>
+                     <i class="fa fa-times" aria-hidden="true"></i>
                   </button>`
                         : ''
                   }
@@ -404,13 +404,25 @@ const openDetailCard = (cardId, userId) => {
          $('.comments').html(commentHTML)
       },
    })
+}
 
+const openDetailCard = (cardId, userId) => {
+   clearDetailCard()
+   ajaxDetailCard(cardId)
    $('#detailCardModal').modal('show')
+}
+
+const clearDetailCard = () => {
+   $('#name-card-detail').html('Loading ...')
+   $('#name-list-detail').html('Loading ...')
+   $('#description-card-detail').html('Loading ...')
+   $('.tasks').html('Loading ...')
 }
 
 const checkingTask = (taskId, isChecked) => {
    event.preventDefault()
-
+   const cardId = $('#card-id').val()
+   console.log('cardId', cardId)
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
@@ -423,9 +435,12 @@ const checkingTask = (taskId, isChecked) => {
       data: JSON.stringify({ Id: parseInt(taskId), IsChecked: isChecked }),
       success: function (response) {
          swal('Success!', 'Your task has been checking!', 'success')
-         setTimeout(() => {
-            location.reload()
-         }, 1000)
+         // renew data
+         ajaxDetailCard(cardId)
+
+         // setTimeout(() => {
+         //    location.reload()
+         // }, 1000)
       },
       error: function (e) {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
@@ -515,7 +530,7 @@ const updateTask = (userId) => {
    })
 }
 
-const deleteTask = (taskId) => {
+const deleteTask = (taskId, cardId) => {
    swal({
       title: 'Are you sure?',
       text: 'Once deleted, you will not be able to recover this task!',
@@ -528,10 +543,13 @@ const deleteTask = (taskId) => {
             type: 'DELETE',
             url: `https://localhost:5001/api/checklistitems/delete/${taskId}`,
             success: function (response) {
+               console.log('response', response)
+               // renew data card
+               ajaxDetailCard(cardId)
+
                swal('Poof! Your task has been deleted!', {
                   icon: 'success',
                })
-               location.reload()
             },
             error: function (response) {
                swal('upps! delete failed', {
@@ -789,10 +807,16 @@ const createTask = () => {
       dataType: 'json',
       data: JSON.stringify(req),
       success: function (response) {
+         // renew data card
+         ajaxDetailCard(req.CardId)
+         $('#name-task').val('')
+         $('#start-task').val('')
+         $('#due-task').val('')
+         $('#members-task').val(null).trigger('change')
+
          swal('Success!', 'Your task has been created!', 'success')
-         setTimeout(() => {
-            location.reload()
-         }, 1000)
+         $('#createTaskModal').modal('hide')
+         $('#detailCardModal').modal('show')
       },
       error: function (e) {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
@@ -822,7 +846,7 @@ const sendComment = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:5001/api/comments`,
+      url: `https://localhost:5001/api/comments/send`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -833,7 +857,47 @@ const sendComment = (userId) => {
          $('#comment-text').val('')
          $('#commentModal').modal('hide')
          swal('Success!', 'Your comment has been sent!', 'success')
-         location.reload()
+         // location.reload()
+
+         // render comments
+         let commentHTML = ''
+         commentHTML += `
+             <div class="row">
+                <div class="col-md-1">
+                   <img src="https://ui-avatars.com/api/?name=${
+                      response.data.user.fullName
+                   }&background=random" alt="${
+            response.data.user.fullName
+         }" width="40px"
+                      class="rounded-circle" data-toggle="tooltip" data-placement="right" title="${
+                         response.data.user.fullName
+                      }">
+                   </img>
+                </div>
+                <div class="col-md-10">
+                   <p style="font-size: 14px;" class="text-secondary">
+                      ${response.data.text}
+                   </p>
+                  <p class="text-secondary" style="font-size: 12px;">
+                      ${moment(response.data.createdAt).format('lll')}
+                   </p>
+                </div>
+                <div class="col-md-1">
+                   ${
+                      response.data.userId == userId
+                         ? `
+                      <button class="btn btn-outline-danger mr-1 btn-sm" onclick="deleteComment(${response.data.id})">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                   </button>`
+                         : ''
+                   }
+                </div>
+             </div>
+             `
+
+         $('.comments').append(commentHTML)
+
+         console.log('response', response)
       },
       error: function (e) {
          swal('Error!', `${JSON.parse(e.responseText).message}`, 'error')
@@ -859,9 +923,10 @@ const deleteComment = (commentId) => {
                swal('Poof! Your comment has been deleted!', {
                   icon: 'success',
                })
-               setTimeout(() => {
-                  location.reload()
-               }, 1000)
+
+               console.log(response)
+               // renew data card
+               ajaxDetailCard(response.result.cardId)
             },
          })
       } else {
