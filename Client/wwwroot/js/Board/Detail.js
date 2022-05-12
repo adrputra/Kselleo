@@ -1,7 +1,10 @@
-const getBoardDetailById = (id, userId) => {
+const getBoardDetailById = (id, userId, token) => {
    $.ajax({
       type: 'GET',
       url: `https://localhost:5001/api/boards/detail/${id}`,
+      headers: {
+         Authorization: 'Bearer ' + token,
+      },
       dataType: 'json',
       success: function (response) {
          renderBoardDetail(response, userId)

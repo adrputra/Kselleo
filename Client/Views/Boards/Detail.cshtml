@@ -443,7 +443,7 @@
 @section Scripts {
 <script src="~/js/Board/Detail.js"></script>
 <script>
-   getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id');
+   getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id', '@Model.Token');
    getListByBoardId(`@ViewBag.BoardId`);
 </script>
 }

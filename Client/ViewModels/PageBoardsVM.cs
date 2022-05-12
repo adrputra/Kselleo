@@ -11,5 +11,6 @@ namespace Client.ViewModels
       public string BoardId { get; set; }
       public NewBoard NewBoard { get; set; }
       public DecodeJwtVM DecodeJwtVM { get; set; }
+      public string Token { get; set; }
    }
 }
