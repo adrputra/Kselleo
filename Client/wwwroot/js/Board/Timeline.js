@@ -71,7 +71,7 @@ const renderTimeline = (series) => {
 }
 
 // $.ajax({
-//    url: 'https://localhost:44308/api/boards/detail/09fa86f6-01e1-4fb9-b04c-66bc3bd005f2',
+//    url: 'https://localhost:5001/api/boards/detail/09fa86f6-01e1-4fb9-b04c-66bc3bd005f2',
 //    success: function (result) {
 //       var board = result.data.name
 //       var awal = moment(result.data.user.lists[0].cards[0].createdAt).format(

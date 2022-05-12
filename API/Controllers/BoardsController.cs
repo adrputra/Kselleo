@@ -2,6 +2,7 @@
 using API.Context;
 using API.Models;
 using API.Repository.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -65,19 +66,38 @@ namespace API.Controllers
          //return Ok(boardRepository.CreateBoard(board));
       }
 
-      [HttpGet("detail/{Id}")]
-      public ActionResult GetBoardDetailById(string Id)
-      {
-         try
-         {
-            var board = boardRepository.GetBoardDetailById(Id);
-            return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
-         }
-         catch (Exception ex)
-         {
-            return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
-         }
-      }
+        [HttpGet("detail/{Id}")]
+        public ActionResult GetBoardDetailById(string Id)
+        {
+            try
+            {
+                var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+                var auth = boardRepository.AuthenticateMember(token, Id);
+                //Console.WriteLine(auth);
+                if (auth)
+                {
+                    var board = boardRepository.GetBoardDetailById(Id);
+                    return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Board By Id {Id} Successfully!", data = board });
+                }
+                else
+                {
+                    return StatusCode(403, new { code = HttpStatusCode.OK, message = $"You are not authorized to access this board!"});
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { status = HttpStatusCode.InternalServerError, message = ex.Message });
+            }
+        }
 
-   }
+        [HttpGet("Token/{Id}")]
+        public ActionResult GetToken(string Id)
+        {
+            var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            var auth = boardRepository.AuthenticateMember(token, Id);
+            return StatusCode(200, new { code = HttpStatusCode.OK, message = $"Get Token Successfully!", data = token });
+        }
+
+
+    }
 }
