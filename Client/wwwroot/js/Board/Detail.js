@@ -1,3 +1,7 @@
+$(document).ready(function () {
+   $.LoadingOverlay('show')
+})
+
 const getBoardDetailById = (id, userId, token) => {
    $.ajax({
       type: 'GET',
@@ -7,6 +11,8 @@ const getBoardDetailById = (id, userId, token) => {
       },
       dataType: 'json',
       success: function (response) {
+         $.LoadingOverlay('hide')
+
          renderBoardDetail(response, userId)
          renderList(response.data.lists, userId)
 
@@ -117,29 +123,32 @@ const renderListByStatus = (items, status, userId) => {
    items.forEach((item, i) => {
       html += `
       <div class="list-item rounded shadow mt-4" style="padding: 18px; background-color: #FAF5E4;">
-            <div class="list-item-header d-flex justify-content-between align-items-start">
-               <div>
-               <p style="font-size: 18px; color: #272727; font-weight: 500; margin-block: auto;">${
-                  item.name
-               }</p>
-               <p style="font-size: 12px; color: #535454; font-weight: 300; margin-block: auto;">Created at ${moment(
-                  item.createdAt
-               ).format('ll')}
-               </p>
+            <div class="list-item-header d-flex justify-content-between align-items-centerr">
+               <div class="bg-red">
+                  <p style="font-size: 18px; color: #272727; font-weight: 500; margin-block: auto;">${
+                     item.name
+                  }</p>
+                  <p style="font-size: 12px; color: #535454; font-weight: 300; margin-block: auto;">Created at ${moment(
+                     item.createdAt
+                  ).format('ll')}
+                  </p>
                </div>
                
-               <div>
-                  ${
-                     item.user.id == userId
-                        ? `<button class="btn btn-outline-warning btn-sm" onclick="updateListModal(${item.id}, '${item.name}', ${item.user.id},'${item.status}', '${item.boardId}')">
-                     <i class="fa fa-pencil" aria-hidden="true"></i>
+               ${
+                  item.user.id == userId
+                     ? `
+               <div class="dropdown">
+                  <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="font-weight: 900;">
+                  ...                  
                   </button>
-                  <button class="btn btn-outline-danger btn-sm" onclick="deleteList(${item.id})">
-                     <i class="fa fa-trash" aria-hidden="true"></i>
-                  </button>`
-                        : ''
-                  }
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li><a class="dropdown-item" type="button" onclick="updateListModal(${item.id}, '${item.name}', ${item.user.id},'${item.status}', '${item.boardId}')">Edit</a></li>
+                  <li><a class="dropdown-item" type="button" onclick="deleteList(${item.id})">Delete</a></li>
+                  </ul>
                </div>
+               `
+                     : ''
+               }
             </div>
 
             <div class="cards mt-4">
@@ -244,12 +253,17 @@ const openDetailCard = (cardId, userId) => {
          if (userId == response.data.createdBy) {
             $('.display-actions-card').html(
                `
-               <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
-               <i class="fa fa-trash" aria-hidden="true"></i>
-            </button>
-            <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
-               <i class="fa fa-pencil" aria-hidden="true"></i>
-            </button>
+               <div class="dropdown">
+               <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                  aria-expanded="false" style="font-weight: 900;">
+                  ...
+               </button>
+               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#updateCardModal">Edit</a>
+                  </li>
+                  <li><a class="dropdown-item" type="button" onclick="deleteCard()">Delete</a></li>
+               </ul>
+            </div>
                `
             )
          }
@@ -318,24 +332,17 @@ const openDetailCard = (cardId, userId) => {
                      ${
                         userId == response.data.createdBy
                            ? `<div class="detail-task-action ml-4">
-                        <div class='buttons d-flex' style='gap: 5px;'>
-                           <div>
-                              <button class='btn btn-outline-warning btn-sm mr-1' onclick="openModalUpdateTask(${x.id})">
-                                   <i
-                                      class='fa fa-pencil'
-                                      aria-hidden='true'
-                                   ></i>
+                           <div class="dropdown">
+                              <button class="btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                 aria-expanded="false" style="font-weight: 900;">
+                                 ...
                               </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                 <li><a class="dropdown-item" type="button" onclick="openModalUpdateTask(${x.id})">Edit</a>
+                                 </li>
+                                 <li><a class="dropdown-item" type="button" onclick="deleteTask(${x.id})">Delete</a></li>
+                              </ul>
                            </div>
-                           <div>
-                               <button class='btn btn-outline-danger btn-sm' onclick="deleteTask(${x.id})">
-                               <i
-                                  class='fa fa-trash'
-                                  aria-hidden='true'
-                               ></i>
-                            </button>
-                           </div>
-                        </div>
                      </div>`
                            : ''
                      }
@@ -590,7 +597,6 @@ const updateCard = (userId) => {
     * Name
     * Description
     * CreatedBy
-    * Due
     */
    const req = {
       Id: parseInt($('#card-id-card-update').val()),
@@ -598,7 +604,6 @@ const updateCard = (userId) => {
       Name: $('#name-card-update').val(),
       Description: $('#description-card-update').val().replace(/\n/g, ' '),
       CreatedBy: userId,
-      Due: $('#due-card-update').val(),
    }
 
    $.ajax({

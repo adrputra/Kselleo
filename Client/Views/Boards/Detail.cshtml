@@ -7,6 +7,10 @@
    ViewData["FullName"] = Model.DecodeJwtVM.FullName;
 }
 
+@section Links {
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+
 @section Navs {
 <div class="list-group list-group-flush">
    <a asp-controller="Boards" asp-action="Detail" asp-route-id="@Context.Request.RouteValues["id"]" class="list-group-item list-group-item-action list-group-item-light p-3 
@@ -136,7 +140,6 @@
             </form>
          </div>
          <div class="modal-footer">
-
          </div>
       </div>
    </div>
@@ -242,11 +245,6 @@
                   <textarea type="text" class="form-control" id="description-card-update"></textarea>
                </div>
 
-               <div class="form-group">
-                  <label for="description-card" class="col-form-label">Due Date:</label>
-                  <input type="date" class="form-control" id="due-card-update">
-               </div>
-
                <button type="submit" class="btn float-right" style="background-color: #F8B401; color: white">Update
                   Card</button>
             </form>
@@ -271,12 +269,7 @@
                      Loading ...
                   </h4>
                   <div class="display-actions-card">
-                     @* <button class="btn btn-outline-danger mr-1" onclick="deleteCard()">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#updateCardModal">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </button> *@
+
                   </div>
                </div>
                <p id="name-list-detail" class="text-secondary">Loading ...</p>
@@ -367,7 +360,9 @@
 
                <div class="form-group">
                   <label for="members-task" class="col-form-label">Members:</label>
-                  <select class="form-control" id="members-task" multiple>
+                  <br>
+                  <select class="form-control members-task" id="members-task" name="members[]" multiple
+                     style="width: 100%;">
                   </select>
 
                </div>
@@ -413,7 +408,7 @@
 
                <div class="form-group">
                   <label for="members-task" class="col-form-label">Members:</label>
-                  <select class="form-control" id="members-task-update" multiple>
+                  <select class="form-control members-task" id="members-task-update" multiple>
                   </select>
 
                </div>
@@ -441,9 +436,22 @@
 </div>
 
 @section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="~/js/Board/Detail.js"></script>
 <script>
    getBoardDetailById(`@ViewBag.BoardId`, '@Model.DecodeJwtVM.Id', '@Model.Token');
    getListByBoardId(`@ViewBag.BoardId`);
+
+   $(document).ready(function () {
+      $('#members-task').select2({
+         dropdownParent: $('#createTaskModal'),
+         width: '100%'
+      });
+
+      $('#members-task-update').select2({
+         dropdownParent: $('#updateTaskModal'),
+         width: '100%'
+      });
+   })
 </script>
 }
