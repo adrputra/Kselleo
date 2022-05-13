@@ -38,7 +38,7 @@ $(document).ready(function () {
                                <div>
                                <button class='btn btn-outline-danger btn-sm' onclick="deleteModal('${item.id}')">
                                <i
-                                  class='fa fa-trash'
+                                  class='fa fa-times'
                                   aria-hidden='true'
                                ></i>
                             </button>
