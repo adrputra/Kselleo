@@ -20,8 +20,8 @@ const register = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/register',
-      // url: 'https://localhost:5001/api/accounts/register',
+      url: 'http://adrputra.somee.com/api/accounts/register',
+      // url: 'http://adrputra.somee.com/api/accounts/register',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ const register = () => {
       .done((response) => {
          swal('Success!', 'Your account has been registered!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/Login'
+            window.location.href = 'http://kselleo.somee.com/Auth/Login'
          }, 2000)
       })
       .fail((e) => {

@@ -8,7 +8,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/forgotpassword',
+      url: 'http://adrputra.somee.com/api/accounts/forgotpassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -23,7 +23,7 @@
             'success'
          )
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/ChangePassword'
+            window.location.href = 'http://kselleo.somee.com/Auth/ChangePassword'
          }, 2000)
       })
       .fail((e) => {
@@ -55,7 +55,7 @@ function ChangePassword() {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/changepassword',
+      url: 'http://adrputra.somee.com/api/accounts/changepassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function ChangePassword() {
       .done((response) => {
          Swal.fire('Success!', 'Change Password Successfully!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/Login'
+            window.location.href = 'http://kselleo.somee.com/Auth/Login'
          }, 2000)
       })
       .fail((e) => {

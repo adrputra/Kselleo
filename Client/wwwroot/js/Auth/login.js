@@ -10,7 +10,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/login',
+      url: 'http://adrputra.somee.com/api/accounts/login',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -21,7 +21,7 @@
       .done((response) => {
          Swal.fire('Success!', 'Your login success', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:5001/Admin/Dashboard'
+            window.location.href = 'http://adrputra.somee.com/Admin/Dashboard'
          }, 2000)
       })
       .fail((e) => {

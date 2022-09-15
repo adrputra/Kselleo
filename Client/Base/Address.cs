@@ -7,6 +7,6 @@ namespace Client.Base
 {
    public class Address
    {
-      public string link = "https://localhost:5001/api/";
+      public string link = "http://adrputra.somee.com/api/";
    }
 }

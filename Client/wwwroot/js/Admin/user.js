@@ -3,7 +3,7 @@
       filter: true,
       orderMulti: false,
       ajax: {
-         url: 'https://localhost:5001/api/users',
+         url: 'http://adrputra.somee.com/api/users',
          datatype: 'json',
          dataSrc: 'result',
       },
@@ -45,7 +45,7 @@ function deleteuser(id) {
       if (result.isConfirmed) {
          $.ajax({
             type: 'DELETE',
-            url: 'https://localhost:5001/api/users/' + id,
+            url: 'http://adrputra.somee.com/api/users/' + id,
          })
             .done((result) => {
                console.log(result)
@@ -60,7 +60,7 @@ function deleteuser(id) {
 
 function GetDataUpdate(id) {
    $.ajax({
-      url: 'https://localhost:5001/api/users/' + id,
+      url: 'http://adrputra.somee.com/api/users/' + id,
       success: function (results) {
          let result = results.result
          $('#IdUpdate').attr('value', `${result.id}`)
@@ -82,7 +82,7 @@ function update() {
    console.log(obj1)
 
    $.ajax({
-      url: 'https://localhost:5001/api/users/',
+      url: 'http://adrputra.somee.com/api/users/',
       type: 'PUT',
       headers: {
          Accept: 'application/json',
@@ -119,7 +119,7 @@ function adduser() {
    console.log(obj)
 
    $.ajax({
-      url: 'https://localhost:5001/api/accounts/register',
+      url: 'http://adrputra.somee.com/api/accounts/register',
       type: 'POST',
       headers: {
          Accept: 'application/json',

@@ -1,7 +1,7 @@
 const getInvitations = (userId) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:5001/api/verifyinvites/pending/${userId}`,
+      url: `http://adrputra.somee.com/api/verifyinvites/pending/${userId}`,
       dataType: 'json',
       success: function (response) {
          let html = ''
@@ -54,7 +54,7 @@ const handleAccept = (id, userId, isAccept, role, boardId) => {
 
    $.ajax({
       type: 'PUT',
-      url: 'https://localhost:5001/api/verifyinvites/accept',
+      url: 'http://adrputra.somee.com/api/verifyinvites/accept',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const handleReject = (id, userId, boardId) => {
    }
    $.ajax({
       type: 'PUT',
-      url: 'https://localhost:5001/api/verifyinvites/accept',
+      url: 'http://adrputra.somee.com/api/verifyinvites/accept',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
