@@ -16,4 +16,9 @@ WORKDIR /app
 COPY --from=build /out .
 # Disable HTTPS
 ENV ASPNETCORE_URLS=http://+:8999 
-ENTRYPOINT ["dotnet", "API.dll"]
+
+# Copy necessary files for migrations (optional)
+COPY --from=build /app /app
+
+# Run migrations before starting the app
+ENTRYPOINT ["dotnet", "API.dll", "migrate"]
