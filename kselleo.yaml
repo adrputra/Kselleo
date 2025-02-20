@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  main:
+    driver: bridge
+
 services:
   kselleo-api:
     build:
