@@ -20,8 +20,8 @@ const register = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:5001/api/accounts/register',
-      // url: 'https://localhost:5001/api/accounts/register',
+      url: 'https://localhost:8999/api/accounts/register',
+      // url: 'https://localhost:8999/api/accounts/register',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',

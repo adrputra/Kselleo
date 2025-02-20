@@ -1,17 +1,17 @@
-# Use Node.js for building the client
-FROM node:14 AS build
+# Use .NET Core 3.1 SDK for building the client
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
-# Copy and install dependencies
-COPY Client/package.json Client/package-lock.json ./
-RUN npm install
+# Copy project files and restore dependencies
+COPY Client/*.csproj ./
+RUN dotnet restore
 
-# Copy source code and build
+# Copy the entire project and build it
 COPY Client/. ./
-RUN npm run build
+RUN dotnet publish -c Release -o /out
 
-# Use Nginx to serve the client
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Use .NET Core 3.1 runtime image for running the client
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
+COPY --from=build /out .
+ENTRYPOINT ["dotnet", "Client.dll"]
