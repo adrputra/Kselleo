@@ -6,6 +6,9 @@ WORKDIR /app
 COPY API/*.csproj ./
 RUN dotnet restore
 
+# Install the compatible EF Core tools (version 3.1)
+RUN dotnet tool install --global dotnet-ef --version 3.1.8
+
 # Copy the entire project and build it
 COPY API/. ./
 RUN dotnet publish -c Release -o /out
@@ -14,6 +17,7 @@ RUN dotnet publish -c Release -o /out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build /out .
+
 # Disable HTTPS
 ENV ASPNETCORE_URLS=http://+:8999 
 
@@ -21,4 +25,5 @@ ENV ASPNETCORE_URLS=http://+:8999
 COPY --from=build /app /app
 
 # Run migrations before starting the app
+WORKDIR /app/API  # Ensure we're in the correct directory
 ENTRYPOINT ["dotnet", "API.dll", "migrate"]
