@@ -8,6 +8,8 @@ services:
     container_name: kselleo-api
     ports:
       - "8999:8999"
+    networks:
+      - main
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Kselleo;User Id=sa;Password=Contabo8@adr;
@@ -19,3 +21,5 @@ services:
     container_name: kselleo-client
     ports:
       - "3999:3999"
+    networks:
+      - main
