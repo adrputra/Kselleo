@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  kselleo-api:
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    container_name: kselleo-api
+    ports:
+      - "8999:8999"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=Kselleo;User Id=sa;Password=Contabo8@adr;
+
+  kselleo-client:
+    build:
+      context: .
+      dockerfile: Client/Dockerfile
+    container_name: kselleo-client
+    ports:
+      - "3999:3999"
