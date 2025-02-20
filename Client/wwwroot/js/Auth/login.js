@@ -10,7 +10,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:8999/api/accounts/login',
+      url: 'https://kselleo.eventarry.com/api/accounts/login',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -21,7 +21,7 @@
       .done((response) => {
          Swal.fire('Success!', 'Your login success', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:8999/Admin/Dashboard'
+            window.location.href = 'https://kselleo.eventarry.com/Admin/Dashboard'
          }, 2000)
       })
       .fail((e) => {

@@ -8,7 +8,7 @@
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:8999/api/accounts/forgotpassword',
+      url: 'https://kselleo.eventarry.com/api/accounts/forgotpassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ function ChangePassword() {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:8999/api/accounts/changepassword',
+      url: 'https://kselleo.eventarry.com/api/accounts/changepassword',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',

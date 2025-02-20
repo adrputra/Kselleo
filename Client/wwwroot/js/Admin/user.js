@@ -3,7 +3,7 @@
       filter: true,
       orderMulti: false,
       ajax: {
-         url: 'https://localhost:8999/api/users',
+         url: 'https://kselleo.eventarry.com/api/users',
          datatype: 'json',
          dataSrc: 'result',
       },
@@ -45,7 +45,7 @@ function deleteuser(id) {
       if (result.isConfirmed) {
          $.ajax({
             type: 'DELETE',
-            url: 'https://localhost:8999/api/users/' + id,
+            url: 'https://kselleo.eventarry.com/api/users/' + id,
          })
             .done((result) => {
                console.log(result)
@@ -60,7 +60,7 @@ function deleteuser(id) {
 
 function GetDataUpdate(id) {
    $.ajax({
-      url: 'https://localhost:8999/api/users/' + id,
+      url: 'https://kselleo.eventarry.com/api/users/' + id,
       success: function (results) {
          let result = results.result
          $('#IdUpdate').attr('value', `${result.id}`)
@@ -82,7 +82,7 @@ function update() {
    console.log(obj1)
 
    $.ajax({
-      url: 'https://localhost:8999/api/users/',
+      url: 'https://kselleo.eventarry.com/api/users/',
       type: 'PUT',
       headers: {
          Accept: 'application/json',
@@ -119,7 +119,7 @@ function adduser() {
    console.log(obj)
 
    $.ajax({
-      url: 'https://localhost:8999/api/accounts/register',
+      url: 'https://kselleo.eventarry.com/api/accounts/register',
       type: 'POST',
       headers: {
          Accept: 'application/json',

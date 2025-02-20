@@ -5,7 +5,7 @@ $(document).ready(function () {
 const getBoardDetailById = (id, userId, token) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:8999/api/boards/detail/${id}`,
+      url: `https://kselleo.eventarry.com/api/boards/detail/${id}`,
       headers: {
          Authorization: 'Bearer ' + token,
       },
@@ -86,7 +86,7 @@ const createList = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:8999/api/lists`,
+      url: `https://kselleo.eventarry.com/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -229,7 +229,7 @@ const renderMemberCards = (checkListItems) => {
 const ajaxDetailCard = (cardId, userId) => {
    $.ajax({
       type: 'GET',
-      url: `https://localhost:8999/api/cards/detail/${cardId}`,
+      url: `https://kselleo.eventarry.com/api/cards/detail/${cardId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -426,7 +426,7 @@ const checkingTask = (taskId, isChecked) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:8999/api/cards/task/checking`,
+      url: `https://kselleo.eventarry.com/api/cards/task/checking`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -458,7 +458,7 @@ const openModalUpdateTask = (taskId) => {
    // get checklistitems by taskId
    $.ajax({
       type: 'GET',
-      url: `https://localhost:8999/api/checklistitems/detail/${taskId}`,
+      url: `https://kselleo.eventarry.com/api/checklistitems/detail/${taskId}`,
       data: 'data',
       dataType: 'json',
       success: function (response) {
@@ -511,7 +511,7 @@ const updateTask = (userId) => {
    // ajax method put /cards/task
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:8999/api/cards/task`,
+      url: `https://kselleo.eventarry.com/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -541,7 +541,7 @@ const deleteTask = (taskId, cardId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/checklistitems/delete/${taskId}`,
+            url: `https://kselleo.eventarry.com/api/checklistitems/delete/${taskId}`,
             success: function (response) {
                console.log('response', response)
                // renew data card
@@ -587,7 +587,7 @@ const createCard = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:8999/api/cards`,
+      url: `https://kselleo.eventarry.com/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -626,7 +626,7 @@ const updateCard = (userId) => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:8999/api/cards`,
+      url: `https://kselleo.eventarry.com/api/cards`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -655,7 +655,7 @@ const deleteCard = () => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/cards/${cardId}`,
+            url: `https://kselleo.eventarry.com/api/cards/${cardId}`,
             success: function (response) {
                swal('Poof! Your card has been deleted!', {
                   icon: 'success',
@@ -696,7 +696,7 @@ const updateList = () => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:8999/api/lists`,
+      url: `https://kselleo.eventarry.com/api/lists`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -728,7 +728,7 @@ const deleteList = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/lists/${id}`,
+            url: `https://kselleo.eventarry.com/api/lists/${id}`,
             success: function (response) {
                swal('Poof! Your list has been deleted!', {
                   icon: 'success',
@@ -758,7 +758,7 @@ const inviteMember = () => {
 
    $.ajax({
       type: 'POST',
-      url: 'https://localhost:8999/api/verifyinvites/verify',
+      url: 'https://kselleo.eventarry.com/api/verifyinvites/verify',
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -799,7 +799,7 @@ const createTask = () => {
    // // ajax method post /cards/task
    $.ajax({
       type: 'POST',
-      url: `https://localhost:8999/api/cards/task`,
+      url: `https://kselleo.eventarry.com/api/cards/task`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -846,7 +846,7 @@ const sendComment = (userId) => {
 
    $.ajax({
       type: 'POST',
-      url: `https://localhost:8999/api/comments/send`,
+      url: `https://kselleo.eventarry.com/api/comments/send`,
       headers: {
          Accept: 'application/json',
          'Content-Type': 'application/json',
@@ -918,7 +918,7 @@ const deleteComment = (commentId) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/comments/${commentId}`,
+            url: `https://kselleo.eventarry.com/api/comments/${commentId}`,
             success: function (response) {
                swal('Poof! Your comment has been deleted!', {
                   icon: 'success',

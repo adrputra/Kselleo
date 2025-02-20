@@ -7,6 +7,6 @@ namespace Client.Base
 {
    public class Address
    {
-      public string link = "https://localhost:8999/api/";
+      public string link = "https://kselleo.eventarry.com/api/";
    }
 }

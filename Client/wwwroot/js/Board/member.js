@@ -3,7 +3,7 @@ const getMembersBoardById = (id, userId) => {
    // return ajax method: GET, url: https://localhost:44372/api/Board/GetMembersBoardById/{id}
    return $.ajax({
       type: 'GET',
-      url: `https://localhost:8999/api/memberboards/board/${id}`,
+      url: `https://kselleo.eventarry.com/api/memberboards/board/${id}`,
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       success: function (response) {
@@ -58,7 +58,7 @@ const kickMember = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/memberboards/delete/${id}`,
+            url: `https://kselleo.eventarry.com/api/memberboards/delete/${id}`,
             success: function (response) {
                location.reload()
             },
@@ -83,7 +83,7 @@ const leaveMember = (id) => {
       if (willDelete) {
          $.ajax({
             type: 'DELETE',
-            url: `https://localhost:8999/api/memberboards/delete/${id}`,
+            url: `https://kselleo.eventarry.com/api/memberboards/delete/${id}`,
             success: function (response) {
                swal('Poof! Your member has been deleted!', {
                   icon: 'success',
@@ -124,7 +124,7 @@ const updateMember = () => {
 
    $.ajax({
       type: 'PUT',
-      url: `https://localhost:8999/api/memberboards`,
+      url: `https://kselleo.eventarry.com/api/memberboards`,
       data: JSON.stringify({
          id,
          userId: userId,

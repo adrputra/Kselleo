@@ -18,7 +18,7 @@
       "Client": {
          "commandName": "Project",
          "launchBrowser": true,
-         "applicationUrl": "https://localhost:8999;http://localhost:8999",
+         "applicationUrl": "https://kselleo.eventarry.com;http://kselleo.eventarry.com",
          "environmentVariables": {
             "ASPNETCORE_ENVIRONMENT": "Development"
          }
