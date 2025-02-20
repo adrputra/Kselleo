@@ -1,17 +1,19 @@
-# Use .NET Core 3.1 SDK for building the client
+# Use .NET Core 3.1 SDK for building the API
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
 # Copy project files and restore dependencies
-COPY Client/*.csproj ./
+COPY API/*.csproj ./
 RUN dotnet restore
 
 # Copy the entire project and build it
-COPY Client/. ./
+COPY API/. ./
 RUN dotnet publish -c Release -o /out
 
-# Use .NET Core 3.1 runtime image for running the client
+# Use .NET Core 3.1 runtime image for running the API
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build /out .
-ENTRYPOINT ["dotnet", "Client.dll"]
+# Disable HTTPS
+ENV ASPNETCORE_URLS=http://+:8999 
+ENTRYPOINT ["dotnet", "API.dll"]

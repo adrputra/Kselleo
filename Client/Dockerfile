@@ -14,4 +14,5 @@ RUN dotnet publish -c Release -o /out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build /out .
+ENV ASPNETCORE_URLS=http://+:3999
 ENTRYPOINT ["dotnet", "Client.dll"]
