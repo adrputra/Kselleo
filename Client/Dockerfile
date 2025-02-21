@@ -25,5 +25,5 @@ ENV ASPNETCORE_URLS=http://+:3999
 COPY --from=build /app /app
 
 # Run migrations before starting the app
-WORKDIR /app/Client
+WORKDIR /app
 ENTRYPOINT ["dotnet", "Client.dll"]
