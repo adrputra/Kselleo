@@ -23,7 +23,7 @@
             'success'
          )
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/ChangePassword'
+            window.location.href = 'https://kselleo.eventarry.com/Auth/ChangePassword'
          }, 2000)
       })
       .fail((e) => {
@@ -66,7 +66,7 @@ function ChangePassword() {
       .done((response) => {
          Swal.fire('Success!', 'Change Password Successfully!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/Login'
+            window.location.href = 'https://kselleo.eventarry.com/Auth/Login'
          }, 2000)
       })
       .fail((e) => {

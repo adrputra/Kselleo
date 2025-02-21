@@ -32,7 +32,7 @@ const register = () => {
       .done((response) => {
          swal('Success!', 'Your account has been registered!', 'success')
          setTimeout(() => {
-            window.location.href = 'https://localhost:3000/Auth/Login'
+            window.location.href = 'https://kselleo.eventarry.com/Auth/Login'
          }, 2000)
       })
       .fail((e) => {

@@ -1,6 +1,6 @@
 const getMembersBoardById = (id, userId) => {
-   // request ajax method: GET, url: https://localhost:44372/api/Board/GetMembersBoardById/{id}
-   // return ajax method: GET, url: https://localhost:44372/api/Board/GetMembersBoardById/{id}
+   // request ajax method: GET, url: https://kselleo.eventarry.com:44372/api/Board/GetMembersBoardById/{id}
+   // return ajax method: GET, url: https://kselleo.eventarry.com:44372/api/Board/GetMembersBoardById/{id}
    return $.ajax({
       type: 'GET',
       url: `https://kselleo.eventarry.com/api/memberboards/board/${id}`,
