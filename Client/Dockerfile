@@ -3,14 +3,14 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
 # Copy project files and restore dependencies
-COPY Client/*.csproj ./
+COPY *.csproj ./
 RUN dotnet restore
 
 # Install the compatible EF Core tools (version 3.1)
 RUN dotnet tool install --global dotnet-ef --version 3.1.8
 
 # Copy the entire project and build it
-COPY Client/. ./
+COPY . ./
 RUN dotnet publish -c Release -o /out
 
 # Use .NET Core 3.1 runtime image for running the Client
