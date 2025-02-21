@@ -6,9 +6,6 @@ networks:
 
 services:
   kselleo-client:
-    build:
-        context: .
-        dockerfile: Client/Dockerfile
     image: kselleo-client
     container_name: kselleo-client
     ports:
