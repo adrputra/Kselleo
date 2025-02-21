@@ -1,0 +1,17 @@
+version: "3.8"
+
+networks:
+  main:
+    driver: bridge
+
+services:
+  kselleo-client:
+    build:
+        context: .
+        dockerfile: Client/Dockerfile
+    image: kselleo-client
+    container_name: kselleo-client
+    ports:
+      - "3999:3999"
+    networks:
+      - main

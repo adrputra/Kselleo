@@ -1,20 +1,29 @@
-# Use .NET Core 3.1 SDK for building
+# Use .NET Core 3.1 SDK for building the Client
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 
-# Install OpenSSL for cert generation (Linux-based)
-RUN apt-get update && apt-get install -y openssl
+# Copy project files and restore dependencies
+COPY Client/*.csproj ./
+RUN dotnet restore
 
-# Generate a self-signed HTTPS certificate
-RUN dotnet dev-certs https -ep /https-certificate.pfx -p adrputra
+# Install the compatible EF Core tools (version 3.1)
+RUN dotnet tool install --global dotnet-ef --version 3.1.8
 
-# Use .NET Core 3.1 runtime for running the client
+# Copy the entire project and build it
+COPY Client/. ./
+RUN dotnet publish -c Release -o /out
+
+# Use .NET Core 3.1 runtime image for running the Client
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
+COPY --from=build /out .
 
-# Copy the application from the build stage
-COPY Client/. ./
+# Disable HTTPS
+ENV ASPNETCORE_URLS=http://+:3999 
 
-ENV ASPNETCORE_URLS=http://+:3999
+# Copy necessary files for migrations (optional)
+COPY --from=build /app /app
 
+# Run migrations before starting the app
+WORKDIR /app/Client
 ENTRYPOINT ["dotnet", "Client.dll"]
