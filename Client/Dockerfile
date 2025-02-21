@@ -15,12 +15,6 @@ WORKDIR /app
 # Copy the application from the build stage
 COPY Client/. ./
 
-# Copy the generated certificate from the build stage
-COPY --from=build /https-certificate.pfx /https-certificate.pfx
-
-# Configure HTTPS
-ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https-certificate.pfx
-ENV ASPNETCORE_Kestrel__Certificates__Default__Password=adrputra
-ENV ASPNETCORE_URLS=https://+:3998;http://+:3999
+ENV ASPNETCORE_URLS=http://+:3999
 
 ENTRYPOINT ["dotnet", "Client.dll"]
